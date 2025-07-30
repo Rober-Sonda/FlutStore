@@ -146,6 +146,12 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       route: AppRoutes.sweepstakes,
       color: Color(0xFF9C27B0), // Púrpura
     ),
+    _NavItemData(
+      icon: Icons.schedule_outlined,
+      label: 'Gastos Fijos',
+      route: AppRoutes.fixedExpenses,
+      color: Color(0xFF009688), // Verde azulado
+    ),
   ];
 
   @override

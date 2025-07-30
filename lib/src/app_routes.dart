@@ -116,4 +116,14 @@ class AppRoutes {
   static const sweepstakes = '/sweepstakes';
   static const sweepstakesAdd = '/sweepstakes/add';
   static const sweepstakesEdit = '/sweepstakes/edit/:id';
+
+  // Gastos Fijos
+  static const fixedExpenses = '/fixed-expenses';
+  static const fixedExpenseAdd = '/fixed-expenses/add';
+  static const fixedExpenseEdit = '/fixed-expenses/edit/:id';
+
+  // Movimientos Financieros
+  static const financialMovements = '/financial-movements';
+  static const financialMovementAdd = '/financial-movements/add';
+  static const financialMovementEdit = '/financial-movements/edit/:id';
 }

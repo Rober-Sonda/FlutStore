@@ -24,6 +24,7 @@ import '../views/cash_flow_view.dart';
 import '../views/profit_loss_view.dart';
 import '../views/cash_register_view.dart';
 import '../views/sweepstakes_view.dart';
+import '../views/fixed_expenses_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/auth_service.dart';
 
@@ -160,6 +161,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/sweepstakes',
             builder: (context, state) => const SweepstakesView(),
+          ),
+          GoRoute(
+            path: '/fixed-expenses',
+            builder: (context, state) => const FixedExpensesView(),
           ),
         ],
       ),

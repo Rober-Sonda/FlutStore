@@ -22,6 +22,8 @@ import '../models/flujo_caja.dart';
 import '../models/ganancia_perdida.dart';
 import '../models/cierre_caja.dart';
 import '../models/sorteo.dart';
+import '../models/gasto_fijo.dart';
+import '../models/movimiento_financiero.dart';
 import '../seed/isar_seed.dart';
 
 final isarServiceProvider = Provider<IsarService>((ref) => IsarService());
@@ -76,6 +78,8 @@ class IsarService {
           GananciaPerdidaSchema,
           CierreCajaSchema,
           SorteoSchema,
+          GastoFijoSchema,
+          MovimientoFinancieroSchema,
         ],
         directory: 'C:/Flutter-Projects/tienda_app/isar_db',
         name: 'default',
