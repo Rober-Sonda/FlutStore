@@ -18,6 +18,7 @@ class AppRoutes {
   static const purchaseAdd = '/purchases/add';
   static const purchaseEdit = '/purchases/edit/:id';
   static const purchaseDetail = '/purchases/:id';
+  static const newPurchase = '/purchases/new';
 
   // Clientes
   static const clients = '/clients';
@@ -34,6 +35,7 @@ class AppRoutes {
   static const saleAdd = '/sales/add';
   static const saleEdit = '/sales/edit/:id';
   static const saleDetail = '/sales/:id';
+  static const newSale = '/sales/new';
 
   // Informes
   static const reports = '/reports';
@@ -88,4 +90,30 @@ class AppRoutes {
 
   // Carrito de Compras
   static const carritoCompra = '/carrito-compra';
+
+  // Nuevas funcionalidades
+  // Ofertas
+  static const offers = '/offers';
+  static const offerAdd = '/offers/add';
+  static const offerEdit = '/offers/edit/:id';
+
+  // Flujo de Caja
+  static const cashFlow = '/cash-flow';
+  static const cashFlowAdd = '/cash-flow/add';
+  static const cashFlowEdit = '/cash-flow/edit/:id';
+
+  // Ganancias y Pérdidas
+  static const profitLoss = '/profit-loss';
+  static const profitLossAdd = '/profit-loss/add';
+  static const profitLossEdit = '/profit-loss/edit/:id';
+
+  // Cierre de Caja
+  static const cashRegister = '/cash-register';
+  static const cashRegisterAdd = '/cash-register/add';
+  static const cashRegisterEdit = '/cash-register/edit/:id';
+
+  // Sorteos
+  static const sweepstakes = '/sweepstakes';
+  static const sweepstakesAdd = '/sweepstakes/add';
+  static const sweepstakesEdit = '/sweepstakes/edit/:id';
 }

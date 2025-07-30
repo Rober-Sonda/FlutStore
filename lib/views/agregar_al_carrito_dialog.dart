@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_app/models/producto.dart';
 import 'package:tienda_app/models/proveedor.dart';
+import 'package:tienda_app/models/producto_proveedor.dart';
 import 'package:tienda_app/services/carrito_compra_service.dart';
-import 'package:tienda_app/services/product_service.dart';
+import 'package:tienda_app/services/producto_proveedor_service.dart';
+import 'package:tienda_app/widgets/proveedor_selector_dialog.dart';
 
 class AgregarAlCarritoDialog extends ConsumerStatefulWidget {
   final Producto producto;
 
-  const AgregarAlCarritoDialog({
-    super.key,
-    required this.producto,
-  });
+  const AgregarAlCarritoDialog({super.key, required this.producto});
 
   @override
-  ConsumerState<AgregarAlCarritoDialog> createState() => _AgregarAlCarritoDialogState();
+  ConsumerState<AgregarAlCarritoDialog> createState() =>
+      _AgregarAlCarritoDialogState();
 }
 
-class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog> {
+class _AgregarAlCarritoDialogState
+    extends ConsumerState<AgregarAlCarritoDialog> {
   bool isLoading = true;
-  List<Proveedor> proveedores = [];
+  List<Map<String, dynamic>> proveedores = [];
+  ProductoProveedor? productoProveedorSeleccionado;
   Proveedor? proveedorSeleccionado;
-  Proveedor? proveedorMasEconomico;
   int cantidad = 1;
   bool esUrgente = false;
   final TextEditingController _notasController = TextEditingController();
@@ -34,18 +35,30 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
 
   Future<void> _cargarProveedores() async {
     setState(() => isLoading = true);
-    
+
     try {
-      final carritoService = ref.read(carritoCompraServiceProvider);
-      final proveedoresData = await carritoService.obtenerProveedoresParaProducto(widget.producto.id);
-      final proveedorEconomico = await carritoService.obtenerProveedorMasEconomico(widget.producto.id);
-      
+      final productoProveedorService = ref.read(
+        productoProveedorServiceProvider,
+      );
+      final proveedoresData = await productoProveedorService
+          .obtenerProveedoresCompletos(widget.producto.id);
+
       setState(() {
         proveedores = proveedoresData;
-        proveedorMasEconomico = proveedorEconomico;
-        proveedorSeleccionado = proveedorEconomico ?? (proveedores.isNotEmpty ? proveedores.first : null);
         isLoading = false;
       });
+
+      // Si hay múltiples proveedores, mostrar el selector
+      if (proveedores.length > 1) {
+        _mostrarSelectorProveedores();
+      } else if (proveedores.isNotEmpty) {
+        // Si solo hay un proveedor, seleccionarlo automáticamente
+        final proveedor = proveedores.first;
+        _seleccionarProveedor(
+          proveedor['productoProveedor'] as ProductoProveedor,
+          proveedor['proveedor'] as Proveedor,
+        );
+      }
     } catch (e) {
       setState(() => isLoading = false);
       if (mounted) {
@@ -56,8 +69,32 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
     }
   }
 
+  void _mostrarSelectorProveedores() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (context) => ProveedorSelectorDialog(
+            productoId: widget.producto.id,
+            nombreProducto: widget.producto.nombre,
+            onProveedorSeleccionado: _seleccionarProveedor,
+          ),
+    );
+  }
+
+  void _seleccionarProveedor(
+    ProductoProveedor productoProveedor,
+    Proveedor proveedor,
+  ) {
+    setState(() {
+      productoProveedorSeleccionado = productoProveedor;
+      proveedorSeleccionado = proveedor;
+    });
+  }
+
   Future<void> _agregarAlCarrito() async {
-    if (proveedorSeleccionado == null) {
+    if (productoProveedorSeleccionado == null ||
+        proveedorSeleccionado == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Debes seleccionar un proveedor'),
@@ -75,9 +112,15 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
         proveedorId: proveedorSeleccionado!.id,
         nombreProveedor: proveedorSeleccionado!.nombre,
         cantidad: cantidad,
-        precioUnitario: widget.producto.precio ?? 0,
+        precioUnitario:
+            productoProveedorSeleccionado!.precioUnitario ??
+            widget.producto.precio ??
+            0,
         esUrgente: esUrgente,
         notas: _notasController.text.isNotEmpty ? _notasController.text : null,
+        codigoProveedor: productoProveedorSeleccionado!.codigoProveedor,
+        stockDisponible: productoProveedorSeleccionado!.stockDisponible,
+        observacionesProveedor: productoProveedorSeleccionado!.observaciones,
       );
 
       if (mounted) {
@@ -104,228 +147,224 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.grey[850],
-      title: Text(
-        'Agregar al Carrito',
-        style: const TextStyle(color: Colors.white),
+      title: Row(
+        children: [
+          Icon(Icons.add_shopping_cart, color: Colors.green[700]),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Agregar al Carrito',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.green[700],
+              ),
+            ),
+          ),
+        ],
       ),
-      content: isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Información del producto
-                Card(
-                  color: Colors.grey[800],
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.producto.nombre,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Precio: \$${(widget.producto.precio ?? 0).toStringAsFixed(2)}',
-                          style: const TextStyle(color: Colors.green),
-                        ),
-                        Text(
-                          'Stock actual: ${widget.producto.stock ?? 0}',
-                          style: const TextStyle(color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Selección de proveedor
-                const Text(
-                  'Seleccionar Proveedor',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<Proveedor>(
-                  value: proveedorSeleccionado,
-                  style: const TextStyle(color: Colors.white),
-                  dropdownColor: Colors.grey[800],
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[800],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  items: proveedores.map((proveedor) {
-                    final isEconomico = proveedor.id == proveedorMasEconomico?.id;
-                    return DropdownMenuItem(
-                      value: proveedor,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              proveedor.nombre,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          if (isEconomico)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(8),
+      content:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Información del producto
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.producto.nombre,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                              child: const Text(
-                                'MEJOR PRECIO',
+                            ),
+                            const SizedBox(height: 8),
+                            if (widget.producto.precio != null)
+                              Text(
+                                'Precio: \$${widget.producto.precio!.toStringAsFixed(2)}',
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
+                                  color: Colors.green[700],
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      proveedorSeleccionado = value;
-                    });
-                  },
-                ),
-                if (proveedorMasEconomico != null) ...[
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.green),
                     ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.info, color: Colors.green, size: 16),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            '${proveedorMasEconomico!.nombre} es el proveedor más económico para este producto',
-                            style: const TextStyle(color: Colors.green, fontSize: 12),
+                    const SizedBox(height: 16),
+
+                    // Información del proveedor seleccionado
+                    if (proveedorSeleccionado != null) ...[
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.business, color: Colors.blue[700]),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Proveedor Seleccionado',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                proveedorSeleccionado!.nombre,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (productoProveedorSeleccionado
+                                      ?.precioUnitario !=
+                                  null) ...[
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Precio: \$${productoProveedorSeleccionado!.precioUnitario!.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    color: Colors.green[700],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                              if (productoProveedorSeleccionado
+                                      ?.stockDisponible !=
+                                  null) ...[
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      productoProveedorSeleccionado!
+                                              .hayStockSuficiente(cantidad)
+                                          ? Icons.check_circle
+                                          : Icons.warning,
+                                      size: 16,
+                                      color:
+                                          productoProveedorSeleccionado!
+                                                  .hayStockSuficiente(cantidad)
+                                              ? Colors.green[700]
+                                              : Colors.orange[700],
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      productoProveedorSeleccionado!
+                                          .estadoStock,
+                                      style: TextStyle(
+                                        color:
+                                            productoProveedorSeleccionado!
+                                                    .hayStockSuficiente(cantidad)
+                                                ? Colors.green[700]
+                                                : Colors.orange[700],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                              if (proveedores.length > 1) ...[
+                                const SizedBox(height: 8),
+                                TextButton.icon(
+                                  onPressed: _mostrarSelectorProveedores,
+                                  icon: const Icon(Icons.swap_horiz),
+                                  label: const Text('Cambiar Proveedor'),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.blue[700],
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // Cantidad
+                    Row(
+                      children: [
+                        const Text('Cantidad:'),
+                        const SizedBox(width: 16),
+                        IconButton(
+                          onPressed:
+                              cantidad > 1
+                                  ? () => setState(() => cantidad--)
+                                  : null,
+                          icon: const Icon(Icons.remove),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            cantidad.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => setState(() => cantidad++),
+                          icon: const Icon(Icons.add),
                         ),
                       ],
                     ),
-                  ),
-                ],
-                const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                // Cantidad
-                const Text(
-                  'Cantidad',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.remove, color: Colors.white),
-                      onPressed: () {
-                        if (cantidad > 1) {
-                          setState(() => cantidad--);
-                        }
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        '$cantidad',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    // Opciones adicionales
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: esUrgente,
+                          onChanged:
+                              (value) =>
+                                  setState(() => esUrgente = value ?? false),
                         ),
+                        const Text('Marcar como urgente'),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Notas
+                    TextField(
+                      controller: _notasController,
+                      decoration: const InputDecoration(
+                        labelText: 'Notas (opcional)',
+                        border: OutlineInputBorder(),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add, color: Colors.white),
-                      onPressed: () {
-                        setState(() => cantidad++);
-                      },
+                      maxLines: 2,
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-
-                // Checkbox urgente
-                Row(
-                  children: [
-                    Checkbox(
-                      value: esUrgente,
-                      onChanged: (value) {
-                        setState(() => esUrgente = value ?? false);
-                      },
-                      fillColor: WidgetStateProperty.resolveWith((states) => Colors.orange),
-                    ),
-                    const Text(
-                      'Pedido urgente',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Notas
-                const Text(
-                  'Notas (opcional)',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _notasController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Agregar notas...',
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    filled: true,
-                    fillColor: Colors.grey[800],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  maxLines: 2,
-                ),
-              ],
-            ),
-          ),
+              ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar', style: TextStyle(color: Colors.white70)),
+          child: const Text('Cancelar'),
         ),
         ElevatedButton(
-          onPressed: _agregarAlCarrito,
+          onPressed:
+              productoProveedorSeleccionado != null ? _agregarAlCarrito : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurpleAccent,
+            backgroundColor: Colors.green[700],
             foregroundColor: Colors.white,
           ),
           child: const Text('Agregar al Carrito'),
@@ -333,4 +372,4 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
       ],
     );
   }
-} 
+}

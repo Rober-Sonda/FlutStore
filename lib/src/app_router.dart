@@ -19,6 +19,11 @@ import '../views/users_view.dart';
 import '../views/orders_view.dart';
 import '../views/carrito_compra_view.dart';
 import '../views/login_view.dart';
+import '../views/offers_view.dart';
+import '../views/cash_flow_view.dart';
+import '../views/profit_loss_view.dart';
+import '../views/cash_register_view.dart';
+import '../views/sweepstakes_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/auth_service.dart';
 
@@ -134,6 +139,27 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/carrito-compra',
             builder: (context, state) => const CarritoCompraView(),
+          ),
+          // Nuevas rutas
+          GoRoute(
+            path: '/offers',
+            builder: (context, state) => const OffersView(),
+          ),
+          GoRoute(
+            path: '/cash-flow',
+            builder: (context, state) => const CashFlowView(),
+          ),
+          GoRoute(
+            path: '/profit-loss',
+            builder: (context, state) => const ProfitLossView(),
+          ),
+          GoRoute(
+            path: '/cash-register',
+            builder: (context, state) => const CashRegisterView(),
+          ),
+          GoRoute(
+            path: '/sweepstakes',
+            builder: (context, state) => const SweepstakesView(),
           ),
         ],
       ),

@@ -24,6 +24,9 @@ class CarritoCompraService {
     required double precioUnitario,
     bool esUrgente = false,
     String? notas,
+    String? codigoProveedor,
+    int? stockDisponible,
+    String? observacionesProveedor,
   }) async {
     final isar = await db;
 
@@ -36,10 +39,16 @@ class CarritoCompraService {
             ..nombreProveedor = nombreProveedor
             ..cantidad = cantidad
             ..precioUnitario = precioUnitario
-            ..precioTotal = precioUnitario * cantidad
             ..esUrgente = esUrgente
             ..notas = notas
+            ..codigoProveedor = codigoProveedor
+            ..stockDisponibleProveedor = stockDisponible
+            ..observacionesProveedor = observacionesProveedor
+            ..proveedorSeleccionado = true
             ..fechaAgregado = DateTime.now();
+
+      // Calcular el precio total
+      item.calcularPrecioTotal();
 
       await isar.carritoCompras.put(item);
     });
@@ -69,8 +78,7 @@ class CarritoCompraService {
     await isar.writeTxn(() async {
       final item = await isar.carritoCompras.get(id);
       if (item != null) {
-        item.cantidad = nuevaCantidad;
-        item.precioTotal = (item.precioUnitario ?? 0) * nuevaCantidad;
+        item.actualizarCantidad(nuevaCantidad);
         await isar.carritoCompras.put(item);
       }
     });

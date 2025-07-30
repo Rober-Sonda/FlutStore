@@ -23,81 +23,128 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       icon: Icons.dashboard_outlined,
       label: 'Dashboard',
       route: AppRoutes.dashboard,
+      color: Color(0xFF2196F3), // Azul
     ),
     _NavItemData(
       icon: Icons.store_outlined,
       label: 'Productos',
       route: AppRoutes.products,
+      color: Color(0xFF4CAF50), // Verde
     ),
     _NavItemData(
       icon: Icons.category_outlined,
       label: 'Categorías',
       route: AppRoutes.categories,
+      color: Color(0xFF9C27B0), // Púrpura
     ),
     _NavItemData(
       icon: Icons.local_shipping_outlined,
       label: 'Proveedores',
       route: AppRoutes.providers,
+      color: Color(0xFFFF9800), // Naranja
     ),
     _NavItemData(
       icon: Icons.shopping_cart_outlined,
       label: 'Compras',
       route: AppRoutes.purchases,
+      color: Color(0xFF795548), // Marrón
     ),
     _NavItemData(
       icon: Icons.shopping_basket_outlined,
       label: 'Carrito Compra',
       route: AppRoutes.carritoCompra,
+      color: Color(0xFF607D8B), // Azul gris
     ),
     _NavItemData(
       icon: Icons.assignment_outlined,
       label: 'Pedidos',
       route: AppRoutes.orders,
+      color: Color(0xFFE91E63), // Rosa
     ),
     _NavItemData(
       icon: Icons.person_outline,
       label: 'Clientes',
       route: AppRoutes.clients,
+      color: Color(0xFF00BCD4), // Cian
     ),
     _NavItemData(
       icon: Icons.account_balance_wallet_outlined,
       label: 'Cuenta Corriente',
       route: AppRoutes.accountBalance,
+      color: Color(0xFF8BC34A), // Verde claro
     ),
     _NavItemData(
       icon: Icons.point_of_sale_outlined,
       label: 'Ventas',
       route: AppRoutes.sales,
+      color: Color(0xFFF44336), // Rojo
     ),
     _NavItemData(
       icon: Icons.inventory_2_outlined,
       label: 'Mov. Stock',
       route: AppRoutes.stockMovements,
+      color: Color(0xFF9E9E9E), // Gris
     ),
     _NavItemData(
       icon: Icons.attach_money_outlined,
       label: 'Finanzas',
       route: AppRoutes.financialRecords,
+      color: Color(0xFFFF5722), // Rojo oscuro
     ),
     _NavItemData(
       icon: Icons.insert_chart_outlined,
       label: 'Informes',
       route: AppRoutes.reports,
+      color: Color(0xFF673AB7), // Púrpura oscuro
     ),
     _NavItemData(
       icon: Icons.admin_panel_settings_outlined,
       label: 'Roles',
       route: AppRoutes.roles,
+      color: Color(0xFF3F51B5), // Índigo
     ),
     _NavItemData(
       icon: Icons.people_alt_outlined,
       label: 'Usuarios',
       route: AppRoutes.users,
+      color: Color(0xFF009688), // Verde azulado
     ),
     _NavItemData(
       icon: Icons.settings_outlined,
       label: 'Configuración',
       route: AppRoutes.settings,
+      color: Color(0xFF607D8B), // Azul gris
+    ),
+    // Nuevas secciones
+    _NavItemData(
+      icon: Icons.local_offer_outlined,
+      label: 'Ofertas',
+      route: AppRoutes.offers,
+      color: Color(0xFFFFC107), // Amarillo
+    ),
+    _NavItemData(
+      icon: Icons.account_balance_outlined,
+      label: 'Flujo de Caja',
+      route: AppRoutes.cashFlow,
+      color: Color(0xFF4CAF50), // Verde
+    ),
+    _NavItemData(
+      icon: Icons.trending_up_outlined,
+      label: 'Ganancias y Pérdidas',
+      route: AppRoutes.profitLoss,
+      color: Color(0xFFE91E63), // Rosa
+    ),
+    _NavItemData(
+      icon: Icons.point_of_sale_outlined,
+      label: 'Cierre de Caja',
+      route: AppRoutes.cashRegister,
+      color: Color(0xFF2196F3), // Azul
+    ),
+    _NavItemData(
+      icon: Icons.card_giftcard_outlined,
+      label: 'Sorteos',
+      route: AppRoutes.sweepstakes,
+      color: Color(0xFF9C27B0), // Púrpura
     ),
   ];
 
@@ -381,11 +428,13 @@ class _NavItemData {
   final IconData icon;
   final String label;
   final String route;
+  final Color color;
 
   const _NavItemData({
     required this.icon,
     required this.label,
     required this.route,
+    required this.color,
   });
 }
 
@@ -403,7 +452,7 @@ class NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? Colors.deepPurpleAccent : Colors.white70;
+    final color = selected ? data.color : Colors.white70;
     final size = isSelectedIcon ? 34.0 : 30.0;
     final borderRadius = isSelectedIcon ? 0.0 : 2.0;
 
@@ -423,7 +472,7 @@ class NavItem extends StatelessWidget {
               child: Container(
                 width: 4,
                 decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
+                  color: data.color,
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
               ),
