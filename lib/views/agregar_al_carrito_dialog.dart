@@ -280,7 +280,7 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
                       onChanged: (value) {
                         setState(() => esUrgente = value ?? false);
                       },
-                      fillColor: MaterialStateProperty.resolveWith((states) => Colors.orange),
+                      fillColor: WidgetStateProperty.resolveWith((states) => Colors.orange),
                     ),
                     const Text(
                       'Pedido urgente',

@@ -100,7 +100,7 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
                   ),
                 ),
               );
-            }).toList(),
+            }),
 
             const SizedBox(width: 16),
 

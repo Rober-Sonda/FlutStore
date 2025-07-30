@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/src/app_routes.dart';
 import 'package:tienda_app/models/compra.dart';
 import 'package:tienda_app/models/producto.dart';
 import 'package:tienda_app/models/proveedor.dart';

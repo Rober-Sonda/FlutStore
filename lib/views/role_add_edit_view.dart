@@ -4,11 +4,13 @@ import 'package:tienda_app/src/app_routes.dart';
 import 'package:tienda_app/models/rol.dart';
 import 'package:tienda_app/services/isar_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 
 class RoleAddEditView extends ConsumerStatefulWidget {
   final Rol? rol;
+  final int? roleId;
 
-  const RoleAddEditView({super.key, this.rol});
+  const RoleAddEditView({super.key, this.rol, this.roleId});
 
   @override
   ConsumerState<RoleAddEditView> createState() => _RoleAddEditViewState();
@@ -24,105 +26,91 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
 
   // Permisos disponibles con acciones específicas
   final Map<String, Map<String, bool>> _permisos = {
-    'productos': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'categorias': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'proveedores': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'compras': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'pedidos': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'clientes': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
+    'productos': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'categorias': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'proveedores': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'compras': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'pedidos': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'clientes': {'visualizar': false, 'editar': false, 'eliminar': false},
     'cuenta_corriente': {
       'visualizar': false,
       'editar': false,
       'eliminar': false,
     },
-    'ventas': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
+    'ventas': {'visualizar': false, 'editar': false, 'eliminar': false},
     'movimientos_stock': {
       'visualizar': false,
       'editar': false,
       'eliminar': false,
     },
-    'finanzas': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'informes': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'roles': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'usuarios': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
-    'configuracion': {
-      'visualizar': false,
-      'editar': false,
-      'eliminar': false,
-    },
+    'finanzas': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'informes': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'roles': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'usuarios': {'visualizar': false, 'editar': false, 'eliminar': false},
+    'configuracion': {'visualizar': false, 'editar': false, 'eliminar': false},
   };
 
   @override
   void initState() {
     super.initState();
-    _isEditing = widget.rol != null;
+    _isEditing = widget.rol != null || widget.roleId != null;
     if (_isEditing) {
       _loadRolData();
     }
   }
 
-  void _loadRolData() {
-    final rol = widget.rol!;
-    _nombreController.text = rol.nombre;
-    _descripcionController.text = rol.descripcion ?? '';
+  Future<void> _loadRolData() async {
+    try {
+      Rol? rolToLoad = widget.rol;
 
-    // Cargar permisos existentes
-    if (rol.permisos != null) {
-      for (final permiso in rol.permisos!) {
-        // Parsear permisos en formato "seccion.accion"
-        final parts = permiso.split('.');
-        if (parts.length == 2) {
-          final seccion = parts[0];
-          final accion = parts[1];
-          if (_permisos.containsKey(seccion) && 
-              _permisos[seccion]!.containsKey(accion)) {
-            _permisos[seccion]![accion] = true;
+      // Si no se proporciona el rol pero sí el ID, cargarlo desde la BD
+      if (rolToLoad == null && widget.roleId != null) {
+        final isar = await ref.read(isarServiceProvider).db;
+        rolToLoad = await isar.rols.get(widget.roleId!);
+
+        if (rolToLoad == null) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Rol no encontrado'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            context.pop();
+            return;
           }
         }
+      }
+
+      if (rolToLoad != null) {
+        _nombreController.text = rolToLoad.nombre;
+        _descripcionController.text = rolToLoad.descripcion ?? '';
+
+        // Cargar permisos existentes
+        if (rolToLoad.permisos != null) {
+          for (final permiso in rolToLoad.permisos!) {
+            // Parsear permisos en formato "seccion.accion"
+            final parts = permiso.split('.');
+            if (parts.length == 2) {
+              final seccion = parts[0];
+              final accion = parts[1];
+              if (_permisos.containsKey(seccion) &&
+                  _permisos[seccion]!.containsKey(accion)) {
+                _permisos[seccion]![accion] = true;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al cargar rol: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        context.pop();
       }
     }
   }
@@ -155,7 +143,20 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
     try {
       final isar = await ref.read(isarServiceProvider).db;
 
-      final rol = _isEditing ? widget.rol! : Rol();
+      Rol rol;
+      if (_isEditing) {
+        // Si estamos editando, obtener el rol existente
+        if (widget.rol != null) {
+          rol = widget.rol!;
+        } else if (widget.roleId != null) {
+          rol = await isar.rols.get(widget.roleId!) ?? Rol();
+        } else {
+          rol = Rol();
+        }
+      } else {
+        rol = Rol();
+      }
+
       rol.nombre = _nombreController.text.trim();
       rol.descripcion = _descripcionController.text.trim();
       rol.permisos = _getPermisosList();
@@ -280,13 +281,14 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 16),
-            Expanded(
+            SizedBox(
+              height: 400, // Altura fija para evitar problemas de layout
               child: ListView.builder(
                 itemCount: _permisos.length,
                 itemBuilder: (context, index) {
                   final seccion = _permisos.keys.elementAt(index);
                   final permisosSeccion = _permisos[seccion]!;
-                  
+
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ExpansionTile(
@@ -344,7 +346,7 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
     Color color,
   ) {
     final isChecked = _permisos[seccion]![accion] ?? false;
-    
+
     return CheckboxListTile(
       title: Row(
         children: [
@@ -450,8 +452,8 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Eliminar'),
                 style: TextButton.styleFrom(foregroundColor: Colors.red),
+                child: const Text('Eliminar'),
               ),
             ],
           ),
@@ -461,18 +463,37 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
       setState(() => _isLoading = true);
       try {
         final isar = await ref.read(isarServiceProvider).db;
-        await isar.writeTxn(() async {
-          await isar.rols.delete(widget.rol!.id);
-        });
 
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Rol eliminado'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          context.pop();
+        int? roleIdToDelete;
+        if (widget.rol != null) {
+          roleIdToDelete = widget.rol!.id;
+        } else if (widget.roleId != null) {
+          roleIdToDelete = widget.roleId;
+        }
+
+        if (roleIdToDelete != null) {
+          await isar.writeTxn(() async {
+            await isar.rols.delete(roleIdToDelete as Id);
+          });
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Rol eliminado'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            context.pop();
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('No se pudo identificar el rol a eliminar'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
       } catch (e) {
         if (mounted) {

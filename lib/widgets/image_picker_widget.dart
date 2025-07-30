@@ -26,7 +26,7 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final ImagePicker _picker = ImagePicker();
-  List<File> _imagenesSeleccionadas = [];
+  final List<File> _imagenesSeleccionadas = [];
   bool _isLoading = false;
 
   @override
@@ -136,7 +136,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   Widget _buildImagenesExistentes() {
-    return Container(
+    return SizedBox(
       height: widget.alturaPreview + 20,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -232,7 +232,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   Widget _buildImagenesNuevas() {
-    return Container(
+    return SizedBox(
       height: widget.alturaPreview + 20,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:tienda_app/models/carrito_compra.dart';
-import 'package:tienda_app/models/producto.dart';
 import 'package:tienda_app/models/proveedor.dart';
 import 'package:tienda_app/services/isar_service.dart';
 

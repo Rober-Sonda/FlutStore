@@ -329,8 +329,9 @@ class _UsersViewState extends ConsumerState<UsersView> {
                                           child,
                                           loadingProgress,
                                         ) {
-                                          if (loadingProgress == null)
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
                                           return Container(
                                             width: 50,
                                             height: 50,

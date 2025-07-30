@@ -30,7 +30,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   // Para agregar producto
   List<Categoria> _categoriasPrincipales = [];
   List<Categoria> _categoriasActuales = [];
-  List<Categoria> _rutaSeleccionada = [];
+  final List<Categoria> _rutaSeleccionada = [];
   Categoria? _categoriaSeleccionada;
   List<PropiedadCategoria> _propiedadesCategoria = [];
 
@@ -47,8 +47,8 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   final _barcodeController = TextEditingController();
 
   // Propiedades dinámicas
-  Map<String, TextEditingController> _propiedadesControllers = {};
-  Map<String, String> _propiedadesValores = {};
+  final Map<String, TextEditingController> _propiedadesControllers = {};
+  final Map<String, String> _propiedadesValores = {};
 
   // Gestión de imágenes
   List<String> _imagenesProducto = [];
@@ -74,9 +74,9 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
     _stockController.dispose();
     _skuController.dispose();
     _barcodeController.dispose();
-    _propiedadesControllers.values.forEach(
-      (controller) => controller.dispose(),
-    );
+    for (var controller in _propiedadesControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -632,9 +632,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                     onImagenAgregada: (urlImagen) {
                       setState(() {
                         _imagenesProducto.add(urlImagen);
-                        if (_imagenPrincipal == null) {
-                          _imagenPrincipal = urlImagen;
-                        }
+                        _imagenPrincipal ??= urlImagen;
                       });
                     },
                     onImagenEliminada: (urlImagen) {
@@ -698,7 +696,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),

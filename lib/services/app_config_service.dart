@@ -52,8 +52,9 @@ class AppConfigService {
     final prefs = await SharedPreferences.getInstance();
     String configName = 'default';
     
-    if (config == FontConfig.modernConfig) configName = 'modern';
-    else if (config == FontConfig.elegantConfig) configName = 'elegant';
+    if (config == FontConfig.modernConfig) {
+      configName = 'modern';
+    } else if (config == FontConfig.elegantConfig) configName = 'elegant';
     else if (config == FontConfig.techConfig) configName = 'tech';
     
     await prefs.setString(_fontConfigKey, configName);

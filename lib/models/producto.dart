@@ -22,9 +22,7 @@ class Producto {
     if (!imagenes.contains(urlImagen)) {
       imagenes.add(urlImagen);
       // Si es la primera imagen, establecerla como principal
-      if (imagenPrincipal == null) {
-        imagenPrincipal = urlImagen;
-      }
+      imagenPrincipal ??= urlImagen;
     }
   }
 

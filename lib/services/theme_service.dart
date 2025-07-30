@@ -24,7 +24,7 @@ class ThemeService {
   // Obtener temas personalizados de un usuario
   Future<List<CustomTheme>> getCustomThemes(String userId) async {
     try {
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) return [];
 
       final themes =
@@ -44,7 +44,7 @@ class ThemeService {
   Future<bool> saveCustomTheme(CustomTheme theme) async {
     try {
       print('🔍 Intentando guardar tema: ${theme.name}');
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) {
         print('❌ Isar es null');
         return false;
@@ -72,7 +72,7 @@ class ThemeService {
   Future<bool> updateCustomTheme(CustomTheme theme) async {
     try {
       print('🔍 Actualizando tema: ${theme.name}');
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) return false;
 
       await isar.writeTxn(() async {
@@ -90,7 +90,7 @@ class ThemeService {
   // Eliminar un tema personalizado
   Future<bool> deleteCustomTheme(int themeId) async {
     try {
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) return false;
 
       await isar.writeTxn(() async {
@@ -106,7 +106,7 @@ class ThemeService {
   // Obtener un tema personalizado por ID
   Future<CustomTheme?> getCustomThemeById(int themeId) async {
     try {
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) return null;
 
       final theme = await isar.customThemes.get(themeId);
@@ -169,7 +169,7 @@ class ThemeService {
     int? excludeId,
   }) async {
     try {
-      final isar = await Isar.getInstance();
+      final isar = Isar.getInstance();
       if (isar == null) return false;
 
       final existingTheme =

@@ -108,7 +108,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         final scale = mediaQuery.textScaleFactor.clamp(0.8, 1.4);
 
         return MediaQuery(
-          data: mediaQuery.copyWith(textScaleFactor: scale),
+          data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),
           child: child!,
         );
       },

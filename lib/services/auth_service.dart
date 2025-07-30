@@ -16,7 +16,7 @@ final isAuthenticatedProvider = StateProvider<bool>((ref) => false);
 
 class AuthService {
   Future<Isar?> get db async {
-    return await Isar.getInstance();
+    return Isar.getInstance();
   }
 
   String _hashPassword(String password) {
@@ -84,7 +84,7 @@ class AuthService {
 
       final rol = await isar.rols.get(usuario.rolId!);
 
-      return rol?.nombre?.toLowerCase() == 'administrador';
+      return rol?.nombre.toLowerCase() == 'administrador';
     } catch (e) {
       print('Error verificando si es admin: $e');
       return false;

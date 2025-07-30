@@ -437,8 +437,8 @@ class _UserAddEditViewState extends ConsumerState<UserAddEditView> {
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Eliminar'),
                 style: TextButton.styleFrom(foregroundColor: Colors.red),
+                child: const Text('Eliminar'),
               ),
             ],
           ),

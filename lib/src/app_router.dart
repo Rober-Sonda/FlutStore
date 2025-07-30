@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:tienda_app/views/product_add_edit_view.dart';
 import '../views/main_view.dart';
-import '../models/categoria.dart';
 import '../views/dashboard_view.dart';
 import '../views/products_view.dart';
 import '../views/providers_view.dart';
@@ -15,6 +14,7 @@ import '../views/stock_movements_view.dart';
 import '../views/properties_view.dart';
 import '../views/financial_records_view.dart';
 import '../views/roles_view.dart';
+import '../views/role_add_edit_view.dart';
 import '../views/users_view.dart';
 import '../views/orders_view.dart';
 import '../views/carrito_compra_view.dart';
@@ -111,6 +111,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/roles',
             builder: (context, state) => const RolesView(),
+          ),
+          GoRoute(
+            path: '/roles/add',
+            builder: (context, state) => const RoleAddEditView(),
+          ),
+          GoRoute(
+            path: '/roles/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return RoleAddEditView(roleId: id);
+            },
           ),
           GoRoute(
             path: '/users',

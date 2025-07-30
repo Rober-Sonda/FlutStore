@@ -444,7 +444,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -523,7 +523,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

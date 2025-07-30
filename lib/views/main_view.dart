@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:tienda_app/components/shared/app_navigation_rail.dart';
 import 'package:tienda_app/widgets/modern_title_bar.dart';
 

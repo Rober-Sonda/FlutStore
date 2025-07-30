@@ -159,8 +159,9 @@ class CustomTheme {
     if (backgroundColor != null) this.backgroundColor = backgroundColor;
     if (surfaceColor != null) this.surfaceColor = surfaceColor;
     if (textColor != null) this.textColor = textColor;
-    if (textSecondaryColor != null)
+    if (textSecondaryColor != null) {
       this.textSecondaryColor = textSecondaryColor;
+    }
     if (errorColor != null) this.errorColor = errorColor;
     if (successColor != null) this.successColor = successColor;
     if (warningColor != null) this.warningColor = warningColor;

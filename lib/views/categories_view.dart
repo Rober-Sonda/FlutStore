@@ -19,7 +19,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   Categoria? _categoriaSeleccionada;
   bool _loading = true;
   bool _error = false;
-  Set<int> _categoriasExpandidas = {};
+  final Set<int> _categoriasExpandidas = {};
 
   @override
   void initState() {
