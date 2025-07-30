@@ -191,6 +191,8 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEditing ? 'Editar Rol' : 'Nuevo Rol'),
+        backgroundColor: Colors.blue[700],
+        foregroundColor: Colors.white,
         actions: [
           if (_isEditing)
             IconButton(
@@ -202,63 +204,127 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
       ),
       body: Form(
         key: _formKey,
-        child: ListView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Información del Rol',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _nombreController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nombre del Rol *',
-                        prefixIcon: Icon(Icons.security),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Información del Rol
+              Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.security,
+                            color: Colors.blue[700],
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Información del Rol',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue[700],
+                            ),
+                          ),
+                        ],
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'El nombre es requerido';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _descripcionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Descripción',
-                        prefixIcon: Icon(Icons.description),
-                        hintText:
-                            'Descripción del rol y sus responsabilidades...',
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _nombreController,
+                        decoration: InputDecoration(
+                          labelText: 'Nombre del Rol *',
+                          prefixIcon: const Icon(Icons.badge),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[50],
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'El nombre es requerido';
+                          }
+                          return null;
+                        },
                       ),
-                      maxLines: 3,
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _descripcionController,
+                        decoration: InputDecoration(
+                          labelText: 'Descripción',
+                          prefixIcon: const Icon(Icons.description),
+                          hintText:
+                              'Descripción del rol y sus responsabilidades...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[50],
+                        ),
+                        maxLines: 3,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            _buildPermisosSection(),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _saveRol,
-                child:
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : Text(_isEditing ? 'Actualizar Rol' : 'Crear Rol'),
+              const SizedBox(height: 20),
+
+              // Sección de Permisos
+              _buildPermisosSection(),
+              const SizedBox(height: 32),
+
+              // Botón de Guardar
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _saveRol,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[700],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                  ),
+                  child:
+                      _isLoading
+                          ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                          : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(_isEditing ? Icons.save : Icons.add),
+                              const SizedBox(width: 8),
+                              Text(
+                                _isEditing ? 'Actualizar Rol' : 'Crear Rol',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -266,37 +332,61 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
 
   Widget _buildPermisosSection() {
     return Card(
+      elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Icon(Icons.lock, color: Colors.orange[700], size: 24),
+                const SizedBox(width: 12),
+                Text(
+                  'Permisos del Rol',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange[700],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
             Text(
-              'Permisos del Rol',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            const Text(
               'Selecciona los permisos que tendrá este rol:',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             SizedBox(
-              height: 400, // Altura fija para evitar problemas de layout
+              height: 500, // Altura fija para evitar problemas de layout
               child: ListView.builder(
                 itemCount: _permisos.length,
                 itemBuilder: (context, index) {
                   final seccion = _permisos.keys.elementAt(index);
-                  final permisosSeccion = _permisos[seccion]!;
 
                   return Card(
-                    margin: const EdgeInsets.only(bottom: 8),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: ExpansionTile(
                       title: Text(
                         _getPermisoDisplayName(seccion),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
-                      subtitle: Text(_getPermisoDescription(seccion)),
+                      subtitle: Text(
+                        _getPermisoDescription(seccion),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                      ),
+                      leading: Icon(
+                        _getPermisoIcon(seccion),
+                        color: Colors.blue[700],
+                        size: 24,
+                      ),
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -504,6 +594,41 @@ class _RoleAddEditViewState extends ConsumerState<RoleAddEditView> {
       } finally {
         setState(() => _isLoading = false);
       }
+    }
+  }
+
+  IconData _getPermisoIcon(String seccion) {
+    switch (seccion) {
+      case 'productos':
+        return Icons.inventory;
+      case 'categorias':
+        return Icons.category;
+      case 'proveedores':
+        return Icons.local_shipping;
+      case 'compras':
+        return Icons.shopping_cart;
+      case 'pedidos':
+        return Icons.receipt_long;
+      case 'clientes':
+        return Icons.people;
+      case 'cuenta_corriente':
+        return Icons.account_balance;
+      case 'ventas':
+        return Icons.point_of_sale;
+      case 'movimientos_stock':
+        return Icons.swap_horiz;
+      case 'finanzas':
+        return Icons.attach_money;
+      case 'informes':
+        return Icons.analytics;
+      case 'roles':
+        return Icons.admin_panel_settings;
+      case 'usuarios':
+        return Icons.person;
+      case 'configuracion':
+        return Icons.settings;
+      default:
+        return Icons.folder;
     }
   }
 }
