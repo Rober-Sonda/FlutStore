@@ -35,9 +35,9 @@ class _OffersViewState extends ConsumerState<OffersView> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar ofertas: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar ofertas: $e')));
       }
     }
   }
@@ -83,9 +83,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.amber[50],
-              border: Border(
-                bottom: BorderSide(color: Colors.amber[200]!),
-              ),
+              border: Border(bottom: BorderSide(color: Colors.amber[200]!)),
             ),
             child: Row(
               children: [
@@ -95,7 +93,9 @@ class _OffersViewState extends ConsumerState<OffersView> {
                     children: [
                       Text(
                         'Ofertas',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall?.copyWith(
                           color: Colors.amber[800],
                           fontWeight: FontWeight.bold,
                         ),
@@ -116,45 +116,80 @@ class _OffersViewState extends ConsumerState<OffersView> {
                   onSelected: (value) {
                     setState(() => _filtroSeleccionado = value);
                   },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'Todas', child: Text('Todas')),
-                    const PopupMenuItem(value: 'Activas', child: Text('Activas')),
-                    const PopupMenuItem(value: 'Próximamente', child: Text('Próximamente')),
-                    const PopupMenuItem(value: 'Expiradas', child: Text('Expiradas')),
-                    const PopupMenuItem(value: 'Agotadas', child: Text('Agotadas')),
-                  ],
+                  itemBuilder:
+                      (context) => [
+                        const PopupMenuItem(
+                          value: 'Todas',
+                          child: Text('Todas'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Activas',
+                          child: Text('Activas'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Próximamente',
+                          child: Text('Próximamente'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Expiradas',
+                          child: Text('Expiradas'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Agotadas',
+                          child: Text('Agotadas'),
+                        ),
+                      ],
                 ),
               ],
             ),
           ),
-          
+
           // Estadísticas rápidas
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Row(
               children: [
-                Expanded(child: _buildStatCard('Activas', _ofertas.where((o) => o.estaActiva).length, Colors.green)),
+                Expanded(
+                  child: _buildStatCard(
+                    'Activas',
+                    _ofertas.where((o) => o.estaActiva).length,
+                    Colors.green,
+                  ),
+                ),
                 const SizedBox(width: 12),
-                Expanded(child: _buildStatCard('Próximas', _ofertas.where((o) => o.estaPorComenzar).length, Colors.blue)),
+                Expanded(
+                  child: _buildStatCard(
+                    'Próximas',
+                    _ofertas.where((o) => o.estaPorComenzar).length,
+                    Colors.blue,
+                  ),
+                ),
                 const SizedBox(width: 12),
-                Expanded(child: _buildStatCard('Expiradas', _ofertas.where((o) => o.haExpirado).length, Colors.red)),
+                Expanded(
+                  child: _buildStatCard(
+                    'Expiradas',
+                    _ofertas.where((o) => o.haExpirado).length,
+                    Colors.red,
+                  ),
+                ),
               ],
             ),
           ),
 
           // Lista de ofertas
           Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _ofertasFiltradas.isEmpty
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _ofertasFiltradas.isEmpty
                     ? _buildEmptyState()
                     : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: _ofertasFiltradas.length,
-                        itemBuilder: (context, index) {
-                          return _buildOfertaCard(_ofertasFiltradas[index]);
-                        },
-                      ),
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _ofertasFiltradas.length,
+                      itemBuilder: (context, index) {
+                        return _buildOfertaCard(_ofertasFiltradas[index]);
+                      },
+                    ),
           ),
         ],
       ),
@@ -177,10 +212,10 @@ class _OffersViewState extends ConsumerState<OffersView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-                         Text(
-               title,
-               style: TextStyle(color: color.withOpacity(0.7), fontSize: 12),
-             ),
+            Text(
+              title,
+              style: TextStyle(color: color.withOpacity(0.7), fontSize: 12),
+            ),
           ],
         ),
       ),
@@ -192,17 +227,13 @@ class _OffersViewState extends ConsumerState<OffersView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.local_offer_outlined,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.local_offer_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'No hay ofertas disponibles',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.grey[600],
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(color: Colors.grey[600]),
           ),
           const SizedBox(height: 8),
           Text(
@@ -261,7 +292,10 @@ class _OffersViewState extends ConsumerState<OffersView> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: _getColorForEstado(oferta.estadoOferta),
                     borderRadius: BorderRadius.circular(12),
@@ -319,7 +353,10 @@ class _OffersViewState extends ConsumerState<OffersView> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.amber[100],
                     borderRadius: BorderRadius.circular(8),
@@ -362,7 +399,9 @@ class _OffersViewState extends ConsumerState<OffersView> {
                     onPressed: () {
                       // TODO: Editar oferta
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Funcionalidad en desarrollo')),
+                        const SnackBar(
+                          content: Text('Funcionalidad en desarrollo'),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.edit, size: 16),
@@ -375,7 +414,9 @@ class _OffersViewState extends ConsumerState<OffersView> {
                     onPressed: () {
                       // TODO: Ver detalles
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Funcionalidad en desarrollo')),
+                        const SnackBar(
+                          content: Text('Funcionalidad en desarrollo'),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.visibility, size: 16),
@@ -409,4 +450,4 @@ class _OffersViewState extends ConsumerState<OffersView> {
         return Colors.grey;
     }
   }
-} 
+}

@@ -34,9 +34,7 @@ class _ProfitLossViewState extends ConsumerState<ProfitLossView> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.pink[50],
-              border: Border(
-                bottom: BorderSide(color: Colors.pink[200]!),
-              ),
+              border: Border(bottom: BorderSide(color: Colors.pink[200]!)),
             ),
             child: Row(
               children: [
@@ -46,7 +44,9 @@ class _ProfitLossViewState extends ConsumerState<ProfitLossView> {
                     children: [
                       Text(
                         'Ganancias y Pérdidas',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall?.copyWith(
                           color: Colors.pink[800],
                           fontWeight: FontWeight.bold,
                         ),
@@ -54,10 +54,7 @@ class _ProfitLossViewState extends ConsumerState<ProfitLossView> {
                       const SizedBox(height: 8),
                       Text(
                         'Análisis financiero del negocio',
-                        style: TextStyle(
-                          color: Colors.pink[700],
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.pink[700], fontSize: 16),
                       ),
                     ],
                   ),
@@ -65,7 +62,7 @@ class _ProfitLossViewState extends ConsumerState<ProfitLossView> {
               ],
             ),
           ),
-          
+
           // Estadísticas
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -137,4 +134,4 @@ class _ProfitLossViewState extends ConsumerState<ProfitLossView> {
       ),
     );
   }
-} 
+}
