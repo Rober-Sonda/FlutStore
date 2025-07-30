@@ -27,10 +27,45 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
   bool showLowStock = false;
   bool showOutOfStock = false;
 
+  // Datos para análisis
+  List<Map<String, dynamic>> _productosMasVendidos = [];
+  List<Map<String, dynamic>> _tendenciasPorMes = [];
+  List<Map<String, dynamic>> _categoriasMasPopulares = [];
+
   @override
   void initState() {
     super.initState();
     _loadData();
+    _generarDatosAnalisis();
+  }
+
+  void _generarDatosAnalisis() {
+    // Simular datos de productos más vendidos
+    _productosMasVendidos = [
+      {'nombre': 'Camisa Azul', 'ventas': 45, 'color': Colors.blue},
+      {'nombre': 'Pantalón Negro', 'ventas': 38, 'color': Colors.black},
+      {'nombre': 'Vestido Rojo', 'ventas': 32, 'color': Colors.red},
+      {'nombre': 'Blazer Gris', 'ventas': 28, 'color': Colors.grey},
+      {'nombre': 'Falda Verde', 'ventas': 25, 'color': Colors.green},
+    ];
+
+    // Simular tendencias por mes
+    _tendenciasPorMes = [
+      {'mes': 'Ene', 'ventas': 120, 'color': Colors.blue},
+      {'mes': 'Feb', 'ventas': 150, 'color': Colors.green},
+      {'mes': 'Mar', 'ventas': 180, 'color': Colors.orange},
+      {'mes': 'Abr', 'ventas': 200, 'color': Colors.purple},
+      {'mes': 'May', 'ventas': 220, 'color': Colors.red},
+      {'mes': 'Jun', 'ventas': 250, 'color': Colors.teal},
+    ];
+
+    // Simular categorías más populares
+    _categoriasMasPopulares = [
+      {'nombre': 'Camisas', 'porcentaje': 35, 'color': Colors.blue},
+      {'nombre': 'Pantalones', 'porcentaje': 28, 'color': Colors.green},
+      {'nombre': 'Vestidos', 'porcentaje': 22, 'color': Colors.purple},
+      {'nombre': 'Accesorios', 'porcentaje': 15, 'color': Colors.orange},
+    ];
   }
 
   Future<void> _loadData() async {
@@ -98,7 +133,17 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
             comparison = (a.stock ?? 0).compareTo(b.stock ?? 0);
             break;
           case 'categoria':
-            comparison = (a.categoriaId ?? 0).compareTo(b.categoriaId ?? 0);
+            final categoriaA = categorias?.firstWhere(
+              (c) => c.id == a.categoriaId,
+              orElse: () => Categoria(),
+            );
+            final categoriaB = categorias?.firstWhere(
+              (c) => c.id == b.categoriaId,
+              orElse: () => Categoria(),
+            );
+            comparison = (categoriaA?.nombre ?? '').compareTo(
+              categoriaB?.nombre ?? '',
+            );
             break;
         }
         return sortAscending ? comparison : -comparison;
