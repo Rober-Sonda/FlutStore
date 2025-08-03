@@ -6,241 +6,169 @@ part 'sorteo.g.dart';
 class Sorteo {
   Id id = Isar.autoIncrement;
 
-  late String titulo;
+  late String nombre;
   String? descripcion;
-  String? imagenSorteo;
-
+  DateTime fechaCreacion = DateTime.now();
+  DateTime? fechaInicio;
+  DateTime? fechaFin;
+  String estado = 'borrador'; // 'borrador', 'activo', 'finalizado', 'cancelado'
+  
   // Configuración del sorteo
-  DateTime fechaInicio;
-  DateTime fechaFin;
-  int? maximoParticipantes;
-  int? minimoParticipantes;
-
+  int maxParticipantes = 0; // 0 = sin límite
+  int numGanadores = 1;
+  String tipoSorteo = 'aleatorio'; // 'aleatorio', 'manual'
+  
   // Premios
-  String? premio;
-  double? valorPremio;
-  int cantidadGanadores = 1;
-
-  // Criterios de participación
-  bool requiereSeguir = true;
-  bool requiereComentar = true;
-  bool requiereCompartir = true;
-  bool requiereEtiquetar = true;
-  int? minimoComentarios;
-  int? minimoCompartidas;
-
-  // Estados
-  bool activo = true;
-  bool finalizado = false;
-  bool ganadoresSeleccionados = false;
-
-  // Información de Instagram
-  String? postInstagramId;
-  String? hashtagSorteo;
-  String? cuentaInstagram;
-
+  List<String> premios = [];
+  List<double> valoresPremios = [];
+  
   // Participantes
-  List<String> participantes = [];
-  List<String> ganadores = [];
-
+  List<int> participantesIds = []; // IDs de clientes participantes
+  List<int> ganadoresIds = []; // IDs de ganadores seleccionados
+  
   // Auditoría
   int usuarioId; // Usuario que creó el sorteo
-  DateTime fechaCreacion = DateTime.now();
   DateTime? fechaActualizacion;
 
   Sorteo({
-    required this.titulo,
+    required this.nombre,
     this.descripcion,
-    this.imagenSorteo,
-    required this.fechaInicio,
-    required this.fechaFin,
-    this.maximoParticipantes,
-    this.minimoParticipantes,
-    this.premio,
-    this.valorPremio,
-    this.cantidadGanadores = 1,
-    this.requiereSeguir = true,
-    this.requiereComentar = true,
-    this.requiereCompartir = true,
-    this.requiereEtiquetar = true,
-    this.minimoComentarios,
-    this.minimoCompartidas,
-    this.activo = true,
-    this.finalizado = false,
-    this.ganadoresSeleccionados = false,
-    this.postInstagramId,
-    this.hashtagSorteo,
-    this.cuentaInstagram,
+    this.fechaInicio,
+    this.fechaFin,
+    this.estado = 'borrador',
+    this.maxParticipantes = 0,
+    this.numGanadores = 1,
+    this.tipoSorteo = 'aleatorio',
     required this.usuarioId,
   });
 
-  // Método para verificar si el sorteo está activo
-  bool get estaActivo {
-    final ahora = DateTime.now();
-    return activo &&
-        ahora.isAfter(fechaInicio) &&
-        ahora.isBefore(fechaFin) &&
-        !finalizado;
+  // Métodos para el estado del sorteo
+  bool get estaActivo => estado == 'activo';
+  bool get estaFinalizado => estado == 'finalizado';
+  bool get estaCancelado => estado == 'cancelado';
+  bool get esBorrador => estado == 'borrador';
+
+  // Método para verificar si puede iniciar
+  bool get puedeIniciar {
+    if (estaFinalizado || estaCancelado) return false;
+    if (fechaInicio != null && fechaInicio!.isAfter(DateTime.now())) return false;
+    return true;
   }
 
-  // Método para verificar si el sorteo ha expirado
-  bool get haExpirado {
-    return DateTime.now().isAfter(fechaFin);
+  // Método para verificar si puede finalizar
+  bool get puedeFinalizar {
+    if (!estaActivo) return false;
+    if (fechaFin != null && fechaFin!.isBefore(DateTime.now())) return true;
+    return participantesIds.length >= numGanadores;
   }
 
-  // Método para verificar si el sorteo está por comenzar
-  bool get estaPorComenzar {
-    return DateTime.now().isBefore(fechaInicio);
+  // Método para agregar participante
+  bool agregarParticipante(int clienteId) {
+    if (!estaActivo) return false;
+    if (maxParticipantes > 0 && participantesIds.length >= maxParticipantes) return false;
+    if (participantesIds.contains(clienteId)) return false;
+    
+    participantesIds.add(clienteId);
+    return true;
   }
 
-  // Método para obtener el estado del sorteo
-  String get estadoSorteo {
-    if (!activo) return 'Inactivo';
-    if (finalizado) return 'Finalizado';
-    if (haExpirado) return 'Expirado';
-    if (estaPorComenzar) return 'Próximamente';
-    return 'Activo';
+  // Método para remover participante
+  bool removerParticipante(int clienteId) {
+    if (!estaActivo) return false;
+    if (!participantesIds.contains(clienteId)) return false;
+    
+    participantesIds.remove(clienteId);
+    return true;
+  }
+
+  // Método para iniciar sorteo
+  void iniciarSorteo() {
+    if (!puedeIniciar) return;
+    estado = 'activo';
+    fechaActualizacion = DateTime.now();
+  }
+
+  // Método para finalizar sorteo
+  void finalizarSorteo() {
+    if (!puedeFinalizar) return;
+    estado = 'finalizado';
+    fechaActualizacion = DateTime.now();
+  }
+
+  // Método para cancelar sorteo
+  void cancelarSorteo() {
+    if (estaFinalizado) return;
+    estado = 'cancelado';
+    fechaActualizacion = DateTime.now();
+  }
+
+  // Método para seleccionar ganadores automáticamente
+  List<int> seleccionarGanadoresAutomaticos() {
+    if (participantesIds.isEmpty) return [];
+    
+    final participantes = List<int>.from(participantesIds);
+    participantes.shuffle();
+    
+    final numGanadoresReal = numGanadores > participantes.length 
+        ? participantes.length 
+        : numGanadores;
+    
+    ganadoresIds = participantes.take(numGanadoresReal).toList();
+    return ganadoresIds;
+  }
+
+  // Método para agregar ganador manualmente
+  bool agregarGanador(int clienteId) {
+    if (!participantesIds.contains(clienteId)) return false;
+    if (ganadoresIds.contains(clienteId)) return false;
+    if (ganadoresIds.length >= numGanadores) return false;
+    
+    ganadoresIds.add(clienteId);
+    return true;
+  }
+
+  // Método para remover ganador
+  bool removerGanador(int clienteId) {
+    if (!ganadoresIds.contains(clienteId)) return false;
+    
+    ganadoresIds.remove(clienteId);
+    return true;
+  }
+
+  // Método para obtener estadísticas
+  int get totalParticipantes => participantesIds.length;
+  int get totalGanadores => ganadoresIds.length;
+  bool get tieneGanadores => ganadoresIds.isNotEmpty;
+
+  // Método para obtener el estado formateado
+  String get estadoFormateado {
+    switch (estado) {
+      case 'borrador':
+        return 'Borrador';
+      case 'activo':
+        return 'Activo';
+      case 'finalizado':
+        return 'Finalizado';
+      case 'cancelado':
+        return 'Cancelado';
+      default:
+        return 'Desconocido';
+    }
   }
 
   // Método para obtener el color del estado
   String get colorEstado {
-    switch (estadoSorteo) {
-      case 'Activo':
+    switch (estado) {
+      case 'borrador':
+        return 'grey';
+      case 'activo':
         return 'green';
-      case 'Próximamente':
+      case 'finalizado':
         return 'blue';
-      case 'Finalizado':
-        return 'purple';
-      case 'Expirado':
-      case 'Inactivo':
+      case 'cancelado':
         return 'red';
       default:
         return 'grey';
     }
-  }
-
-  // Método para obtener días restantes
-  int get diasRestantes {
-    final ahora = DateTime.now();
-    if (ahora.isAfter(fechaFin)) return 0;
-    return fechaFin.difference(ahora).inDays;
-  }
-
-  // Método para obtener días transcurridos
-  int get diasTranscurridos {
-    final ahora = DateTime.now();
-    if (ahora.isBefore(fechaInicio)) return 0;
-    return ahora.difference(fechaInicio).inDays;
-  }
-
-  // Método para obtener el progreso del sorteo (0.0 a 1.0)
-  double get progresoSorteo {
-    final totalDias = fechaFin.difference(fechaInicio).inDays;
-    if (totalDias <= 0) return 0.0;
-
-    final diasTranscurridos = this.diasTranscurridos;
-    if (diasTranscurridos <= 0) return 0.0;
-    if (diasTranscurridos >= totalDias) return 1.0;
-
-    return diasTranscurridos / totalDias;
-  }
-
-  // Método para agregar participante
-  void agregarParticipante(String participante) {
-    if (!participantes.contains(participante)) {
-      participantes.add(participante);
-      fechaActualizacion = DateTime.now();
-    }
-  }
-
-  // Método para remover participante
-  void removerParticipante(String participante) {
-    participantes.remove(participante);
-    fechaActualizacion = DateTime.now();
-  }
-
-  // Método para obtener el número de participantes
-  int get numeroParticipantes {
-    return participantes.length;
-  }
-
-  // Método para verificar si hay suficientes participantes
-  bool get haySuficientesParticipantes {
-    if (minimoParticipantes == null) return true;
-    return participantes.length >= minimoParticipantes!;
-  }
-
-  // Método para verificar si se alcanzó el máximo de participantes
-  bool get seAlcanzoMaximoParticipantes {
-    if (maximoParticipantes == null) return false;
-    return participantes.length >= maximoParticipantes!;
-  }
-
-  // Método para finalizar el sorteo
-  void finalizarSorteo() {
-    finalizado = true;
-    fechaActualizacion = DateTime.now();
-  }
-
-  // Método para seleccionar ganadores
-  void seleccionarGanadores() {
-    if (participantes.isNotEmpty && !ganadoresSeleccionados) {
-      final participantesShuffled = List<String>.from(participantes);
-      participantesShuffled.shuffle();
-
-      ganadores = participantesShuffled.take(cantidadGanadores).toList();
-      ganadoresSeleccionados = true;
-      fechaActualizacion = DateTime.now();
-    }
-  }
-
-  // Método para obtener los criterios de participación
-  List<String> get criteriosParticipacion {
-    List<String> criterios = [];
-
-    if (requiereSeguir) criterios.add('Seguir la cuenta');
-    if (requiereComentar) criterios.add('Comentar la publicación');
-    if (requiereCompartir) criterios.add('Compartir en stories');
-    if (requiereEtiquetar) criterios.add('Etiquetar amigos');
-
-    if (minimoComentarios != null) {
-      criterios.add('Mínimo $minimoComentarios comentarios');
-    }
-
-    if (minimoCompartidas != null) {
-      criterios.add('Mínimo $minimoCompartidas compartidas');
-    }
-
-    return criterios;
-  }
-
-  // Método para obtener el valor del premio formateado
-  String? get valorPremioFormateado {
-    if (valorPremio == null) return null;
-    return '\$${valorPremio!.toStringAsFixed(2)}';
-  }
-
-  // Método para obtener la duración del sorteo
-  @ignore
-  Duration get duracionSorteo {
-    return fechaFin.difference(fechaInicio);
-  }
-
-  // Método para obtener la duración formateada
-  String get duracionFormateada {
-    final duracion = duracionSorteo;
-    final dias = duracion.inDays;
-    final horas = duracion.inHours % 24;
-
-    if (dias > 0) {
-      return '$dias días, $horas horas';
-    } else {
-      return '$horas horas';
-    }
-  }
-
-  // Método para verificar si se puede seleccionar ganadores
-  bool get puedeSeleccionarGanadores {
-    return haExpirado && haySuficientesParticipantes && !ganadoresSeleccionados;
   }
 }

@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:tienda_app/models/usuario.dart';
 import 'package:tienda_app/models/rol.dart';
-import 'package:tienda_app/services/isar_service.dart';
 import 'package:tienda_app/services/id_validator.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
@@ -101,23 +99,40 @@ class AuthService {
       if (usuarioAEliminar == null) return false;
 
       final esAdminAEliminar = await isAdmin(usuarioAEliminar);
-
       if (!esAdminAEliminar) return true; // Puede eliminar usuarios no admin
 
-      // Si es admin, verificar cuántos administradores hay
+      // Si es admin, verificar que no sea el último
       final admins = await isar.usuarios.filter().rolIdIsNotNull().findAll();
 
       int adminCount = 0;
-      for (final admin in admins) {
-        if (await isAdmin(admin)) {
-          adminCount++;
+      for (final usuario in admins) {
+        if (usuario.rolId != null) {
+          final rol = await isar.rols.get(usuario.rolId!);
+          if (rol?.nombre.toLowerCase() == 'administrador') {
+            adminCount++;
+          }
         }
       }
 
-      // Solo puede eliminar si hay más de un administrador
-      return adminCount > 1;
+      return adminCount > 1; // Solo puede eliminar si hay más de un admin
     } catch (e) {
       print('Error verificando si puede eliminar usuario: $e');
+      return false;
+    }
+  }
+
+  /// Verifica si el usuario actual puede agregar usuarios
+  Future<bool> canAddUser(Usuario? currentUser) async {
+    try {
+      if (currentUser == null) return false;
+
+      final isar = await db;
+      if (isar == null) return false;
+
+      // Solo los administradores pueden agregar usuarios
+      return await isAdmin(currentUser);
+    } catch (e) {
+      print('Error verificando si puede agregar usuario: $e');
       return false;
     }
   }

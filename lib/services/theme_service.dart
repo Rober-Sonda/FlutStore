@@ -4,7 +4,6 @@ import 'package:isar/isar.dart';
 import 'package:tienda_app/models/app_theme.dart';
 import 'package:tienda_app/models/custom_theme.dart';
 import 'package:tienda_app/services/auth_service.dart';
-import 'package:tienda_app/services/isar_service.dart';
 import 'package:tienda_app/services/id_validator.dart';
 
 final themeServiceProvider = Provider<ThemeService>((ref) => ThemeService());

@@ -17,7 +17,6 @@ class MainView extends StatelessWidget {
           children: [
             // Modern Title Bar
             const ModernTitleBar(),
-            const SizedBox(height: 10),
             Expanded(
               child: Row(
                 children: [const AppNavigationRail(), Expanded(child: child)],

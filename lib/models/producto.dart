@@ -9,6 +9,8 @@ class Producto {
 
   late String nombre;
   double? precio;
+  double? precioCosto; // Precio de costo para calcular utilidad
+  double? utilidad; // Porcentaje de utilidad
   int? stock;
   int? categoriaId;
   List<ValorPropiedadProducto> valoresPropiedades = [];

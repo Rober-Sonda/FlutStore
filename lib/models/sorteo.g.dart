@@ -17,215 +17,135 @@ const SorteoSchema = CollectionSchema(
   name: r'Sorteo',
   id: -5523654683105411362,
   properties: {
-    r'activo': PropertySchema(
-      id: 0,
-      name: r'activo',
-      type: IsarType.bool,
-    ),
-    r'cantidadGanadores': PropertySchema(
-      id: 1,
-      name: r'cantidadGanadores',
-      type: IsarType.long,
-    ),
     r'colorEstado': PropertySchema(
-      id: 2,
+      id: 0,
       name: r'colorEstado',
       type: IsarType.string,
     ),
-    r'criteriosParticipacion': PropertySchema(
-      id: 3,
-      name: r'criteriosParticipacion',
-      type: IsarType.stringList,
-    ),
-    r'cuentaInstagram': PropertySchema(
-      id: 4,
-      name: r'cuentaInstagram',
-      type: IsarType.string,
-    ),
     r'descripcion': PropertySchema(
-      id: 5,
+      id: 1,
       name: r'descripcion',
       type: IsarType.string,
     ),
-    r'diasRestantes': PropertySchema(
-      id: 6,
-      name: r'diasRestantes',
-      type: IsarType.long,
-    ),
-    r'diasTranscurridos': PropertySchema(
-      id: 7,
-      name: r'diasTranscurridos',
-      type: IsarType.long,
-    ),
-    r'duracionFormateada': PropertySchema(
-      id: 8,
-      name: r'duracionFormateada',
-      type: IsarType.string,
+    r'esBorrador': PropertySchema(
+      id: 2,
+      name: r'esBorrador',
+      type: IsarType.bool,
     ),
     r'estaActivo': PropertySchema(
-      id: 9,
+      id: 3,
       name: r'estaActivo',
       type: IsarType.bool,
     ),
-    r'estaPorComenzar': PropertySchema(
-      id: 10,
-      name: r'estaPorComenzar',
+    r'estaCancelado': PropertySchema(
+      id: 4,
+      name: r'estaCancelado',
       type: IsarType.bool,
     ),
-    r'estadoSorteo': PropertySchema(
-      id: 11,
-      name: r'estadoSorteo',
+    r'estaFinalizado': PropertySchema(
+      id: 5,
+      name: r'estaFinalizado',
+      type: IsarType.bool,
+    ),
+    r'estado': PropertySchema(
+      id: 6,
+      name: r'estado',
+      type: IsarType.string,
+    ),
+    r'estadoFormateado': PropertySchema(
+      id: 7,
+      name: r'estadoFormateado',
       type: IsarType.string,
     ),
     r'fechaActualizacion': PropertySchema(
-      id: 12,
+      id: 8,
       name: r'fechaActualizacion',
       type: IsarType.dateTime,
     ),
     r'fechaCreacion': PropertySchema(
-      id: 13,
+      id: 9,
       name: r'fechaCreacion',
       type: IsarType.dateTime,
     ),
     r'fechaFin': PropertySchema(
-      id: 14,
+      id: 10,
       name: r'fechaFin',
       type: IsarType.dateTime,
     ),
     r'fechaInicio': PropertySchema(
-      id: 15,
+      id: 11,
       name: r'fechaInicio',
       type: IsarType.dateTime,
     ),
-    r'finalizado': PropertySchema(
+    r'ganadoresIds': PropertySchema(
+      id: 12,
+      name: r'ganadoresIds',
+      type: IsarType.longList,
+    ),
+    r'maxParticipantes': PropertySchema(
+      id: 13,
+      name: r'maxParticipantes',
+      type: IsarType.long,
+    ),
+    r'nombre': PropertySchema(
+      id: 14,
+      name: r'nombre',
+      type: IsarType.string,
+    ),
+    r'numGanadores': PropertySchema(
+      id: 15,
+      name: r'numGanadores',
+      type: IsarType.long,
+    ),
+    r'participantesIds': PropertySchema(
       id: 16,
-      name: r'finalizado',
-      type: IsarType.bool,
+      name: r'participantesIds',
+      type: IsarType.longList,
     ),
-    r'ganadores': PropertySchema(
+    r'premios': PropertySchema(
       id: 17,
-      name: r'ganadores',
+      name: r'premios',
       type: IsarType.stringList,
     ),
-    r'ganadoresSeleccionados': PropertySchema(
+    r'puedeFinalizar': PropertySchema(
       id: 18,
-      name: r'ganadoresSeleccionados',
+      name: r'puedeFinalizar',
       type: IsarType.bool,
     ),
-    r'haExpirado': PropertySchema(
+    r'puedeIniciar': PropertySchema(
       id: 19,
-      name: r'haExpirado',
+      name: r'puedeIniciar',
       type: IsarType.bool,
     ),
-    r'hashtagSorteo': PropertySchema(
+    r'tieneGanadores': PropertySchema(
       id: 20,
-      name: r'hashtagSorteo',
-      type: IsarType.string,
+      name: r'tieneGanadores',
+      type: IsarType.bool,
     ),
-    r'haySuficientesParticipantes': PropertySchema(
+    r'tipoSorteo': PropertySchema(
       id: 21,
-      name: r'haySuficientesParticipantes',
-      type: IsarType.bool,
+      name: r'tipoSorteo',
+      type: IsarType.string,
     ),
-    r'imagenSorteo': PropertySchema(
+    r'totalGanadores': PropertySchema(
       id: 22,
-      name: r'imagenSorteo',
-      type: IsarType.string,
+      name: r'totalGanadores',
+      type: IsarType.long,
     ),
-    r'maximoParticipantes': PropertySchema(
+    r'totalParticipantes': PropertySchema(
       id: 23,
-      name: r'maximoParticipantes',
+      name: r'totalParticipantes',
       type: IsarType.long,
-    ),
-    r'minimoComentarios': PropertySchema(
-      id: 24,
-      name: r'minimoComentarios',
-      type: IsarType.long,
-    ),
-    r'minimoCompartidas': PropertySchema(
-      id: 25,
-      name: r'minimoCompartidas',
-      type: IsarType.long,
-    ),
-    r'minimoParticipantes': PropertySchema(
-      id: 26,
-      name: r'minimoParticipantes',
-      type: IsarType.long,
-    ),
-    r'numeroParticipantes': PropertySchema(
-      id: 27,
-      name: r'numeroParticipantes',
-      type: IsarType.long,
-    ),
-    r'participantes': PropertySchema(
-      id: 28,
-      name: r'participantes',
-      type: IsarType.stringList,
-    ),
-    r'postInstagramId': PropertySchema(
-      id: 29,
-      name: r'postInstagramId',
-      type: IsarType.string,
-    ),
-    r'premio': PropertySchema(
-      id: 30,
-      name: r'premio',
-      type: IsarType.string,
-    ),
-    r'progresoSorteo': PropertySchema(
-      id: 31,
-      name: r'progresoSorteo',
-      type: IsarType.double,
-    ),
-    r'puedeSeleccionarGanadores': PropertySchema(
-      id: 32,
-      name: r'puedeSeleccionarGanadores',
-      type: IsarType.bool,
-    ),
-    r'requiereComentar': PropertySchema(
-      id: 33,
-      name: r'requiereComentar',
-      type: IsarType.bool,
-    ),
-    r'requiereCompartir': PropertySchema(
-      id: 34,
-      name: r'requiereCompartir',
-      type: IsarType.bool,
-    ),
-    r'requiereEtiquetar': PropertySchema(
-      id: 35,
-      name: r'requiereEtiquetar',
-      type: IsarType.bool,
-    ),
-    r'requiereSeguir': PropertySchema(
-      id: 36,
-      name: r'requiereSeguir',
-      type: IsarType.bool,
-    ),
-    r'seAlcanzoMaximoParticipantes': PropertySchema(
-      id: 37,
-      name: r'seAlcanzoMaximoParticipantes',
-      type: IsarType.bool,
-    ),
-    r'titulo': PropertySchema(
-      id: 38,
-      name: r'titulo',
-      type: IsarType.string,
     ),
     r'usuarioId': PropertySchema(
-      id: 39,
+      id: 24,
       name: r'usuarioId',
       type: IsarType.long,
     ),
-    r'valorPremio': PropertySchema(
-      id: 40,
-      name: r'valorPremio',
-      type: IsarType.double,
-    ),
-    r'valorPremioFormateado': PropertySchema(
-      id: 41,
-      name: r'valorPremioFormateado',
-      type: IsarType.string,
+    r'valoresPremios': PropertySchema(
+      id: 25,
+      name: r'valoresPremios',
+      type: IsarType.doubleList,
     )
   },
   estimateSize: _sorteoEstimateSize,
@@ -249,72 +169,26 @@ int _sorteoEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.colorEstado.length * 3;
-  bytesCount += 3 + object.criteriosParticipacion.length * 3;
-  {
-    for (var i = 0; i < object.criteriosParticipacion.length; i++) {
-      final value = object.criteriosParticipacion[i];
-      bytesCount += value.length * 3;
-    }
-  }
-  {
-    final value = object.cuentaInstagram;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   {
     final value = object.descripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.duracionFormateada.length * 3;
-  bytesCount += 3 + object.estadoSorteo.length * 3;
-  bytesCount += 3 + object.ganadores.length * 3;
+  bytesCount += 3 + object.estado.length * 3;
+  bytesCount += 3 + object.estadoFormateado.length * 3;
+  bytesCount += 3 + object.ganadoresIds.length * 8;
+  bytesCount += 3 + object.nombre.length * 3;
+  bytesCount += 3 + object.participantesIds.length * 8;
+  bytesCount += 3 + object.premios.length * 3;
   {
-    for (var i = 0; i < object.ganadores.length; i++) {
-      final value = object.ganadores[i];
+    for (var i = 0; i < object.premios.length; i++) {
+      final value = object.premios[i];
       bytesCount += value.length * 3;
     }
   }
-  {
-    final value = object.hashtagSorteo;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.imagenSorteo;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.participantes.length * 3;
-  {
-    for (var i = 0; i < object.participantes.length; i++) {
-      final value = object.participantes[i];
-      bytesCount += value.length * 3;
-    }
-  }
-  {
-    final value = object.postInstagramId;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.premio;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.titulo.length * 3;
-  {
-    final value = object.valorPremioFormateado;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.tipoSorteo.length * 3;
+  bytesCount += 3 + object.valoresPremios.length * 8;
   return bytesCount;
 }
 
@@ -324,48 +198,32 @@ void _sorteoSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.activo);
-  writer.writeLong(offsets[1], object.cantidadGanadores);
-  writer.writeString(offsets[2], object.colorEstado);
-  writer.writeStringList(offsets[3], object.criteriosParticipacion);
-  writer.writeString(offsets[4], object.cuentaInstagram);
-  writer.writeString(offsets[5], object.descripcion);
-  writer.writeLong(offsets[6], object.diasRestantes);
-  writer.writeLong(offsets[7], object.diasTranscurridos);
-  writer.writeString(offsets[8], object.duracionFormateada);
-  writer.writeBool(offsets[9], object.estaActivo);
-  writer.writeBool(offsets[10], object.estaPorComenzar);
-  writer.writeString(offsets[11], object.estadoSorteo);
-  writer.writeDateTime(offsets[12], object.fechaActualizacion);
-  writer.writeDateTime(offsets[13], object.fechaCreacion);
-  writer.writeDateTime(offsets[14], object.fechaFin);
-  writer.writeDateTime(offsets[15], object.fechaInicio);
-  writer.writeBool(offsets[16], object.finalizado);
-  writer.writeStringList(offsets[17], object.ganadores);
-  writer.writeBool(offsets[18], object.ganadoresSeleccionados);
-  writer.writeBool(offsets[19], object.haExpirado);
-  writer.writeString(offsets[20], object.hashtagSorteo);
-  writer.writeBool(offsets[21], object.haySuficientesParticipantes);
-  writer.writeString(offsets[22], object.imagenSorteo);
-  writer.writeLong(offsets[23], object.maximoParticipantes);
-  writer.writeLong(offsets[24], object.minimoComentarios);
-  writer.writeLong(offsets[25], object.minimoCompartidas);
-  writer.writeLong(offsets[26], object.minimoParticipantes);
-  writer.writeLong(offsets[27], object.numeroParticipantes);
-  writer.writeStringList(offsets[28], object.participantes);
-  writer.writeString(offsets[29], object.postInstagramId);
-  writer.writeString(offsets[30], object.premio);
-  writer.writeDouble(offsets[31], object.progresoSorteo);
-  writer.writeBool(offsets[32], object.puedeSeleccionarGanadores);
-  writer.writeBool(offsets[33], object.requiereComentar);
-  writer.writeBool(offsets[34], object.requiereCompartir);
-  writer.writeBool(offsets[35], object.requiereEtiquetar);
-  writer.writeBool(offsets[36], object.requiereSeguir);
-  writer.writeBool(offsets[37], object.seAlcanzoMaximoParticipantes);
-  writer.writeString(offsets[38], object.titulo);
-  writer.writeLong(offsets[39], object.usuarioId);
-  writer.writeDouble(offsets[40], object.valorPremio);
-  writer.writeString(offsets[41], object.valorPremioFormateado);
+  writer.writeString(offsets[0], object.colorEstado);
+  writer.writeString(offsets[1], object.descripcion);
+  writer.writeBool(offsets[2], object.esBorrador);
+  writer.writeBool(offsets[3], object.estaActivo);
+  writer.writeBool(offsets[4], object.estaCancelado);
+  writer.writeBool(offsets[5], object.estaFinalizado);
+  writer.writeString(offsets[6], object.estado);
+  writer.writeString(offsets[7], object.estadoFormateado);
+  writer.writeDateTime(offsets[8], object.fechaActualizacion);
+  writer.writeDateTime(offsets[9], object.fechaCreacion);
+  writer.writeDateTime(offsets[10], object.fechaFin);
+  writer.writeDateTime(offsets[11], object.fechaInicio);
+  writer.writeLongList(offsets[12], object.ganadoresIds);
+  writer.writeLong(offsets[13], object.maxParticipantes);
+  writer.writeString(offsets[14], object.nombre);
+  writer.writeLong(offsets[15], object.numGanadores);
+  writer.writeLongList(offsets[16], object.participantesIds);
+  writer.writeStringList(offsets[17], object.premios);
+  writer.writeBool(offsets[18], object.puedeFinalizar);
+  writer.writeBool(offsets[19], object.puedeIniciar);
+  writer.writeBool(offsets[20], object.tieneGanadores);
+  writer.writeString(offsets[21], object.tipoSorteo);
+  writer.writeLong(offsets[22], object.totalGanadores);
+  writer.writeLong(offsets[23], object.totalParticipantes);
+  writer.writeLong(offsets[24], object.usuarioId);
+  writer.writeDoubleList(offsets[25], object.valoresPremios);
 }
 
 Sorteo _sorteoDeserialize(
@@ -375,35 +233,23 @@ Sorteo _sorteoDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Sorteo(
-    activo: reader.readBoolOrNull(offsets[0]) ?? true,
-    cantidadGanadores: reader.readLongOrNull(offsets[1]) ?? 1,
-    cuentaInstagram: reader.readStringOrNull(offsets[4]),
-    descripcion: reader.readStringOrNull(offsets[5]),
-    fechaFin: reader.readDateTime(offsets[14]),
-    fechaInicio: reader.readDateTime(offsets[15]),
-    finalizado: reader.readBoolOrNull(offsets[16]) ?? false,
-    ganadoresSeleccionados: reader.readBoolOrNull(offsets[18]) ?? false,
-    hashtagSorteo: reader.readStringOrNull(offsets[20]),
-    imagenSorteo: reader.readStringOrNull(offsets[22]),
-    maximoParticipantes: reader.readLongOrNull(offsets[23]),
-    minimoComentarios: reader.readLongOrNull(offsets[24]),
-    minimoCompartidas: reader.readLongOrNull(offsets[25]),
-    minimoParticipantes: reader.readLongOrNull(offsets[26]),
-    postInstagramId: reader.readStringOrNull(offsets[29]),
-    premio: reader.readStringOrNull(offsets[30]),
-    requiereComentar: reader.readBoolOrNull(offsets[33]) ?? true,
-    requiereCompartir: reader.readBoolOrNull(offsets[34]) ?? true,
-    requiereEtiquetar: reader.readBoolOrNull(offsets[35]) ?? true,
-    requiereSeguir: reader.readBoolOrNull(offsets[36]) ?? true,
-    titulo: reader.readString(offsets[38]),
-    usuarioId: reader.readLong(offsets[39]),
-    valorPremio: reader.readDoubleOrNull(offsets[40]),
+    descripcion: reader.readStringOrNull(offsets[1]),
+    estado: reader.readStringOrNull(offsets[6]) ?? 'borrador',
+    fechaFin: reader.readDateTimeOrNull(offsets[10]),
+    fechaInicio: reader.readDateTimeOrNull(offsets[11]),
+    maxParticipantes: reader.readLongOrNull(offsets[13]) ?? 0,
+    nombre: reader.readString(offsets[14]),
+    numGanadores: reader.readLongOrNull(offsets[15]) ?? 1,
+    tipoSorteo: reader.readStringOrNull(offsets[21]) ?? 'aleatorio',
+    usuarioId: reader.readLong(offsets[24]),
   );
-  object.fechaActualizacion = reader.readDateTimeOrNull(offsets[12]);
-  object.fechaCreacion = reader.readDateTime(offsets[13]);
-  object.ganadores = reader.readStringList(offsets[17]) ?? [];
+  object.fechaActualizacion = reader.readDateTimeOrNull(offsets[8]);
+  object.fechaCreacion = reader.readDateTime(offsets[9]);
+  object.ganadoresIds = reader.readLongList(offsets[12]) ?? [];
   object.id = id;
-  object.participantes = reader.readStringList(offsets[28]) ?? [];
+  object.participantesIds = reader.readLongList(offsets[16]) ?? [];
+  object.premios = reader.readStringList(offsets[17]) ?? [];
+  object.valoresPremios = reader.readDoubleList(offsets[25]) ?? [];
   return object;
 }
 
@@ -415,89 +261,57 @@ P _sorteoDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
+      return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset) ?? 1) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 6:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? 'borrador') as P;
     case 7:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
-    case 9:
-      return (reader.readBool(offset)) as P;
-    case 10:
-      return (reader.readBool(offset)) as P;
-    case 11:
-      return (reader.readString(offset)) as P;
-    case 12:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 9:
+      return (reader.readDateTime(offset)) as P;
+    case 10:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 11:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 12:
+      return (reader.readLongList(offset) ?? []) as P;
     case 13:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     case 14:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 15:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 1) as P;
     case 16:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readLongList(offset) ?? []) as P;
     case 17:
       return (reader.readStringList(offset) ?? []) as P;
     case 18:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readBool(offset)) as P;
     case 19:
       return (reader.readBool(offset)) as P;
     case 20:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 21:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? 'aleatorio') as P;
     case 22:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 23:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 24:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 25:
-      return (reader.readLongOrNull(offset)) as P;
-    case 26:
-      return (reader.readLongOrNull(offset)) as P;
-    case 27:
-      return (reader.readLong(offset)) as P;
-    case 28:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 29:
-      return (reader.readStringOrNull(offset)) as P;
-    case 30:
-      return (reader.readStringOrNull(offset)) as P;
-    case 31:
-      return (reader.readDouble(offset)) as P;
-    case 32:
-      return (reader.readBool(offset)) as P;
-    case 33:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
-    case 34:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
-    case 35:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
-    case 36:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
-    case 37:
-      return (reader.readBool(offset)) as P;
-    case 38:
-      return (reader.readString(offset)) as P;
-    case 39:
-      return (reader.readLong(offset)) as P;
-    case 40:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 41:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -591,70 +405,6 @@ extension SorteoQueryWhere on QueryBuilder<Sorteo, Sorteo, QWhereClause> {
 }
 
 extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> activoEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'activo',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cantidadGanadoresEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'cantidadGanadores',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      cantidadGanadoresGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'cantidadGanadores',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cantidadGanadoresLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'cantidadGanadores',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cantidadGanadoresBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'cantidadGanadores',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> colorEstadoEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -780,382 +530,6 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'colorEstado',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'criteriosParticipacion',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'criteriosParticipacion',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'criteriosParticipacion',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'criteriosParticipacion',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'criteriosParticipacion',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      criteriosParticipacionLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'criteriosParticipacion',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'cuentaInstagram',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      cuentaInstagramIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'cuentaInstagram',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      cuentaInstagramGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'cuentaInstagram',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'cuentaInstagram',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'cuentaInstagram',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> cuentaInstagramIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'cuentaInstagram',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      cuentaInstagramIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'cuentaInstagram',
         value: '',
       ));
     });
@@ -1307,244 +681,12 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasRestantesEqualTo(
-      int value) {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> esBorradorEqualTo(
+      bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'diasRestantes',
+        property: r'esBorrador',
         value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasRestantesGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'diasRestantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasRestantesLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'diasRestantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasRestantesBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'diasRestantes',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasTranscurridosEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'diasTranscurridos',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      diasTranscurridosGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'diasTranscurridos',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasTranscurridosLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'diasTranscurridos',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> diasTranscurridosBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'diasTranscurridos',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> duracionFormateadaEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> duracionFormateadaBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'duracionFormateada',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'duracionFormateada',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> duracionFormateadaMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'duracionFormateada',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'duracionFormateada',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      duracionFormateadaIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'duracionFormateada',
-        value: '',
       ));
     });
   }
@@ -1559,30 +701,40 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estaPorComenzarEqualTo(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estaCanceladoEqualTo(
       bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'estaPorComenzar',
+        property: r'estaCancelado',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoEqualTo(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estaFinalizadoEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'estaFinalizado',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoGreaterThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1590,14 +742,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoLessThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1605,14 +757,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoBetween(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1621,7 +773,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'estadoSorteo',
+        property: r'estado',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1631,69 +783,203 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoStartsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoEndsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoContains(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'estadoSorteo',
+        property: r'estado',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoMatches(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'estadoSorteo',
+        property: r'estado',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoIsEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'estadoSorteo',
+        property: r'estado',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoSorteoIsNotEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'estadoSorteo',
+        property: r'estado',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      estadoFormateadoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'estadoFormateado',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      estadoFormateadoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'estadoFormateado',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> estadoFormateadoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'estadoFormateado',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      estadoFormateadoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'estadoFormateado',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      estadoFormateadoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'estadoFormateado',
         value: '',
       ));
     });
@@ -1825,8 +1111,24 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'fechaFin',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'fechaFin',
+      ));
+    });
+  }
+
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'fechaFin',
@@ -1836,7 +1138,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1849,7 +1151,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1862,8 +1164,8 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaFinBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1878,8 +1180,24 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'fechaInicio',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'fechaInicio',
+      ));
+    });
+  }
+
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'fechaInicio',
@@ -1889,7 +1207,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1902,7 +1220,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1915,8 +1233,8 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> fechaInicioBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1931,155 +1249,67 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> finalizadoEqualTo(
-      bool value) {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      ganadoresIdsElementEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'finalizado',
+        property: r'ganadoresIds',
         value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ganadores',
-        value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresElementGreaterThan(
-    String value, {
+      ganadoresIdsElementGreaterThan(
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'ganadores',
+        property: r'ganadoresIds',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementLessThan(
-    String value, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      ganadoresIdsElementLessThan(
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'ganadores',
+        property: r'ganadoresIds',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      ganadoresIdsElementBetween(
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'ganadores',
+        property: r'ganadoresIds',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'ganadores',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'ganadores',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'ganadores',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresElementMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'ganadores',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ganadores',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'ganadores',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresLengthEqualTo(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIdsLengthEqualTo(
       int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         length,
         true,
         length,
@@ -2088,10 +1318,10 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIsEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIdsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         0,
         true,
         0,
@@ -2100,10 +1330,10 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIsNotEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIdsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         0,
         false,
         999999,
@@ -2112,13 +1342,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresLengthLessThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      ganadoresIdsLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         0,
         true,
         length,
@@ -2128,13 +1359,13 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresLengthGreaterThan(
+      ganadoresIdsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         length,
         include,
         999999,
@@ -2143,7 +1374,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresLengthBetween(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> ganadoresIdsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2151,189 +1382,12 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'ganadores',
+        r'ganadoresIds',
         lower,
         includeLower,
         upper,
         includeUpper,
       );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      ganadoresSeleccionadosEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ganadoresSeleccionados',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> haExpiradoEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'haExpirado',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'hashtagSorteo',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'hashtagSorteo',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'hashtagSorteo',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'hashtagSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'hashtagSorteo',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> hashtagSorteoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'hashtagSorteo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      hashtagSorteoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'hashtagSorteo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      haySuficientesParticipantesEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'haySuficientesParticipantes',
-        value: value,
-      ));
     });
   }
 
@@ -2389,484 +1443,44 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'imagenSorteo',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'imagenSorteo',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> maxParticipantesEqualTo(
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'imagenSorteo',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'imagenSorteo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'imagenSorteo',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagenSorteo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> imagenSorteoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'imagenSorteo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'maximoParticipantes',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'maximoParticipantes',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'maximoParticipantes',
+        property: r'maxParticipantes',
         value: value,
       ));
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'maximoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'maximoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      maximoParticipantesBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'maximoParticipantes',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoComentariosIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'minimoComentarios',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoComentariosIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'minimoComentarios',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoComentariosEqualTo(
-      int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'minimoComentarios',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoComentariosGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'minimoComentarios',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoComentariosLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'minimoComentarios',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoComentariosBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'minimoComentarios',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoCompartidasIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'minimoCompartidas',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoCompartidasIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'minimoCompartidas',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoCompartidasEqualTo(
-      int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'minimoCompartidas',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoCompartidasGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'minimoCompartidas',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoCompartidasLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'minimoCompartidas',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> minimoCompartidasBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'minimoCompartidas',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'minimoParticipantes',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'minimoParticipantes',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'minimoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'minimoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'minimoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      minimoParticipantesBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'minimoParticipantes',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      numeroParticipantesEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'numeroParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      numeroParticipantesGreaterThan(
+      maxParticipantesGreaterThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'numeroParticipantes',
+        property: r'maxParticipantes',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      numeroParticipantesLessThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> maxParticipantesLessThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'numeroParticipantes',
+        property: r'maxParticipantes',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      numeroParticipantesBetween(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> maxParticipantesBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2874,7 +1488,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'numeroParticipantes',
+        property: r'maxParticipantes',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2883,22 +1497,20 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementEqualTo(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementGreaterThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2906,15 +1518,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementLessThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2922,15 +1533,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementBetween(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2939,7 +1549,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'participantes',
+        property: r'nombre',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2949,81 +1559,188 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementStartsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementEndsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'participantes',
+        property: r'nombre',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'participantes',
+        property: r'nombre',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementIsEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'participantes',
+        property: r'nombre',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesElementIsNotEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> nombreIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'participantes',
+        property: r'nombre',
         value: '',
       ));
     });
   }
 
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> numGanadoresEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> numGanadoresGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> numGanadoresLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> numGanadoresBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numGanadores',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesLengthEqualTo(int length) {
+      participantesIdsElementEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'participantesIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      participantesIdsElementGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'participantesIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      participantesIdsElementLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'participantesIds',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      participantesIdsElementBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'participantesIds',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      participantesIdsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         length,
         true,
         length,
@@ -3032,10 +1749,11 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> participantesIsEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      participantesIdsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         0,
         true,
         0,
@@ -3045,10 +1763,10 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesIsNotEmpty() {
+      participantesIdsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         0,
         false,
         999999,
@@ -3058,13 +1776,13 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesLengthLessThan(
+      participantesIdsLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         0,
         true,
         length,
@@ -3074,13 +1792,13 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesLengthGreaterThan(
+      participantesIdsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         length,
         include,
         999999,
@@ -3090,7 +1808,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      participantesLengthBetween(
+      participantesIdsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -3098,7 +1816,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'participantes',
+        r'participantesIds',
         lower,
         includeLower,
         upper,
@@ -3107,437 +1825,20 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'postInstagramId',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      postInstagramIdIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'postInstagramId',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      postInstagramIdGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'postInstagramId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'postInstagramId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'postInstagramId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> postInstagramIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'postInstagramId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      postInstagramIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'postInstagramId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'premio',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'premio',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'premio',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'premio',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'premio',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'premio',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premioIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'premio',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> progresoSorteoEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'progresoSorteo',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> progresoSorteoGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'progresoSorteo',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> progresoSorteoLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'progresoSorteo',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> progresoSorteoBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'progresoSorteo',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      puedeSeleccionarGanadoresEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'puedeSeleccionarGanadores',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> requiereComentarEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'requiereComentar',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> requiereCompartirEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'requiereCompartir',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> requiereEtiquetarEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'requiereEtiquetar',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> requiereSeguirEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'requiereSeguir',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      seAlcanzoMaximoParticipantesEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'seAlcanzoMaximoParticipantes',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloEqualTo(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloGreaterThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3545,14 +1846,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloLessThan(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3560,14 +1861,14 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloBetween(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -3576,7 +1877,7 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'titulo',
+        property: r'premios',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -3586,70 +1887,423 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloStartsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloEndsWith(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloContains(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'titulo',
+        property: r'premios',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloMatches(
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'titulo',
+        property: r'premios',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloIsEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'titulo',
+        property: r'premios',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tituloIsNotEmpty() {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      premiosElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'titulo',
+        property: r'premios',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'premios',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> puedeFinalizarEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'puedeFinalizar',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> puedeIniciarEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'puedeIniciar',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tieneGanadoresEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tieneGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSorteo',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSorteo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSorteo',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSorteo',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> tipoSorteoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSorteo',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalGanadoresEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalGanadoresGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalGanadoresLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalGanadores',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalGanadoresBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalGanadores',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalParticipantesEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalParticipantes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      totalParticipantesGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalParticipantes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      totalParticipantesLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalParticipantes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> totalParticipantesBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalParticipantes',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -3707,75 +2361,63 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'valorPremio',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'valorPremio',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioEqualTo(
-    double? value, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      valoresPremiosElementEqualTo(
+    double value, {
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'valorPremio',
+        property: r'valoresPremios',
         value: value,
         epsilon: epsilon,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioGreaterThan(
-    double? value, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      valoresPremiosElementGreaterThan(
+    double value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'valorPremio',
+        property: r'valoresPremios',
         value: value,
         epsilon: epsilon,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioLessThan(
-    double? value, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      valoresPremiosElementLessThan(
+    double value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'valorPremio',
+        property: r'valoresPremios',
         value: value,
         epsilon: epsilon,
       ));
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valorPremioBetween(
-    double? lower,
-    double? upper, {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
+      valoresPremiosElementBetween(
+    double lower,
+    double upper, {
     bool includeLower = true,
     bool includeUpper = true,
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'valorPremio',
+        property: r'valoresPremios',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -3786,157 +2428,90 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoIsNull() {
+      valoresPremiosLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'valorPremioFormateado',
-      ));
+      return query.listLength(
+        r'valoresPremios',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valoresPremiosIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'valoresPremios',
+        0,
+        true,
+        0,
+        true,
+      );
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoIsNotNull() {
+      valoresPremiosIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'valorPremioFormateado',
-      ));
+      return query.listLength(
+        r'valoresPremios',
+        0,
+        false,
+        999999,
+        true,
+      );
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoGreaterThan(
-    String? value, {
+      valoresPremiosLengthLessThan(
+    int length, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.listLength(
+        r'valoresPremios',
+        0,
+        true,
+        length,
+        include,
+      );
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoLessThan(
-    String? value, {
+      valoresPremiosLengthGreaterThan(
+    int length, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.listLength(
+        r'valoresPremios',
+        length,
+        include,
+        999999,
+        true,
+      );
     });
   }
 
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoBetween(
-    String? lower,
-    String? upper, {
+      valoresPremiosLengthBetween(
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'valorPremioFormateado',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'valorPremioFormateado',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'valorPremioFormateado',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'valorPremioFormateado',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valorPremioFormateadoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'valorPremioFormateado',
-        value: '',
-      ));
+      return query.listLength(
+        r'valoresPremios',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
@@ -3946,30 +2521,6 @@ extension SorteoQueryObject on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {}
 extension SorteoQueryLinks on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {}
 
 extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByActivo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByActivoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activo', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByCantidadGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cantidadGanadores', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByCantidadGanadoresDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cantidadGanadores', Sort.desc);
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByColorEstado() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorEstado', Sort.asc);
@@ -3979,18 +2530,6 @@ extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
   QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByColorEstadoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorEstado', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByCuentaInstagram() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cuentaInstagram', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByCuentaInstagramDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cuentaInstagram', Sort.desc);
     });
   }
 
@@ -4006,39 +2545,15 @@ extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDiasRestantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEsBorrador() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasRestantes', Sort.asc);
+      return query.addSortBy(r'esBorrador', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDiasRestantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEsBorradorDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasRestantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDiasTranscurridos() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasTranscurridos', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDiasTranscurridosDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasTranscurridos', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDuracionFormateada() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'duracionFormateada', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByDuracionFormateadaDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'duracionFormateada', Sort.desc);
+      return query.addSortBy(r'esBorrador', Sort.desc);
     });
   }
 
@@ -4054,27 +2569,51 @@ extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaPorComenzar() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaCancelado() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estaPorComenzar', Sort.asc);
+      return query.addSortBy(r'estaCancelado', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaPorComenzarDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaCanceladoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estaPorComenzar', Sort.desc);
+      return query.addSortBy(r'estaCancelado', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstadoSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaFinalizado() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estadoSorteo', Sort.asc);
+      return query.addSortBy(r'estaFinalizado', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstadoSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstaFinalizadoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estadoSorteo', Sort.desc);
+      return query.addSortBy(r'estaFinalizado', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstado() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estado', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstadoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estado', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstadoFormateado() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateado', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByEstadoFormateadoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateado', Sort.desc);
     });
   }
 
@@ -4126,261 +2665,111 @@ extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByFinalizado() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMaxParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'finalizado', Sort.asc);
+      return query.addSortBy(r'maxParticipantes', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByFinalizadoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMaxParticipantesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'finalizado', Sort.desc);
+      return query.addSortBy(r'maxParticipantes', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByGanadoresSeleccionados() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNombre() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ganadoresSeleccionados', Sort.asc);
+      return query.addSortBy(r'nombre', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortByGanadoresSeleccionadosDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNombreDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ganadoresSeleccionados', Sort.desc);
+      return query.addSortBy(r'nombre', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByHaExpirado() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNumGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haExpirado', Sort.asc);
+      return query.addSortBy(r'numGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByHaExpiradoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNumGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haExpirado', Sort.desc);
+      return query.addSortBy(r'numGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByHashtagSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPuedeFinalizar() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hashtagSorteo', Sort.asc);
+      return query.addSortBy(r'puedeFinalizar', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByHashtagSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPuedeFinalizarDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hashtagSorteo', Sort.desc);
+      return query.addSortBy(r'puedeFinalizar', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortByHaySuficientesParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPuedeIniciar() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haySuficientesParticipantes', Sort.asc);
+      return query.addSortBy(r'puedeIniciar', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortByHaySuficientesParticipantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPuedeIniciarDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haySuficientesParticipantes', Sort.desc);
+      return query.addSortBy(r'puedeIniciar', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByImagenSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTieneGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenSorteo', Sort.asc);
+      return query.addSortBy(r'tieneGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByImagenSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTieneGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenSorteo', Sort.desc);
+      return query.addSortBy(r'tieneGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMaximoParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTipoSorteo() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maximoParticipantes', Sort.asc);
+      return query.addSortBy(r'tipoSorteo', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMaximoParticipantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTipoSorteoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maximoParticipantes', Sort.desc);
+      return query.addSortBy(r'tipoSorteo', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoComentarios() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTotalGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoComentarios', Sort.asc);
+      return query.addSortBy(r'totalGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoComentariosDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTotalGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoComentarios', Sort.desc);
+      return query.addSortBy(r'totalGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoCompartidas() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTotalParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoCompartidas', Sort.asc);
+      return query.addSortBy(r'totalParticipantes', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoCompartidasDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTotalParticipantesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoCompartidas', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoParticipantes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByMinimoParticipantesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoParticipantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNumeroParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'numeroParticipantes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByNumeroParticipantesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'numeroParticipantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPostInstagramId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'postInstagramId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPostInstagramIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'postInstagramId', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPremio() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'premio', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPremioDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'premio', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByProgresoSorteo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'progresoSorteo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByProgresoSorteoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'progresoSorteo', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByPuedeSeleccionarGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'puedeSeleccionarGanadores', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortByPuedeSeleccionarGanadoresDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'puedeSeleccionarGanadores', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereComentar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereComentar', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereComentarDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereComentar', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereCompartir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereCompartir', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereCompartirDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereCompartir', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereEtiquetar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereEtiquetar', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereEtiquetarDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereEtiquetar', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereSeguir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereSeguir', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByRequiereSeguirDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereSeguir', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortBySeAlcanzoMaximoParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seAlcanzoMaximoParticipantes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      sortBySeAlcanzoMaximoParticipantesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seAlcanzoMaximoParticipantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTitulo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'titulo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByTituloDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'titulo', Sort.desc);
+      return query.addSortBy(r'totalParticipantes', Sort.desc);
     });
   }
 
@@ -4395,57 +2784,9 @@ extension SorteoQuerySortBy on QueryBuilder<Sorteo, Sorteo, QSortBy> {
       return query.addSortBy(r'usuarioId', Sort.desc);
     });
   }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByValorPremio() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremio', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByValorPremioDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremio', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByValorPremioFormateado() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremioFormateado', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> sortByValorPremioFormateadoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremioFormateado', Sort.desc);
-    });
-  }
 }
 
 extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByActivo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByActivoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activo', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByCantidadGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cantidadGanadores', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByCantidadGanadoresDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cantidadGanadores', Sort.desc);
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByColorEstado() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorEstado', Sort.asc);
@@ -4455,18 +2796,6 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
   QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByColorEstadoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorEstado', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByCuentaInstagram() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cuentaInstagram', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByCuentaInstagramDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'cuentaInstagram', Sort.desc);
     });
   }
 
@@ -4482,39 +2811,15 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDiasRestantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEsBorrador() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasRestantes', Sort.asc);
+      return query.addSortBy(r'esBorrador', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDiasRestantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEsBorradorDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasRestantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDiasTranscurridos() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasTranscurridos', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDiasTranscurridosDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'diasTranscurridos', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDuracionFormateada() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'duracionFormateada', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByDuracionFormateadaDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'duracionFormateada', Sort.desc);
+      return query.addSortBy(r'esBorrador', Sort.desc);
     });
   }
 
@@ -4530,27 +2835,51 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaPorComenzar() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaCancelado() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estaPorComenzar', Sort.asc);
+      return query.addSortBy(r'estaCancelado', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaPorComenzarDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaCanceladoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estaPorComenzar', Sort.desc);
+      return query.addSortBy(r'estaCancelado', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstadoSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaFinalizado() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estadoSorteo', Sort.asc);
+      return query.addSortBy(r'estaFinalizado', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstadoSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstaFinalizadoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'estadoSorteo', Sort.desc);
+      return query.addSortBy(r'estaFinalizado', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstado() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estado', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstadoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estado', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstadoFormateado() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateado', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByEstadoFormateadoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateado', Sort.desc);
     });
   }
 
@@ -4602,69 +2931,6 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByFinalizado() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'finalizado', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByFinalizadoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'finalizado', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByGanadoresSeleccionados() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ganadoresSeleccionados', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenByGanadoresSeleccionadosDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ganadoresSeleccionados', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByHaExpirado() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haExpirado', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByHaExpiradoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haExpirado', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByHashtagSorteo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hashtagSorteo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByHashtagSorteoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hashtagSorteo', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenByHaySuficientesParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haySuficientesParticipantes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenByHaySuficientesParticipantesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'haySuficientesParticipantes', Sort.desc);
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4677,198 +2943,111 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByImagenSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMaxParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenSorteo', Sort.asc);
+      return query.addSortBy(r'maxParticipantes', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByImagenSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMaxParticipantesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenSorteo', Sort.desc);
+      return query.addSortBy(r'maxParticipantes', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMaximoParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNombre() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maximoParticipantes', Sort.asc);
+      return query.addSortBy(r'nombre', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMaximoParticipantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNombreDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maximoParticipantes', Sort.desc);
+      return query.addSortBy(r'nombre', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoComentarios() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNumGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoComentarios', Sort.asc);
+      return query.addSortBy(r'numGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoComentariosDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNumGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoComentarios', Sort.desc);
+      return query.addSortBy(r'numGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoCompartidas() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPuedeFinalizar() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoCompartidas', Sort.asc);
+      return query.addSortBy(r'puedeFinalizar', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoCompartidasDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPuedeFinalizarDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoCompartidas', Sort.desc);
+      return query.addSortBy(r'puedeFinalizar', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPuedeIniciar() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoParticipantes', Sort.asc);
+      return query.addSortBy(r'puedeIniciar', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByMinimoParticipantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPuedeIniciarDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'minimoParticipantes', Sort.desc);
+      return query.addSortBy(r'puedeIniciar', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNumeroParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTieneGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'numeroParticipantes', Sort.asc);
+      return query.addSortBy(r'tieneGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByNumeroParticipantesDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTieneGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'numeroParticipantes', Sort.desc);
+      return query.addSortBy(r'tieneGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPostInstagramId() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTipoSorteo() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'postInstagramId', Sort.asc);
+      return query.addSortBy(r'tipoSorteo', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPostInstagramIdDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTipoSorteoDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'postInstagramId', Sort.desc);
+      return query.addSortBy(r'tipoSorteo', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPremio() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTotalGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'premio', Sort.asc);
+      return query.addSortBy(r'totalGanadores', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPremioDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTotalGanadoresDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'premio', Sort.desc);
+      return query.addSortBy(r'totalGanadores', Sort.desc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByProgresoSorteo() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTotalParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'progresoSorteo', Sort.asc);
+      return query.addSortBy(r'totalParticipantes', Sort.asc);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByProgresoSorteoDesc() {
+  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTotalParticipantesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'progresoSorteo', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByPuedeSeleccionarGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'puedeSeleccionarGanadores', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenByPuedeSeleccionarGanadoresDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'puedeSeleccionarGanadores', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereComentar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereComentar', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereComentarDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereComentar', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereCompartir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereCompartir', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereCompartirDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereCompartir', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereEtiquetar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereEtiquetar', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereEtiquetarDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereEtiquetar', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereSeguir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereSeguir', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByRequiereSeguirDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'requiereSeguir', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenBySeAlcanzoMaximoParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seAlcanzoMaximoParticipantes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy>
-      thenBySeAlcanzoMaximoParticipantesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seAlcanzoMaximoParticipantes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTitulo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'titulo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByTituloDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'titulo', Sort.desc);
+      return query.addSortBy(r'totalParticipantes', Sort.desc);
     });
   }
 
@@ -4883,63 +3062,13 @@ extension SorteoQuerySortThenBy on QueryBuilder<Sorteo, Sorteo, QSortThenBy> {
       return query.addSortBy(r'usuarioId', Sort.desc);
     });
   }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByValorPremio() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremio', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByValorPremioDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremio', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByValorPremioFormateado() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremioFormateado', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterSortBy> thenByValorPremioFormateadoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'valorPremioFormateado', Sort.desc);
-    });
-  }
 }
 
 extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByActivo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'activo');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByCantidadGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'cantidadGanadores');
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByColorEstado(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'colorEstado', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByCriteriosParticipacion() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'criteriosParticipacion');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByCuentaInstagram(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'cuentaInstagram',
-          caseSensitive: caseSensitive);
     });
   }
 
@@ -4950,23 +3079,9 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByDiasRestantes() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEsBorrador() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'diasRestantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByDiasTranscurridos() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'diasTranscurridos');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByDuracionFormateada(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'duracionFormateada',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'esBorrador');
     });
   }
 
@@ -4976,16 +3091,30 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstaPorComenzar() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstaCancelado() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'estaPorComenzar');
+      return query.addDistinctBy(r'estaCancelado');
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstadoSorteo(
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstaFinalizado() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'estaFinalizado');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstado(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'estadoSorteo', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'estado', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByEstadoFormateado(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'estadoFormateado',
+          caseSensitive: caseSensitive);
     });
   }
 
@@ -5013,151 +3142,77 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByFinalizado() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByGanadoresIds() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'finalizado');
+      return query.addDistinctBy(r'ganadoresIds');
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByGanadores() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByMaxParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'ganadores');
+      return query.addDistinctBy(r'maxParticipantes');
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByGanadoresSeleccionados() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'ganadoresSeleccionados');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByHaExpirado() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'haExpirado');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByHashtagSorteo(
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByNombre(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'hashtagSorteo',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'nombre', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct>
-      distinctByHaySuficientesParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByNumGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'haySuficientesParticipantes');
+      return query.addDistinctBy(r'numGanadores');
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByImagenSorteo(
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByParticipantesIds() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'participantesIds');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPremios() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'premios');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPuedeFinalizar() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'puedeFinalizar');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPuedeIniciar() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'puedeIniciar');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByTieneGanadores() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tieneGanadores');
+    });
+  }
+
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByTipoSorteo(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'imagenSorteo', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'tipoSorteo', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByMaximoParticipantes() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByTotalGanadores() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'maximoParticipantes');
+      return query.addDistinctBy(r'totalGanadores');
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByMinimoComentarios() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByTotalParticipantes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'minimoComentarios');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByMinimoCompartidas() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'minimoCompartidas');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByMinimoParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'minimoParticipantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByNumeroParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'numeroParticipantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'participantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPostInstagramId(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'postInstagramId',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPremio(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'premio', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByProgresoSorteo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'progresoSorteo');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct>
-      distinctByPuedeSeleccionarGanadores() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'puedeSeleccionarGanadores');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByRequiereComentar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'requiereComentar');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByRequiereCompartir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'requiereCompartir');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByRequiereEtiquetar() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'requiereEtiquetar');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByRequiereSeguir() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'requiereSeguir');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct>
-      distinctBySeAlcanzoMaximoParticipantes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'seAlcanzoMaximoParticipantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByTitulo(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'titulo', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'totalParticipantes');
     });
   }
 
@@ -5167,17 +3222,9 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByValorPremio() {
+  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByValoresPremios() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'valorPremio');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByValorPremioFormateado(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'valorPremioFormateado',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'valoresPremios');
     });
   }
 }
@@ -5189,34 +3236,9 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations> activoProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'activo');
-    });
-  }
-
-  QueryBuilder<Sorteo, int, QQueryOperations> cantidadGanadoresProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'cantidadGanadores');
-    });
-  }
-
   QueryBuilder<Sorteo, String, QQueryOperations> colorEstadoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'colorEstado');
-    });
-  }
-
-  QueryBuilder<Sorteo, List<String>, QQueryOperations>
-      criteriosParticipacionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'criteriosParticipacion');
-    });
-  }
-
-  QueryBuilder<Sorteo, String?, QQueryOperations> cuentaInstagramProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'cuentaInstagram');
     });
   }
 
@@ -5226,21 +3248,9 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, int, QQueryOperations> diasRestantesProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> esBorradorProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'diasRestantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, int, QQueryOperations> diasTranscurridosProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'diasTranscurridos');
-    });
-  }
-
-  QueryBuilder<Sorteo, String, QQueryOperations> duracionFormateadaProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'duracionFormateada');
+      return query.addPropertyName(r'esBorrador');
     });
   }
 
@@ -5250,15 +3260,27 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations> estaPorComenzarProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> estaCanceladoProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'estaPorComenzar');
+      return query.addPropertyName(r'estaCancelado');
     });
   }
 
-  QueryBuilder<Sorteo, String, QQueryOperations> estadoSorteoProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> estaFinalizadoProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'estadoSorteo');
+      return query.addPropertyName(r'estaFinalizado');
+    });
+  }
+
+  QueryBuilder<Sorteo, String, QQueryOperations> estadoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'estado');
+    });
+  }
+
+  QueryBuilder<Sorteo, String, QQueryOperations> estadoFormateadoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'estadoFormateado');
     });
   }
 
@@ -5275,157 +3297,87 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, DateTime, QQueryOperations> fechaFinProperty() {
+  QueryBuilder<Sorteo, DateTime?, QQueryOperations> fechaFinProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fechaFin');
     });
   }
 
-  QueryBuilder<Sorteo, DateTime, QQueryOperations> fechaInicioProperty() {
+  QueryBuilder<Sorteo, DateTime?, QQueryOperations> fechaInicioProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fechaInicio');
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations> finalizadoProperty() {
+  QueryBuilder<Sorteo, List<int>, QQueryOperations> ganadoresIdsProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'finalizado');
+      return query.addPropertyName(r'ganadoresIds');
     });
   }
 
-  QueryBuilder<Sorteo, List<String>, QQueryOperations> ganadoresProperty() {
+  QueryBuilder<Sorteo, int, QQueryOperations> maxParticipantesProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'ganadores');
+      return query.addPropertyName(r'maxParticipantes');
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations>
-      ganadoresSeleccionadosProperty() {
+  QueryBuilder<Sorteo, String, QQueryOperations> nombreProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'ganadoresSeleccionados');
+      return query.addPropertyName(r'nombre');
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations> haExpiradoProperty() {
+  QueryBuilder<Sorteo, int, QQueryOperations> numGanadoresProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'haExpirado');
+      return query.addPropertyName(r'numGanadores');
     });
   }
 
-  QueryBuilder<Sorteo, String?, QQueryOperations> hashtagSorteoProperty() {
+  QueryBuilder<Sorteo, List<int>, QQueryOperations> participantesIdsProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'hashtagSorteo');
+      return query.addPropertyName(r'participantesIds');
     });
   }
 
-  QueryBuilder<Sorteo, bool, QQueryOperations>
-      haySuficientesParticipantesProperty() {
+  QueryBuilder<Sorteo, List<String>, QQueryOperations> premiosProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'haySuficientesParticipantes');
+      return query.addPropertyName(r'premios');
     });
   }
 
-  QueryBuilder<Sorteo, String?, QQueryOperations> imagenSorteoProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> puedeFinalizarProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'imagenSorteo');
+      return query.addPropertyName(r'puedeFinalizar');
     });
   }
 
-  QueryBuilder<Sorteo, int?, QQueryOperations> maximoParticipantesProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> puedeIniciarProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'maximoParticipantes');
+      return query.addPropertyName(r'puedeIniciar');
     });
   }
 
-  QueryBuilder<Sorteo, int?, QQueryOperations> minimoComentariosProperty() {
+  QueryBuilder<Sorteo, bool, QQueryOperations> tieneGanadoresProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'minimoComentarios');
+      return query.addPropertyName(r'tieneGanadores');
     });
   }
 
-  QueryBuilder<Sorteo, int?, QQueryOperations> minimoCompartidasProperty() {
+  QueryBuilder<Sorteo, String, QQueryOperations> tipoSorteoProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'minimoCompartidas');
+      return query.addPropertyName(r'tipoSorteo');
     });
   }
 
-  QueryBuilder<Sorteo, int?, QQueryOperations> minimoParticipantesProperty() {
+  QueryBuilder<Sorteo, int, QQueryOperations> totalGanadoresProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'minimoParticipantes');
+      return query.addPropertyName(r'totalGanadores');
     });
   }
 
-  QueryBuilder<Sorteo, int, QQueryOperations> numeroParticipantesProperty() {
+  QueryBuilder<Sorteo, int, QQueryOperations> totalParticipantesProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'numeroParticipantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, List<String>, QQueryOperations> participantesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'participantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, String?, QQueryOperations> postInstagramIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'postInstagramId');
-    });
-  }
-
-  QueryBuilder<Sorteo, String?, QQueryOperations> premioProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'premio');
-    });
-  }
-
-  QueryBuilder<Sorteo, double, QQueryOperations> progresoSorteoProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'progresoSorteo');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations>
-      puedeSeleccionarGanadoresProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'puedeSeleccionarGanadores');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations> requiereComentarProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'requiereComentar');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations> requiereCompartirProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'requiereCompartir');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations> requiereEtiquetarProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'requiereEtiquetar');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations> requiereSeguirProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'requiereSeguir');
-    });
-  }
-
-  QueryBuilder<Sorteo, bool, QQueryOperations>
-      seAlcanzoMaximoParticipantesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'seAlcanzoMaximoParticipantes');
-    });
-  }
-
-  QueryBuilder<Sorteo, String, QQueryOperations> tituloProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'titulo');
+      return query.addPropertyName(r'totalParticipantes');
     });
   }
 
@@ -5435,16 +3387,10 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, double?, QQueryOperations> valorPremioProperty() {
+  QueryBuilder<Sorteo, List<double>, QQueryOperations>
+      valoresPremiosProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'valorPremio');
-    });
-  }
-
-  QueryBuilder<Sorteo, String?, QQueryOperations>
-      valorPremioFormateadoProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'valorPremioFormateado');
+      return query.addPropertyName(r'valoresPremios');
     });
   }
 }

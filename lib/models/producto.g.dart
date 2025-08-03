@@ -47,13 +47,23 @@ const ProductoSchema = CollectionSchema(
       name: r'precio',
       type: IsarType.double,
     ),
-    r'stock': PropertySchema(
+    r'precioCosto': PropertySchema(
       id: 6,
+      name: r'precioCosto',
+      type: IsarType.double,
+    ),
+    r'stock': PropertySchema(
+      id: 7,
       name: r'stock',
       type: IsarType.long,
     ),
+    r'utilidad': PropertySchema(
+      id: 8,
+      name: r'utilidad',
+      type: IsarType.double,
+    ),
     r'valoresPropiedades': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'valoresPropiedades',
       type: IsarType.objectList,
       target: r'ValorPropiedadProducto',
@@ -123,9 +133,11 @@ void _productoSerialize(
   writer.writeStringList(offsets[3], object.imagenes);
   writer.writeString(offsets[4], object.nombre);
   writer.writeDouble(offsets[5], object.precio);
-  writer.writeLong(offsets[6], object.stock);
+  writer.writeDouble(offsets[6], object.precioCosto);
+  writer.writeLong(offsets[7], object.stock);
+  writer.writeDouble(offsets[8], object.utilidad);
   writer.writeObjectList<ValorPropiedadProducto>(
-    offsets[7],
+    offsets[9],
     allOffsets,
     ValorPropiedadProductoSchema.serialize,
     object.valoresPropiedades,
@@ -145,9 +157,11 @@ Producto _productoDeserialize(
   object.imagenes = reader.readStringList(offsets[3]) ?? [];
   object.nombre = reader.readString(offsets[4]);
   object.precio = reader.readDoubleOrNull(offsets[5]);
-  object.stock = reader.readLongOrNull(offsets[6]);
+  object.precioCosto = reader.readDoubleOrNull(offsets[6]);
+  object.stock = reader.readLongOrNull(offsets[7]);
+  object.utilidad = reader.readDoubleOrNull(offsets[8]);
   object.valoresPropiedades = reader.readObjectList<ValorPropiedadProducto>(
-        offsets[7],
+        offsets[9],
         ValorPropiedadProductoSchema.deserialize,
         allOffsets,
         ValorPropiedadProducto(),
@@ -176,8 +190,12 @@ P _productoDeserializeProp<P>(
     case 5:
       return (reader.readDoubleOrNull(offset)) as P;
     case 6:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 7:
+      return (reader.readLongOrNull(offset)) as P;
+    case 8:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 9:
       return (reader.readObjectList<ValorPropiedadProducto>(
             offset,
             ValorPropiedadProductoSchema.deserialize,
@@ -1142,6 +1160,86 @@ extension ProductoQueryFilter
     });
   }
 
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> precioCostoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'precioCosto',
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition>
+      precioCostoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'precioCosto',
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> precioCostoEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'precioCosto',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition>
+      precioCostoGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'precioCosto',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> precioCostoLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'precioCosto',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> precioCostoBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'precioCosto',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
   QueryBuilder<Producto, Producto, QAfterFilterCondition> stockIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1207,6 +1305,84 @@ extension ProductoQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'utilidad',
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'utilidad',
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'utilidad',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'utilidad',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'utilidad',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterFilterCondition> utilidadBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'utilidad',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -1377,6 +1553,18 @@ extension ProductoQuerySortBy on QueryBuilder<Producto, Producto, QSortBy> {
     });
   }
 
+  QueryBuilder<Producto, Producto, QAfterSortBy> sortByPrecioCosto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'precioCosto', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> sortByPrecioCostoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'precioCosto', Sort.desc);
+    });
+  }
+
   QueryBuilder<Producto, Producto, QAfterSortBy> sortByStock() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stock', Sort.asc);
@@ -1386,6 +1574,18 @@ extension ProductoQuerySortBy on QueryBuilder<Producto, Producto, QSortBy> {
   QueryBuilder<Producto, Producto, QAfterSortBy> sortByStockDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stock', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> sortByUtilidad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utilidad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> sortByUtilidadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utilidad', Sort.desc);
     });
   }
 }
@@ -1466,6 +1666,18 @@ extension ProductoQuerySortThenBy
     });
   }
 
+  QueryBuilder<Producto, Producto, QAfterSortBy> thenByPrecioCosto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'precioCosto', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> thenByPrecioCostoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'precioCosto', Sort.desc);
+    });
+  }
+
   QueryBuilder<Producto, Producto, QAfterSortBy> thenByStock() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stock', Sort.asc);
@@ -1475,6 +1687,18 @@ extension ProductoQuerySortThenBy
   QueryBuilder<Producto, Producto, QAfterSortBy> thenByStockDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stock', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> thenByUtilidad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utilidad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QAfterSortBy> thenByUtilidadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utilidad', Sort.desc);
     });
   }
 }
@@ -1522,9 +1746,21 @@ extension ProductoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Producto, Producto, QDistinct> distinctByPrecioCosto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'precioCosto');
+    });
+  }
+
   QueryBuilder<Producto, Producto, QDistinct> distinctByStock() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'stock');
+    });
+  }
+
+  QueryBuilder<Producto, Producto, QDistinct> distinctByUtilidad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'utilidad');
     });
   }
 }
@@ -1574,9 +1810,21 @@ extension ProductoQueryProperty
     });
   }
 
+  QueryBuilder<Producto, double?, QQueryOperations> precioCostoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'precioCosto');
+    });
+  }
+
   QueryBuilder<Producto, int?, QQueryOperations> stockProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'stock');
+    });
+  }
+
+  QueryBuilder<Producto, double?, QQueryOperations> utilidadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'utilidad');
     });
   }
 

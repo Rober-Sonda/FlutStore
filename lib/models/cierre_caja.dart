@@ -237,9 +237,9 @@ class CierreCaja {
     if (diferenciaCalculada == 0) {
       return 'Caja balanceada';
     } else if (diferenciaCalculada > 0) {
-      return 'Sobrante: ${diferenciaFormateada}';
+      return 'Sobrante: $diferenciaFormateada';
     } else {
-      return 'Faltante: ${diferenciaFormateada}';
+      return 'Faltante: $diferenciaFormateada';
     }
   }
 }

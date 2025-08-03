@@ -47,14 +47,19 @@ const ClienteSchema = CollectionSchema(
       name: r'fechaRegistro',
       type: IsarType.dateTime,
     ),
-    r'nombre': PropertySchema(
+    r'instagram': PropertySchema(
       id: 6,
+      name: r'instagram',
+      type: IsarType.string,
+    ),
+    r'nombre': PropertySchema(
+      id: 7,
       name: r'nombre',
       type: IsarType.string,
     ),
-    r'telefono': PropertySchema(
-      id: 7,
-      name: r'telefono',
+    r'whatsapp': PropertySchema(
+      id: 8,
+      name: r'whatsapp',
       type: IsarType.string,
     )
   },
@@ -108,9 +113,15 @@ int _clienteEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.instagram;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.nombre.length * 3;
   {
-    final value = object.telefono;
+    final value = object.whatsapp;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -130,8 +141,9 @@ void _clienteSerialize(
   writer.writeString(offsets[3], object.dni);
   writer.writeString(offsets[4], object.email);
   writer.writeDateTime(offsets[5], object.fechaRegistro);
-  writer.writeString(offsets[6], object.nombre);
-  writer.writeString(offsets[7], object.telefono);
+  writer.writeString(offsets[6], object.instagram);
+  writer.writeString(offsets[7], object.nombre);
+  writer.writeString(offsets[8], object.whatsapp);
 }
 
 Cliente _clienteDeserialize(
@@ -148,8 +160,9 @@ Cliente _clienteDeserialize(
   object.email = reader.readStringOrNull(offsets[4]);
   object.fechaRegistro = reader.readDateTimeOrNull(offsets[5]);
   object.id = id;
-  object.nombre = reader.readString(offsets[6]);
-  object.telefono = reader.readStringOrNull(offsets[7]);
+  object.instagram = reader.readStringOrNull(offsets[6]);
+  object.nombre = reader.readString(offsets[7]);
+  object.whatsapp = reader.readStringOrNull(offsets[8]);
   return object;
 }
 
@@ -173,8 +186,10 @@ P _clienteDeserializeProp<P>(
     case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1123,6 +1138,152 @@ extension ClienteQueryFilter
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'instagram',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'instagram',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'instagram',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'instagram',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'instagram',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'instagram',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> instagramIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'instagram',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterFilterCondition> nombreEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1253,36 +1414,36 @@ extension ClienteQueryFilter
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNull() {
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'telefono',
+        property: r'whatsapp',
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNotNull() {
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'telefono',
+        property: r'whatsapp',
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoEqualTo(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoGreaterThan(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1290,14 +1451,14 @@ extension ClienteQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoLessThan(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1305,14 +1466,14 @@ extension ClienteQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoBetween(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1321,7 +1482,7 @@ extension ClienteQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'telefono',
+        property: r'whatsapp',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1331,69 +1492,69 @@ extension ClienteQueryFilter
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoStartsWith(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoEndsWith(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoContains(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'telefono',
+        property: r'whatsapp',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoMatches(
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'telefono',
+        property: r'whatsapp',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsEmpty() {
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'telefono',
+        property: r'whatsapp',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNotEmpty() {
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'telefono',
+        property: r'whatsapp',
         value: '',
       ));
     });
@@ -1479,6 +1640,18 @@ extension ClienteQuerySortBy on QueryBuilder<Cliente, Cliente, QSortBy> {
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByInstagram() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'instagram', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByInstagramDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'instagram', Sort.desc);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByNombre() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.asc);
@@ -1491,15 +1664,15 @@ extension ClienteQuerySortBy on QueryBuilder<Cliente, Cliente, QSortBy> {
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByTelefono() {
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByWhatsapp() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'telefono', Sort.asc);
+      return query.addSortBy(r'whatsapp', Sort.asc);
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByTelefonoDesc() {
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByWhatsappDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'telefono', Sort.desc);
+      return query.addSortBy(r'whatsapp', Sort.desc);
     });
   }
 }
@@ -1590,6 +1763,18 @@ extension ClienteQuerySortThenBy
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByInstagram() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'instagram', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByInstagramDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'instagram', Sort.desc);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByNombre() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.asc);
@@ -1602,15 +1787,15 @@ extension ClienteQuerySortThenBy
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByTelefono() {
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByWhatsapp() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'telefono', Sort.asc);
+      return query.addSortBy(r'whatsapp', Sort.asc);
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByTelefonoDesc() {
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByWhatsappDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'telefono', Sort.desc);
+      return query.addSortBy(r'whatsapp', Sort.desc);
     });
   }
 }
@@ -1658,6 +1843,13 @@ extension ClienteQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QDistinct> distinctByInstagram(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'instagram', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QDistinct> distinctByNombre(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1665,10 +1857,10 @@ extension ClienteQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Cliente, Cliente, QDistinct> distinctByTelefono(
+  QueryBuilder<Cliente, Cliente, QDistinct> distinctByWhatsapp(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'telefono', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'whatsapp', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1717,15 +1909,21 @@ extension ClienteQueryProperty
     });
   }
 
+  QueryBuilder<Cliente, String?, QQueryOperations> instagramProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'instagram');
+    });
+  }
+
   QueryBuilder<Cliente, String, QQueryOperations> nombreProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nombre');
     });
   }
 
-  QueryBuilder<Cliente, String?, QQueryOperations> telefonoProperty() {
+  QueryBuilder<Cliente, String?, QQueryOperations> whatsappProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'telefono');
+      return query.addPropertyName(r'whatsapp');
     });
   }
 }

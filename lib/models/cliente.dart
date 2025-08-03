@@ -9,7 +9,8 @@ class Cliente {
   late String nombre;
   String? apellido;
   String? email;
-  String? telefono;
+  String? whatsapp; // Cambiado de telefono a whatsapp
+  String? instagram; // Nuevo campo para Instagram
   String? direccion;
   String? dni;
   String? cuil;

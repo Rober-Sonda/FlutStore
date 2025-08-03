@@ -72,6 +72,7 @@ class AppRoutes {
   // Reportes
   static const reportAdd = '/reports/add';
   static const reportEdit = '/reports/edit/:id';
+  static const utilidadReport = '/reports/utilidad';
 
   // Roles
   static const roles = '/roles';
@@ -87,6 +88,11 @@ class AppRoutes {
   static const orders = '/orders';
   static const orderAdd = '/orders/add';
   static const orderEdit = '/orders/edit/:id';
+
+  // Pedidos a Proveedores
+  static const pedidosProveedor = '/pedidos-proveedor';
+  static const pedidoProveedorAdd = '/pedidos-proveedor/add';
+  static const pedidoProveedorEdit = '/pedidos-proveedor/edit/:id';
 
   // Carrito de Compras
   static const carritoCompra = '/carrito-compra';

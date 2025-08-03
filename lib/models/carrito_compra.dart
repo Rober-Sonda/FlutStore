@@ -52,16 +52,17 @@ class CarritoCompra {
     this.nombreProveedor = nombreProveedor;
     this.precioUnitario = precioUnitario ?? this.precioUnitario;
     this.codigoProveedor = codigoProveedor;
-    this.stockDisponibleProveedor = stockDisponible;
-    this.observacionesProveedor = observaciones;
-    this.proveedorSeleccionado = true;
+    stockDisponibleProveedor = stockDisponible;
+    observacionesProveedor = observaciones;
+    proveedorSeleccionado = true;
     calcularPrecioTotal();
   }
 
   // Método para verificar si hay stock suficiente
   bool get hayStockSuficiente {
-    if (stockDisponibleProveedor == null)
+    if (stockDisponibleProveedor == null) {
       return true; // Si no hay info de stock, asumir que hay
+    }
     return stockDisponibleProveedor! >= cantidad;
   }
 

@@ -42,7 +42,7 @@ class ProductoProveedor {
     this.esProveedorPorDefecto =
         esProveedorPorDefecto ?? this.esProveedorPorDefecto;
     this.observaciones = observaciones ?? this.observaciones;
-    this.fechaActualizacion = DateTime.now();
+    fechaActualizacion = DateTime.now();
   }
 
   // Método para verificar si está disponible
@@ -52,8 +52,9 @@ class ProductoProveedor {
 
   // Método para verificar si hay stock suficiente (para una cantidad específica)
   bool hayStockSuficiente(int cantidad) {
-    if (stockDisponible == null)
+    if (stockDisponible == null) {
       return true; // Si no hay info de stock, asumir que hay
+    }
     return stockDisponible! >= cantidad;
   }
 

@@ -314,41 +314,38 @@ Future<void> seedIsar(Isar isar) async {
     ]);
 
     // 4. Crear proveedores
-    final proveedor1 =
-        Proveedor()
-          ..nombre = 'Textil Argentina S.A.'
-          ..razonSocial = 'Textil Argentina Sociedad Anónima'
-          ..email = 'contacto@textilar.com.ar'
-          ..telefono = '011-4567-8901'
-          ..direccion = 'Av. Corrientes 1234, CABA'
-          ..cuit = '30-12345678-9'
-          ..contacto = 'Carlos Rodríguez'
-          ..observaciones = 'Proveedor principal de telas'
-          ..fechaRegistro = DateTime.now();
+    final proveedor1 = Proveedor(
+      nombre: 'Textil Argentina S.A.',
+      razonSocial: 'Textil Argentina Sociedad Anónima',
+      email: 'contacto@textilar.com.ar',
+      telefono: '011-4567-8901',
+      direccion: 'Av. Corrientes 1234, CABA',
+      cuit: '30-12345678-9',
+      contacto: 'Carlos Rodríguez',
+      observaciones: 'Proveedor principal de telas',
+    );
 
-    final proveedor2 =
-        Proveedor()
-          ..nombre = 'Deportes Max'
-          ..razonSocial = 'Deportes Max S.R.L.'
-          ..email = 'ventas@deportesmax.com'
-          ..telefono = '011-2345-6789'
-          ..direccion = 'Belgrano 567, CABA'
-          ..cuit = '30-98765432-1'
-          ..contacto = 'Ana Martínez'
-          ..observaciones = 'Especialista en ropa deportiva'
-          ..fechaRegistro = DateTime.now();
+    final proveedor2 = Proveedor(
+      nombre: 'Deportes Max',
+      razonSocial: 'Deportes Max S.R.L.',
+      email: 'ventas@deportesmax.com',
+      telefono: '011-2345-6789',
+      direccion: 'Belgrano 567, CABA',
+      cuit: '30-98765432-1',
+      contacto: 'Ana Martínez',
+      observaciones: 'Especialista en ropa deportiva',
+    );
 
-    final proveedor3 =
-        Proveedor()
-          ..nombre = 'Calzado Premium'
-          ..razonSocial = 'Calzado Premium S.A.'
-          ..email = 'info@calzadopremium.com'
-          ..telefono = '011-3456-7890'
-          ..direccion = 'Florida 890, CABA'
-          ..cuit = '30-11223344-5'
-          ..contacto = 'Roberto Silva'
-          ..observaciones = 'Zapatillas de alta calidad'
-          ..fechaRegistro = DateTime.now();
+    final proveedor3 = Proveedor(
+      nombre: 'Calzado Premium',
+      razonSocial: 'Calzado Premium S.A.',
+      email: 'info@calzadopremium.com',
+      telefono: '011-3456-7890',
+      direccion: 'Florida 890, CABA',
+      cuit: '30-11223344-5',
+      contacto: 'Roberto Silva',
+      observaciones: 'Zapatillas de alta calidad',
+    );
 
     await isar.proveedors.putAll([proveedor1, proveedor2, proveedor3]);
 
@@ -358,7 +355,7 @@ Future<void> seedIsar(Isar isar) async {
           ..nombre = 'María'
           ..apellido = 'García'
           ..email = 'maria.garcia@email.com'
-          ..telefono = '011-1234-5678'
+          ..whatsapp = '011-1234-5678'
           ..direccion = 'Av. Santa Fe 123, CABA'
           ..dni = '12345678'
           ..cuil = '20-12345678-9'
@@ -369,7 +366,7 @@ Future<void> seedIsar(Isar isar) async {
           ..nombre = 'Carlos'
           ..apellido = 'López'
           ..email = 'carlos.lopez@email.com'
-          ..telefono = '011-2345-6789'
+          ..whatsapp = '011-2345-6789'
           ..direccion = 'Corrientes 456, CABA'
           ..dni = '23456789'
           ..cuil = '20-23456789-0'
@@ -380,7 +377,7 @@ Future<void> seedIsar(Isar isar) async {
           ..nombre = 'Ana'
           ..apellido = 'Martínez'
           ..email = 'ana.martinez@email.com'
-          ..telefono = '011-3456-7890'
+          ..whatsapp = '011-3456-7890'
           ..direccion = 'Belgrano 789, CABA'
           ..dni = '34567890'
           ..cuil = '20-34567890-1'
@@ -494,25 +491,23 @@ Future<void> seedIsar(Isar isar) async {
     ]);
 
     // 7. Crear compras
-    final compra1 =
-        Compra()
-          ..proveedorId = proveedor1.id
-          ..productos = [producto1.id, producto2.id]
-          ..fecha = DateTime.now().subtract(const Duration(days: 5))
-          ..total = 7000.0
-          ..numeroFactura = 'FAC-001-2024'
-          ..observaciones = 'Compra inicial de stock'
-          ..estado = 'Pagado';
+    final compra1 = Compra(
+      numeroFactura: 'FAC-001-2024',
+      fecha: DateTime.now().subtract(const Duration(days: 5)),
+      total: 7000.0,
+      proveedorId: proveedor1.id,
+      observaciones: 'Compra inicial de stock',
+      estado: 'Pagado',
+    );
 
-    final compra2 =
-        Compra()
-          ..proveedorId = proveedor2.id
-          ..productos = [producto4.id, producto5.id]
-          ..fecha = DateTime.now().subtract(const Duration(days: 3))
-          ..total = 7000.0
-          ..numeroFactura = 'FAC-002-2024'
-          ..observaciones = 'Ropa deportiva'
-          ..estado = 'Pendiente';
+    final compra2 = Compra(
+      numeroFactura: 'FAC-002-2024',
+      fecha: DateTime.now().subtract(const Duration(days: 3)),
+      total: 7000.0,
+      proveedorId: proveedor2.id,
+      observaciones: 'Ropa deportiva',
+      estado: 'Pendiente',
+    );
 
     await isar.compras.putAll([compra1, compra2]);
 

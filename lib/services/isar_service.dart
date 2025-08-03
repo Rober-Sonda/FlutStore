@@ -24,6 +24,11 @@ import '../models/cierre_caja.dart';
 import '../models/sorteo.dart';
 import '../models/gasto_fijo.dart';
 import '../models/movimiento_financiero.dart';
+import '../models/cuenta_corriente.dart';
+import '../models/pago_cuota.dart';
+import '../models/pedido_proveedor.dart';
+import '../models/business_config.dart';
+import '../models/venta.dart';
 import '../seed/isar_seed.dart';
 
 final isarServiceProvider = Provider<IsarService>((ref) => IsarService());
@@ -80,6 +85,11 @@ class IsarService {
           SorteoSchema,
           GastoFijoSchema,
           MovimientoFinancieroSchema,
+          CuentaCorrienteSchema,
+          PagoCuotaSchema,
+          PedidoProveedorSchema,
+          BusinessConfigSchema,
+          VentaSchema,
         ],
         directory: 'C:/Flutter-Projects/tienda_app/isar_db',
         name: 'default',
