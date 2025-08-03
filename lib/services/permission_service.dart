@@ -55,12 +55,16 @@ class PermissionService {
   /// Permisos para rol Vendedor
   bool _canVendedorPerformAction(String action, String resource) {
     switch (resource) {
+      case 'dashboard':
+        return true; // Todos pueden ver el dashboard
       case 'usuarios':
         return false; // Los vendedores no pueden gestionar usuarios
       case 'roles':
         return false; // Los vendedores no pueden gestionar roles
       case 'productos':
         return action == 'read'; // Solo pueden ver productos
+      case 'categorias':
+        return action == 'read'; // Solo pueden ver categorías
       case 'clientes':
         return action == 'create' ||
             action == 'read' ||
@@ -74,10 +78,20 @@ class PermissionService {
         return action == 'read'; // Solo pueden ver proveedores
       case 'compras':
         return false; // No pueden gestionar compras
+      case 'carrito':
+        return action == 'read'; // Solo pueden ver carrito
+      case 'cuenta_corriente':
+        return action == 'read'; // Solo pueden ver cuenta corriente
+      case 'stock':
+        return action == 'read'; // Solo pueden ver movimientos de stock
       case 'finanzas':
         return action == 'read'; // Solo pueden ver registros financieros
       case 'reportes':
         return action == 'read'; // Solo pueden ver reportes
+      case 'ofertas':
+        return action == 'read'; // Solo pueden ver ofertas
+      case 'sorteos':
+        return action == 'read'; // Solo pueden ver sorteos
       case 'configuracion':
         return false; // No pueden modificar configuración
       default:
@@ -88,6 +102,8 @@ class PermissionService {
   /// Permisos para rol Inventario
   bool _canInventarioPerformAction(String action, String resource) {
     switch (resource) {
+      case 'dashboard':
+        return true; // Todos pueden ver el dashboard
       case 'usuarios':
         return false;
       case 'roles':
@@ -96,6 +112,10 @@ class PermissionService {
         return action == 'create' ||
             action == 'read' ||
             action == 'update'; // Pueden gestionar productos
+      case 'categorias':
+        return action == 'create' ||
+            action == 'read' ||
+            action == 'update'; // Pueden gestionar categorías
       case 'clientes':
         return action == 'read'; // Solo pueden ver clientes
       case 'ventas':
@@ -112,10 +132,24 @@ class PermissionService {
         return action == 'create' ||
             action == 'read' ||
             action == 'update'; // Pueden gestionar compras
+      case 'carrito':
+        return action == 'create' ||
+            action == 'read' ||
+            action == 'update'; // Pueden gestionar carrito
+      case 'cuenta_corriente':
+        return action == 'read'; // Solo pueden ver cuenta corriente
+      case 'stock':
+        return action == 'create' ||
+            action == 'read' ||
+            action == 'update'; // Pueden gestionar stock
       case 'finanzas':
         return action == 'read'; // Solo pueden ver registros financieros
       case 'reportes':
         return action == 'read'; // Solo pueden ver reportes
+      case 'ofertas':
+        return action == 'read'; // Solo pueden ver ofertas
+      case 'sorteos':
+        return action == 'read'; // Solo pueden ver sorteos
       case 'configuracion':
         return false;
       default:
@@ -126,12 +160,16 @@ class PermissionService {
   /// Permisos para rol Finanzas
   bool _canFinanzasPerformAction(String action, String resource) {
     switch (resource) {
+      case 'dashboard':
+        return true; // Todos pueden ver el dashboard
       case 'usuarios':
         return false;
       case 'roles':
         return false;
       case 'productos':
         return action == 'read'; // Solo pueden ver productos
+      case 'categorias':
+        return action == 'read'; // Solo pueden ver categorías
       case 'clientes':
         return action == 'read'; // Solo pueden ver clientes
       case 'ventas':
@@ -142,6 +180,14 @@ class PermissionService {
         return action == 'read'; // Solo pueden ver proveedores
       case 'compras':
         return action == 'read'; // Solo pueden ver compras
+      case 'carrito':
+        return action == 'read'; // Solo pueden ver carrito
+      case 'cuenta_corriente':
+        return action == 'create' ||
+            action == 'read' ||
+            action == 'update'; // Pueden gestionar cuenta corriente
+      case 'stock':
+        return action == 'read'; // Solo pueden ver movimientos de stock
       case 'finanzas':
         return action == 'create' ||
             action == 'read' ||
@@ -150,6 +196,12 @@ class PermissionService {
         return action == 'create' ||
             action == 'read' ||
             action == 'update'; // Pueden gestionar reportes
+      case 'ofertas':
+        return action == 'read'; // Solo pueden ver ofertas
+      case 'sorteos':
+        return action == 'create' ||
+            action == 'read' ||
+            action == 'update'; // Pueden gestionar sorteos
       case 'configuracion':
         return false;
       default:

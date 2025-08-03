@@ -5,6 +5,8 @@ import 'package:tienda_app/services/app_config_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_app/models/app_theme.dart';
 import 'package:tienda_app/models/font_config.dart';
+import 'package:tienda_app/services/permission_service.dart';
+import 'package:tienda_app/services/auth_service.dart';
 
 class AppNavigationRail extends ConsumerStatefulWidget {
   const AppNavigationRail({super.key});
@@ -18,109 +20,144 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   AppTheme? _currentTheme;
   FontConfig? _currentFontConfig;
   int _hoveredIndex = -1;
+  List<_NavItemData> _filteredItems = [];
 
-  final List<_NavItemData> _items = const [
+  final List<_NavItemData> _allItems = const [
     _NavItemData(
       icon: Icons.dashboard_rounded,
       label: 'Dashboard',
       route: AppRoutes.dashboard,
       color: Color(0xFF6366F1), // Indigo moderno
+      resource: 'dashboard',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.inventory_2_rounded,
       label: 'Productos',
       route: AppRoutes.products,
       color: Color(0xFF10B981), // Emerald moderno
+      resource: 'productos',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.category_rounded,
       label: 'Categorías',
       route: AppRoutes.categories,
       color: Color(0xFF8B5CF6), // Violet moderno
+      resource: 'categorias',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.local_shipping_rounded,
       label: 'Proveedores',
       route: AppRoutes.providers,
       color: Color(0xFFF59E0B), // Amber moderno
+      resource: 'proveedores',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.shopping_cart_rounded,
       label: 'Compras',
       route: AppRoutes.purchases,
       color: Color(0xFFEF4444), // Red moderno
+      resource: 'compras',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.inventory_2_outlined,
       label: 'Pedidos Proveedores',
       route: AppRoutes.pedidosProveedor,
       color: Color(0xFF8B5CF6), // Violet moderno
+      resource: 'pedidos',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.shopping_basket_rounded,
       label: 'Carrito Compra',
       route: AppRoutes.carritoCompra,
       color: Color(0xFF6B7280), // Gray moderno
+      resource: 'carrito',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.assignment_rounded,
       label: 'Pedidos',
       route: AppRoutes.orders,
       color: Color(0xFFEC4899), // Pink moderno
+      resource: 'pedidos',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.people_rounded,
       label: 'Clientes',
       route: AppRoutes.clients,
       color: Color(0xFF06B6D4), // Cyan moderno
+      resource: 'clientes',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.account_balance_wallet_rounded,
       label: 'Cuenta Corriente',
       route: AppRoutes.accountBalance,
       color: Color(0xFF84CC16), // Lime moderno
+      resource: 'cuenta_corriente',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.point_of_sale_rounded,
       label: 'Ventas',
       route: AppRoutes.sales,
       color: Color(0xFFDC2626), // Red-600 moderno
+      resource: 'ventas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.inventory_rounded,
       label: 'Mov. Stock',
       route: AppRoutes.stockMovements,
       color: Color(0xFF7C3AED), // Violet-600 moderno
+      resource: 'stock',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.attach_money_rounded,
       label: 'Finanzas',
       route: AppRoutes.financialRecords,
       color: Color(0xFF059669), // Emerald-600 moderno
+      resource: 'finanzas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.analytics_rounded,
       label: 'Informes',
       route: AppRoutes.reports,
       color: Color(0xFF7C2D12), // Orange-900 moderno
+      resource: 'reportes',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.admin_panel_settings_rounded,
       label: 'Roles',
       route: AppRoutes.roles,
       color: Color(0xFF1E40AF), // Blue-800 moderno
+      resource: 'roles',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.people_alt_rounded,
       label: 'Usuarios',
       route: AppRoutes.users,
       color: Color(0xFF0D9488), // Teal-600 moderno
+      resource: 'usuarios',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.settings_rounded,
       label: 'Configuración',
       route: AppRoutes.settings,
       color: Color(0xFF6B7280), // Gray-500 moderno
+      resource: 'configuracion',
+      action: 'read',
     ),
     // Nuevas secciones
     _NavItemData(
@@ -128,36 +165,48 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       label: 'Ofertas',
       route: AppRoutes.offers,
       color: Color(0xFFFCD34D), // Yellow-300 moderno
+      resource: 'ofertas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.account_balance_rounded,
       label: 'Flujo de Caja',
       route: AppRoutes.cashFlow,
       color: Color(0xFF34D399), // Emerald-400 moderno
+      resource: 'finanzas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.trending_up_rounded,
       label: 'Ganancias y Pérdidas',
       route: AppRoutes.profitLoss,
       color: Color(0xFFF472B6), // Pink-400 moderno
+      resource: 'finanzas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.point_of_sale_rounded,
       label: 'Cierre de Caja',
       route: AppRoutes.cashRegister,
       color: Color(0xFF60A5FA), // Blue-400 moderno
+      resource: 'finanzas',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.card_giftcard_rounded,
       label: 'Sorteos',
       route: AppRoutes.sweepstakes,
       color: Color(0xFFA78BFA), // Violet-400 moderno
+      resource: 'sorteos',
+      action: 'read',
     ),
     _NavItemData(
       icon: Icons.schedule_rounded,
       label: 'Gastos Fijos',
       route: AppRoutes.fixedExpenses,
       color: Color(0xFF5EEAD4), // Teal-300 moderno
+      resource: 'finanzas',
+      action: 'read',
     ),
   ];
 
@@ -165,6 +214,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   void initState() {
     super.initState();
     _loadTheme();
+    _filterItemsByPermissions();
   }
 
   @override
@@ -180,6 +230,36 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     setState(() {
       _currentTheme = theme;
       _currentFontConfig = fontConfig;
+    });
+  }
+
+  Future<void> _filterItemsByPermissions() async {
+    final currentUser = ref.read(currentUserProvider);
+    final permissionService = ref.read(permissionServiceProvider);
+    
+    if (currentUser == null) {
+      setState(() {
+        _filteredItems = [];
+      });
+      return;
+    }
+
+    final filteredItems = <_NavItemData>[];
+    
+    for (final item in _allItems) {
+      final hasPermission = await permissionService.canPerformAction(
+        currentUser,
+        item.action,
+        item.resource,
+      );
+      
+      if (hasPermission) {
+        filteredItems.add(item);
+      }
+    }
+
+    setState(() {
+      _filteredItems = filteredItems;
     });
   }
 
@@ -340,16 +420,16 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final itemHeight = (constraints.maxHeight - 40) / _items.length;
+                final itemHeight = (constraints.maxHeight - 40) / _filteredItems.length;
                 final minItemHeight = 52.0;
                 final actualItemHeight =
                     itemHeight < minItemHeight ? minItemHeight : itemHeight;
 
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: _items.length,
+                  itemCount: _filteredItems.length,
                   itemBuilder: (context, index) {
-                    final item = _items[index];
+                    final item = _filteredItems[index];
                     final selected = _selectedIndex == index;
                     final isHovered = _hoveredIndex == index;
 
@@ -588,9 +668,9 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     final uri = GoRouter.of(context).routeInformationProvider.value.uri;
     final path = uri.path;
 
-    for (int i = 0; i < _items.length; i++) {
+    for (int i = 0; i < _filteredItems.length; i++) {
       // Coincidencia exacta o path segmentado
-      if (path == _items[i].route || path.startsWith('${_items[i].route}/')) {
+      if (path == _filteredItems[i].route || path.startsWith('${_filteredItems[i].route}/')) {
         return i;
       }
     }
@@ -598,7 +678,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   }
 
   void _onTap(BuildContext context, int index) {
-    context.go(_items[index].route);
+    context.go(_filteredItems[index].route);
   }
 }
 
@@ -607,11 +687,15 @@ class _NavItemData {
   final String label;
   final String route;
   final Color color;
+  final String resource;
+  final String action;
 
   const _NavItemData({
     required this.icon,
     required this.label,
     required this.route,
     required this.color,
+    required this.resource,
+    required this.action,
   });
 }
