@@ -8,16 +8,16 @@ class PedidoCompraService {
   final IsarService _isarService = IsarService();
 
   /// Convierte un pedido a proveedor en una compra
-  Future<Compra> convertirPedidoACompra({
-    required PedidoProveedor pedido,
-    required Proveedor proveedor,
-    required Map<int, double> preciosFinales, // productoId -> precioFinal
-  }) async {
+  Future<Compra> convertirPedidoACompra(
+    PedidoProveedor pedido,
+    Proveedor proveedor,
+    Map<int, double> preciosFinales,
+  ) async {
     final isar = await _isarService.db;
 
-    // Crear la compra
+    // Crear la compra con número de factura manual
     final compra = Compra(
-      numeroFactura: 'CONV-${DateTime.now().millisecondsSinceEpoch}',
+      numeroFactura: 'PED-${pedido.id}-${DateTime.now().millisecondsSinceEpoch}',
       fecha: DateTime.now(),
       total: 0.0, // Se calculará después
       proveedorId: proveedor.id,

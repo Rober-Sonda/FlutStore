@@ -6,6 +6,7 @@ import 'package:tienda_app/models/producto.dart';
 import 'package:tienda_app/models/proveedor.dart';
 import 'package:tienda_app/services/isar_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tienda_app/widgets/permission_widget.dart';
 
 class PurchaseAddView extends ConsumerStatefulWidget {
   const PurchaseAddView({super.key});
@@ -34,16 +35,25 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     _loadData();
   }
 
+  @override
+  void dispose() {
+    _numeroFacturaController.dispose();
+    _observacionesController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadData() async {
     try {
-      final isar = await ref.read(isarServiceProvider).db;
-      final proveedores = await isar.proveedors.where().findAll();
-      final productos = await isar.productos.where().findAll();
+      final isar = Isar.getInstance();
+      if (isar != null) {
+        final proveedores = await isar.proveedors.where().findAll();
+        final productos = await isar.productos.where().findAll();
 
-      setState(() {
-        _proveedores = proveedores;
-        _productos = productos;
-      });
+        setState(() {
+          _proveedores = proveedores;
+          _productos = productos;
+        });
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -57,27 +67,127 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
   }
 
   void _agregarAlCarrito(Producto producto) {
+    // Verificar si el producto ya está en el carrito
     final existingIndex = _carrito.indexWhere(
       (item) => item.producto.id == producto.id,
     );
 
     if (existingIndex != -1) {
-      setState(() {
-        _carrito[existingIndex].cantidad++;
-        _calcularTotal();
-      });
+      // Si ya existe, mostrar diálogo para actualizar cantidad
+      _mostrarDialogoCantidad(producto, existingIndex);
     } else {
-      setState(() {
+      // Si es nuevo, mostrar diálogo para especificar cantidad
+      _mostrarDialogoCantidad(producto, null);
+    }
+  }
+
+  void _mostrarDialogoCantidad(Producto producto, int? indexExistente) {
+    final cantidadController = TextEditingController(text: '1');
+    final precioController = TextEditingController(
+      text: (producto.precio ?? 0.0).toString(),
+    );
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text('Agregar ${producto.nombre}'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Stock actual: ${producto.stock ?? 0}'),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: cantidadController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Cantidad',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: precioController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Precio unitario',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final cantidad = int.tryParse(cantidadController.text);
+                  final precio = double.tryParse(precioController.text);
+
+                  if (cantidad != null &&
+                      cantidad > 0 &&
+                      precio != null &&
+                      precio >= 0) {
+                    _agregarProductoConCantidad(
+                      producto,
+                      cantidad,
+                      precio,
+                      indexExistente,
+                    );
+                    Navigator.of(context).pop();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Ingrese valores válidos'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Agregar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _agregarProductoConCantidad(
+    Producto producto,
+    int cantidad,
+    double precio,
+    int? indexExistente,
+  ) {
+    setState(() {
+      if (indexExistente != null) {
+        // Actualizar cantidad existente
+        _carrito[indexExistente].cantidad = cantidad;
+        _carrito[indexExistente].precioUnitario = precio;
+      } else {
+        // Agregar nuevo producto
         _carrito.add(
           ItemCarritoCompra(
             producto: producto,
-            cantidad: 1,
-            precioUnitario: producto.precio ?? 0.0,
+            cantidad: cantidad,
+            precioUnitario: precio,
           ),
         );
-        _calcularTotal();
-      });
-    }
+      }
+      _calcularTotal();
+    });
+  }
+
+  // Método para agregar producto por código de barras/SKU (preparado para futuro)
+  void _agregarPorCodigo(String codigo) {
+    // Buscar producto por código (cuando se agreguen los campos)
+    // Por ahora, buscar por nombre como fallback
+    final producto = _productos.firstWhere(
+      (p) => p.nombre.toLowerCase().contains(codigo.toLowerCase()),
+      orElse: () => throw Exception('Producto no encontrado'),
+    );
+
+    _agregarAlCarrito(producto);
   }
 
   void _removerDelCarrito(int index) {
@@ -133,38 +243,62 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
       return;
     }
 
+    if (_numeroFacturaController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Debe ingresar un número de factura'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
-      final isar = await ref.read(isarServiceProvider).db;
-
-      final compra = Compra();
-      compra.proveedorId = _proveedorSeleccionado!.id;
-      compra.numeroFactura = _numeroFacturaController.text.trim();
-      compra.observaciones = _observacionesController.text.trim();
-      compra.total = _totalCarrito;
-      compra.fecha = DateTime.now();
-      compra.estado = 'pendiente';
-
-      await isar.writeTxn(() async {
-        await isar.compras.put(compra);
-
-        // Actualizar stock de productos
-        for (final item in _carrito) {
-          final producto = item.producto;
-          producto.stock = (producto.stock ?? 0) + item.cantidad;
-          await isar.productos.put(producto);
-        }
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Compra guardada exitosamente'),
-            backgroundColor: Colors.green,
-          ),
+      final isar = Isar.getInstance();
+      if (isar != null) {
+        final compra = Compra(
+          numeroFactura: _numeroFacturaController.text.trim(),
+          fecha: DateTime.now(),
+          total: _totalCarrito,
+          proveedorId: _proveedorSeleccionado!.id,
+          observaciones: _observacionesController.text.trim(),
+          estado: 'pendiente',
         );
-        context.pop();
+
+        // Agregar productos al carrito de la compra
+        for (final item in _carrito) {
+          compra.productos.add(
+            CompraProducto(
+              productoId: item.producto.id,
+              nombreProducto: item.producto.nombre,
+              cantidad: item.cantidad,
+              precioUnitario: item.precioUnitario,
+            ),
+          );
+        }
+
+        await isar.writeTxn(() async {
+          await isar.compras.put(compra);
+
+          // Actualizar stock de productos
+          for (final item in _carrito) {
+            final producto = item.producto;
+            producto.stock = (producto.stock ?? 0) + item.cantidad;
+            await isar.productos.put(producto);
+          }
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Compra guardada exitosamente'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.pop();
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -182,311 +316,332 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nueva Compra'),
-        actions: [
-          if (_carrito.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () => _mostrarCarrito(),
-              tooltip: 'Ver Carrito',
-            ),
-        ],
+        backgroundColor: Colors.grey[900],
+        foregroundColor: Colors.white,
       ),
-      body: Row(
-        children: [
-          // Panel izquierdo - Formulario y productos
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                // Formulario de compra
-                Card(
-                  margin: const EdgeInsets.all(16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Información de la Compra',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 16),
-                          DropdownButtonFormField<Proveedor>(
-                            value: _proveedorSeleccionado,
-                            decoration: const InputDecoration(
-                              labelText: 'Proveedor *',
-                              prefixIcon: Icon(Icons.business),
-                            ),
-                            items:
-                                _proveedores.map((proveedor) {
-                                  return DropdownMenuItem(
-                                    value: proveedor,
-                                    child: Text(proveedor.nombre),
-                                  );
-                                }).toList(),
-                            onChanged: (Proveedor? value) {
-                              setState(() {
-                                _proveedorSeleccionado = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Debe seleccionar un proveedor';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _numeroFacturaController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Número de Factura',
-                                    prefixIcon: Icon(Icons.receipt),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _observacionesController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Observaciones',
-                                    prefixIcon: Icon(Icons.note),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Lista de productos
-                Expanded(
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Información básica de la compra
+                      Card(
+                        child: Padding(
                           padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Productos Disponibles',
+                                'Información de la Compra',
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
-                              Text(
-                                '${_productos.length} productos',
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: _productos.length,
-                            itemBuilder: (context, index) {
-                              final producto = _productos[index];
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  child: Text(producto.nombre[0].toUpperCase()),
-                                ),
-                                title: Text(producto.nombre),
-                                subtitle: Text(
-                                  'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stock ?? 0}',
-                                ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.add_shopping_cart),
-                                  onPressed: () => _agregarAlCarrito(producto),
-                                  tooltip: 'Agregar al carrito',
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                              const SizedBox(height: 16),
 
-          // Panel derecho - Carrito
-          Expanded(
-            flex: 1,
-            child: Card(
-              margin: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Carrito de Compra',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          '\$${_totalCarrito.toStringAsFixed(2)}',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child:
-                        _carrito.isEmpty
-                            ? const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              // Proveedor
+                              DropdownButtonFormField<Proveedor>(
+                                value: _proveedorSeleccionado,
+                                decoration: const InputDecoration(
+                                  labelText: 'Proveedor *',
+                                  prefixIcon: Icon(Icons.business),
+                                  border: OutlineInputBorder(),
+                                ),
+                                items:
+                                    _proveedores.map((proveedor) {
+                                      return DropdownMenuItem(
+                                        value: proveedor,
+                                        child: Text(proveedor.nombre),
+                                      );
+                                    }).toList(),
+                                onChanged: (Proveedor? value) {
+                                  setState(() {
+                                    _proveedorSeleccionado = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Debe seleccionar un proveedor';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Número de Factura y Observaciones
+                              Row(
                                 children: [
-                                  Icon(
-                                    Icons.shopping_cart_outlined,
-                                    size: 64,
-                                    color: Colors.grey,
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: _numeroFacturaController,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Número de Factura *',
+                                        prefixIcon: Icon(Icons.receipt),
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
                                   ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    'Carrito vacío',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  Text(
-                                    'Agrega productos desde la lista',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: _observacionesController,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Observaciones',
+                                        prefixIcon: Icon(Icons.note),
+                                        border: OutlineInputBorder(),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            )
-                            : ListView.builder(
-                              itemCount: _carrito.length,
-                              itemBuilder: (context, index) {
-                                final item = _carrito[index];
-                                return Card(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  child: ListTile(
-                                    title: Text(item.producto.nombre),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextFormField(
-                                                initialValue:
-                                                    item.precioUnitario
-                                                        .toString(),
-                                                decoration:
-                                                    const InputDecoration(
-                                                      labelText: 'Precio',
-                                                      isDense: true,
-                                                    ),
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                onChanged: (value) {
-                                                  final precio =
-                                                      double.tryParse(value);
-                                                  if (precio != null) {
-                                                    _actualizarPrecio(
-                                                      index,
-                                                      precio,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: TextFormField(
-                                                initialValue:
-                                                    item.cantidad.toString(),
-                                                decoration:
-                                                    const InputDecoration(
-                                                      labelText: 'Cantidad',
-                                                      isDense: true,
-                                                    ),
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                onChanged: (value) {
-                                                  final cantidad = int.tryParse(
-                                                    value,
-                                                  );
-                                                  if (cantidad != null) {
-                                                    _actualizarCantidad(
-                                                      index,
-                                                      cantidad,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          'Subtotal: \$${(item.precioUnitario * item.cantidad).toStringAsFixed(2)}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.remove_circle,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed:
-                                          () => _removerDelCarrito(index),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                  ),
-                  if (_carrito.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _guardarCompra,
-                          child:
-                              _isLoading
-                                  ? const CircularProgressIndicator()
-                                  : const Text('Guardar Compra'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                ],
+
+                      const SizedBox(height: 16),
+
+                      // Sección de productos
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Productos',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Text(
+                                    'Total: \$${_totalCarrito.toStringAsFixed(2)}',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge?.copyWith(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Campo de búsqueda rápida
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Buscar producto por nombre',
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  hintText:
+                                      'Escriba el nombre del producto y presione Enter',
+                                ),
+                                onSubmitted: (codigo) {
+                                  if (codigo.isNotEmpty) {
+                                    try {
+                                      _agregarPorCodigo(codigo);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Producto no encontrado: $codigo',
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Lista de productos disponibles
+                              Text(
+                                'Productos Disponibles:',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: _productos.length,
+                                  itemBuilder: (context, index) {
+                                    final producto = _productos[index];
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                        child: Text(
+                                          producto.nombre[0].toUpperCase(),
+                                        ),
+                                      ),
+                                      title: Text(producto.nombre),
+                                      subtitle: Text(
+                                        'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stock ?? 0}',
+                                      ),
+                                      trailing: ElevatedButton.icon(
+                                        icon: const Icon(Icons.add),
+                                        label: const Text('Agregar'),
+                                        onPressed:
+                                            () => _agregarAlCarrito(producto),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.indigo[700],
+                                          foregroundColor: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Productos en la compra
+                      if (_carrito.isNotEmpty)
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Productos en la Compra:',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const SizedBox(height: 16),
+                                ..._carrito.map((item) {
+                                  return Card(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 4,
+                                    ),
+                                    child: ListTile(
+                                      title: Text(item.producto.nombre),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  initialValue:
+                                                      item.cantidad.toString(),
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        labelText: 'Cantidad',
+                                                        isDense: true,
+                                                      ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  onChanged: (value) {
+                                                    final cantidad =
+                                                        int.tryParse(value);
+                                                    if (cantidad != null) {
+                                                      _actualizarCantidad(
+                                                        _carrito.indexOf(item),
+                                                        cantidad,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: TextFormField(
+                                                  initialValue:
+                                                      item.precioUnitario
+                                                          .toString(),
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        labelText:
+                                                            'Precio Unit.',
+                                                        isDense: true,
+                                                      ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  onChanged: (value) {
+                                                    final precio =
+                                                        double.tryParse(value);
+                                                    if (precio != null) {
+                                                      _actualizarPrecio(
+                                                        _carrito.indexOf(item),
+                                                        precio,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            'Subtotal: \$${(item.precioUnitario * item.cantidad).toStringAsFixed(2)}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                          Icons.remove_circle,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed:
+                                            () => _removerDelCarrito(
+                                              _carrito.indexOf(item),
+                                            ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 32),
+
+                      // Botón Guardar
+                      PermissionWidget(
+                        action: 'create',
+                        resource: 'compras',
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _guardarCompra,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.indigo[700],
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child:
+                              _isLoading
+                                  ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                  : const Text(
+                                    'Guardar Compra',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

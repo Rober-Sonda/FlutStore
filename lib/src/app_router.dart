@@ -46,6 +46,7 @@ import '../views/configuracion/optimization_view.dart';
 import '../views/finanzas/dialogs/fixed_expense_add_edit_view.dart';
 import '../views/ventas/dialogs/sale_add_edit_view.dart';
 import '../views/compras/dialogs/purchase_add_edit_view.dart';
+import '../views/compras/dialogs/purchase_add_view.dart';
 import '../views/finanzas/dialogs/cash_flow_add_edit_view.dart';
 import '../views/registros_financieros/dialogs/financial_record_add_edit_view.dart';
 
@@ -117,7 +118,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/purchases/add',
-            builder: (context, state) => const PurchaseAddEditView(),
+            builder: (context, state) => const PurchaseAddView(),
           ),
           GoRoute(
             path: '/purchases/edit/:id',
@@ -295,6 +296,38 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               final id = int.parse(state.pathParameters['id']!);
               return ProfitLossAddEditView(profitLossId: id);
+            },
+          ),
+          // Ventas
+          GoRoute(
+            path: '/sales',
+            builder: (context, state) => const SalesView(),
+          ),
+          GoRoute(
+            path: '/sales/add',
+            builder: (context, state) => const SaleAddEditView(),
+          ),
+          GoRoute(
+            path: '/sales/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return SaleAddEditView(ventaId: id);
+            },
+          ),
+          // Compras
+          GoRoute(
+            path: '/purchases',
+            builder: (context, state) => const PurchasesView(),
+          ),
+          GoRoute(
+            path: '/purchases/add',
+            builder: (context, state) => const PurchaseAddView(),
+          ),
+          GoRoute(
+            path: '/purchases/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return PurchaseAddEditView(compraId: id);
             },
           ),
           GoRoute(

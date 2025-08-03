@@ -83,9 +83,9 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
 
       final pedidoCompraService = PedidoCompraService();
       final compra = await pedidoCompraService.convertirPedidoACompra(
-        pedido: widget.pedido,
-        proveedor: widget.proveedor,
-        preciosFinales: preciosFinales,
+        widget.pedido,
+        widget.proveedor,
+        preciosFinales,
       );
 
       if (mounted) {
