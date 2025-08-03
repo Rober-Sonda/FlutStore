@@ -21,6 +21,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   FontConfig? _currentFontConfig;
   int _hoveredIndex = -1;
   List<_NavItemData> _filteredItems = [];
+  bool _isLoadingPermissions = true;
 
   final List<_NavItemData> _allItems = const [
     _NavItemData(
@@ -234,12 +235,17 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   }
 
   Future<void> _filterItemsByPermissions() async {
+    setState(() {
+      _isLoadingPermissions = true;
+    });
+
     final currentUser = ref.read(currentUserProvider);
     final permissionService = ref.read(permissionServiceProvider);
     
     if (currentUser == null) {
       setState(() {
         _filteredItems = [];
+        _isLoadingPermissions = false;
       });
       return;
     }
@@ -260,6 +266,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
 
     setState(() {
       _filteredItems = filteredItems;
+      _isLoadingPermissions = false;
     });
   }
 
@@ -280,11 +287,42 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider);
     final theme = _currentTheme ?? AppTheme.darkTheme;
     final fontConfig = _currentFontConfig ?? FontConfig.defaultConfig;
     final screenWidth = MediaQuery.of(context).size.width;
     final isCompact = screenWidth < 1200;
     final railWidth = isCompact ? 80.0 : 240.0;
+
+    // Actualizar permisos cuando cambie el usuario
+    if (currentUser != null && _filteredItems.isEmpty && !_isLoadingPermissions) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _filterItemsByPermissions();
+      });
+    }
+
+    // Mostrar loading mientras se cargan los permisos
+    if (_isLoadingPermissions) {
+      return Container(
+        width: railWidth,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              theme.surfaceColor,
+              theme.surfaceColor.withOpacity(0.95),
+              theme.surfaceColor,
+            ],
+          ),
+        ),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
 
     return Container(
       width: railWidth,
@@ -420,6 +458,38 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
+                if (_filteredItems.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.lock_outline,
+                          color: Colors.white.withOpacity(0.5),
+                          size: 48,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Sin permisos',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'No tienes acceso a ninguna sección',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.3),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
                 final itemHeight = (constraints.maxHeight - 40) / _filteredItems.length;
                 final minItemHeight = 52.0;
                 final actualItemHeight =
