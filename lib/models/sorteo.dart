@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'premio_sorteo.dart';
 
 part 'sorteo.g.dart';
 
@@ -19,8 +20,7 @@ class Sorteo {
   String tipoSorteo = 'aleatorio'; // 'aleatorio', 'manual'
   
   // Premios
-  List<String> premios = [];
-  List<double> valoresPremios = [];
+  List<PremioSorteo> premios = [];
   
   // Participantes
   List<int> participantesIds = []; // IDs de clientes participantes

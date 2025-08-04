@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import 'package:tienda_app/src/app_routes.dart';
+import '../../models/venta.dart';
+import '../../models/cliente.dart';
+import '../../services/isar_service.dart';
+import '../../widgets/permission_widget.dart';
+import 'dialogs/return_sale_dialog.dart';
 import 'widgets/stat_card.dart';
 import 'widgets/empty_state.dart';
 
@@ -13,8 +19,77 @@ class SalesView extends ConsumerStatefulWidget {
 }
 
 class _SalesViewState extends ConsumerState<SalesView> {
-  final bool _isLoading = false;
+  bool _isLoading = false;
   String _filtroSeleccionado = 'Todas';
+  List<Venta> _ventas = [];
+  List<Cliente> _clientes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      setState(() => _isLoading = true);
+
+      final isar = await ref.read(isarServiceProvider).db;
+      _ventas = await isar.ventas.where().sortByFecha().findAll();
+      _clientes = await isar.clientes.where().findAll();
+
+      setState(() => _isLoading = false);
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar datos: $e')));
+      }
+    }
+  }
+
+  List<Venta> get _ventasFiltradas {
+    switch (_filtroSeleccionado) {
+      case 'Pendientes':
+        return _ventas.where((v) => v.estado == 'pendiente').toList();
+      case 'Completadas':
+        return _ventas.where((v) => v.estado == 'completada').toList();
+      case 'Canceladas':
+        return _ventas.where((v) => v.estado == 'cancelada').toList();
+      case 'Devoluciones':
+        return _ventas.where((v) => v.esDevolucion).toList();
+      default:
+        return _ventas;
+    }
+  }
+
+  double get _totalVentas => _ventas.fold(0.0, (sum, v) => sum + v.total);
+  double get _ventasHoy => _ventas
+      .where(
+        (v) =>
+            v.fecha.isAfter(DateTime.now().subtract(const Duration(days: 1))),
+      )
+      .fold(0.0, (sum, v) => sum + v.total);
+
+  String _obtenerNombreCliente(int clienteId) {
+    final cliente = _clientes.firstWhere(
+      (c) => c.id == clienteId,
+      orElse: () {
+        final clienteDefault = Cliente();
+        clienteDefault.nombre = 'Cliente no encontrado';
+        return clienteDefault;
+      },
+    );
+    return cliente.nombre;
+  }
+
+  void _mostrarDialogoDevolucion(Venta venta) {
+    showDialog(
+      context: context,
+      builder: (context) => ReturnSaleDialog(venta: venta),
+    ).then((_) => _loadData());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +118,16 @@ class _SalesViewState extends ConsumerState<SalesView> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        context.push(AppRoutes.saleAdd);
-                      },
-                      icon: const Icon(Icons.add),
-                      tooltip: 'Nueva Venta',
+                    PermissionWidget(
+                      resource: 'ventas',
+                      action: 'create',
+                      child: IconButton(
+                        onPressed: () {
+                          context.push(AppRoutes.saleAdd);
+                        },
+                        icon: const Icon(Icons.add),
+                        tooltip: 'Nueva Venta',
+                      ),
                     ),
                     PopupMenuButton<String>(
                       onSelected: (value) {
@@ -74,6 +153,10 @@ class _SalesViewState extends ConsumerState<SalesView> {
                               value: 'Canceladas',
                               child: Text('Canceladas'),
                             ),
+                            const PopupMenuItem(
+                              value: 'Devoluciones',
+                              child: Text('Devoluciones'),
+                            ),
                           ],
                       child: Chip(
                         label: Text(_filtroSeleccionado),
@@ -90,7 +173,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                     Expanded(
                       child: StatCard(
                         title: 'Total Ventas',
-                        value: '0',
+                        value: _ventas.length.toString(),
                         icon: Icons.point_of_sale,
                         color: Colors.blue,
                       ),
@@ -99,7 +182,17 @@ class _SalesViewState extends ConsumerState<SalesView> {
                     Expanded(
                       child: StatCard(
                         title: 'Ventas Hoy',
-                        value: '0',
+                        value:
+                            _ventas
+                                .where(
+                                  (v) => v.fecha.isAfter(
+                                    DateTime.now().subtract(
+                                      const Duration(days: 1),
+                                    ),
+                                  ),
+                                )
+                                .length
+                                .toString(),
                         icon: Icons.today,
                         color: Colors.green,
                       ),
@@ -108,7 +201,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                     Expanded(
                       child: StatCard(
                         title: 'Ingresos',
-                        value: '\$0.00',
+                        value: '\$${_totalVentas.toStringAsFixed(2)}',
                         icon: Icons.attach_money,
                         color: Colors.orange,
                       ),
@@ -121,62 +214,180 @@ class _SalesViewState extends ConsumerState<SalesView> {
 
           // Contenido principal
           Expanded(
-            child: DefaultTabController(
-              length: 3,
-              child: Column(
-                children: [
-                  TabBar(
-                    labelColor: Colors.blue[700],
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: Colors.blue[700],
-                    tabs: const [
-                      Tab(text: 'Ventas', icon: Icon(Icons.point_of_sale)),
-                      Tab(text: 'Carrito', icon: Icon(Icons.shopping_cart)),
-                      Tab(text: 'Historial', icon: Icon(Icons.history)),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        // Tab de Ventas
-                        EmptyState(
-                          title: 'No hay ventas registradas',
-                          subtitle: 'Crea tu primera venta desde el carrito',
-                          actionText: 'Nueva Venta',
-                          icon: Icons.point_of_sale_outlined,
-                          color: Colors.blue[700]!,
-                          onAction: () => context.push(AppRoutes.saleAdd),
-                        ),
-
-                        // Tab de Carrito
-                        EmptyState(
-                          title: 'Carrito vacío',
-                          subtitle:
-                              'Agrega productos al carrito para crear una venta',
-                          actionText: 'Ver Productos',
-                          icon: Icons.shopping_cart_outlined,
-                          color: Colors.green[700]!,
-                          onAction: () => context.push(AppRoutes.products),
-                        ),
-
-                        // Tab de Historial
-                        EmptyState(
-                          title: 'Sin historial',
-                          subtitle: 'El historial de ventas aparecerá aquí',
-                          actionText: 'Ver Reportes',
-                          icon: Icons.history,
-                          color: Colors.purple[700]!,
-                          onAction: () => context.push(AppRoutes.reports),
-                        ),
-                      ],
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _ventasFiltradas.isEmpty
+                    ? EmptyState(
+                      title: 'No hay ventas registradas',
+                      subtitle: 'Crea tu primera venta desde el botón +',
+                      actionText: 'Nueva Venta',
+                      icon: Icons.point_of_sale_outlined,
+                      color: Colors.blue[700]!,
+                      onAction: () => context.push(AppRoutes.saleAdd),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _ventasFiltradas.length,
+                      itemBuilder: (context, index) {
+                        final venta = _ventasFiltradas[index];
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: _getColorEstado(venta.estado),
+                              child: Icon(
+                                _getIconEstado(venta.estado),
+                                color: Colors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Venta #${venta.numeroFactura ?? venta.id.toString()}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Cliente: ${_obtenerNombreCliente(venta.clienteId)}',
+                                ),
+                                Text(
+                                  'Total: \$${venta.total.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Text(
+                                  'Fecha: ${_formatearFecha(venta.fecha)}',
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                                if (venta.esDevolucion)
+                                  Text(
+                                    'DEVOLUCIÓN',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            trailing: PopupMenuButton<String>(
+                              onSelected: (value) {
+                                switch (value) {
+                                  case 'ver':
+                                    context.push(
+                                      '${AppRoutes.saleEdit}/${venta.id}',
+                                    );
+                                    break;
+                                  case 'devolucion':
+                                    if (!venta.esDevolucion) {
+                                      _mostrarDialogoDevolucion(venta);
+                                    }
+                                    break;
+                                  case 'eliminar':
+                                    _confirmarEliminarVenta(venta);
+                                    break;
+                                }
+                              },
+                              itemBuilder:
+                                  (context) => [
+                                    const PopupMenuItem(
+                                      value: 'ver',
+                                      child: Text('Ver detalles'),
+                                    ),
+                                    if (!venta.esDevolucion)
+                                      const PopupMenuItem(
+                                        value: 'devolucion',
+                                        child: Text('Procesar devolución'),
+                                      ),
+                                    const PopupMenuItem(
+                                      value: 'eliminar',
+                                      child: Text('Eliminar'),
+                                    ),
+                                  ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
+    );
+  }
+
+  Color _getColorEstado(String estado) {
+    switch (estado) {
+      case 'completada':
+        return Colors.green;
+      case 'pendiente':
+        return Colors.orange;
+      case 'cancelada':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  IconData _getIconEstado(String estado) {
+    switch (estado) {
+      case 'completada':
+        return Icons.check_circle;
+      case 'pendiente':
+        return Icons.schedule;
+      case 'cancelada':
+        return Icons.cancel;
+      default:
+        return Icons.help;
+    }
+  }
+
+  String _formatearFecha(DateTime fecha) {
+    return '${fecha.day.toString().padLeft(2, '0')}/${fecha.month.toString().padLeft(2, '0')}/${fecha.year}';
+  }
+
+  void _confirmarEliminarVenta(Venta venta) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Confirmar eliminación'),
+            content: Text(
+              '¿Está seguro de eliminar la venta #${venta.numeroFactura ?? venta.id}?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final isar = await ref.read(isarServiceProvider).db;
+                    await isar.writeTxn(() async {
+                      await isar.ventas.delete(venta.id);
+                    });
+                    Navigator.of(context).pop();
+                    _loadData();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Venta eliminada exitosamente'),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error al eliminar venta: $e')),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Eliminar'),
+              ),
+            ],
+          ),
     );
   }
 }

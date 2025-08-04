@@ -101,9 +101,9 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
 
     return productos!.where((producto) {
         // Filtro por búsqueda
-        final matchesSearch = producto.nombre.toLowerCase().contains(
+        final matchesSearch = (producto.nombre?.toLowerCase().contains(
           searchQuery.toLowerCase(),
-        );
+        ) ?? false);
 
         // Filtro por categoría
         final matchesCategory =
@@ -127,7 +127,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
         int comparison = 0;
         switch (sortBy) {
           case 'nombre':
-            comparison = a.nombre.compareTo(b.nombre);
+            comparison = (a.nombre ?? '').compareTo(b.nombre ?? '');
             break;
           case 'precio':
             comparison = (a.precio ?? 0).compareTo(b.precio ?? 0);
@@ -193,7 +193,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
           (context) => AlertDialog(
             title: const Text('Confirmar eliminación'),
             content: Text(
-              '¿Estás seguro de que quieres eliminar "${producto.nombre}"?',
+              '¿Estás seguro de que quieres eliminar "${producto.nombre ?? 'Producto sin nombre'}"?',
             ),
             actions: [
               TextButton(

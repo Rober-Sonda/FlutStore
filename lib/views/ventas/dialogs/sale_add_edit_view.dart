@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/venta.dart';
-import 'package:tienda_app/models/cliente.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/oferta.dart';
-import 'package:tienda_app/src/app_routes.dart';
-import 'package:tienda_app/widgets/permission_widget.dart';
+import '../../../models/venta.dart';
+import '../../../models/producto.dart';
+import '../../../models/cliente.dart';
+import '../../../services/isar_service.dart';
+import '../../../services/numeracion_service.dart';
+import '../../../widgets/permission_widget.dart';
 
 class SaleAddEditView extends ConsumerStatefulWidget {
   final int? ventaId;
@@ -20,752 +20,1141 @@ class SaleAddEditView extends ConsumerStatefulWidget {
 
 class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
   final _formKey = GlobalKey<FormState>();
-  final _numeroFacturaController = TextEditingController();
+  final _codigoBarrasController = TextEditingController();
   final _observacionesController = TextEditingController();
+  final _referenciaPagoController = TextEditingController();
+  final _direccionEntregaController = TextEditingController();
+  final _telefonoClienteController = TextEditingController();
+  final _emailClienteController = TextEditingController();
+  final _notasInternasController = TextEditingController();
 
-  String _metodoPagoSeleccionado = 'efectivo';
-  int? _clienteSeleccionado;
-  DateTime _fechaSeleccionada = DateTime.now();
-  bool _isLoading = false;
-  bool _isEditing = false;
+  // Datos de la venta
+  int? _clienteSeleccionadoId;
+  String _metodoPago = 'Efectivo';
+  String _estado = 'completada';
+  double _total = 0.0;
+  double _montoPagado = 0.0;
+  double _cambio = 0.0;
 
-  List<Cliente> _clientes = [];
+  // Números de documento
+  String? _numeroFactura;
+  String? _numeroRecibo;
+  String? _numeroTicket;
+  String? _numeroOrden;
+
+  // Información adicional
+  String? _banco;
+  String? _numeroTarjeta;
+  String? _condicionesVenta;
+
+  // Productos
   List<Producto> _productos = [];
-  List<Oferta> _ofertas = [];
+  List<Cliente> _clientes = [];
+  List<ItemCarritoVenta> _carrito = [];
 
-  // Carrito de venta
-  final List<ItemCarritoVenta> _carrito = [];
-  double _totalCarrito = 0.0;
-  double _descuentoTotal = 0.0;
+  // Estados
+  bool _isLoading = true;
+  bool _isSaving = false;
+  bool _generarNumerosAutomaticos = true;
+  Venta? _venta;
+
+  final List<String> _metodosPago = [
+    'Efectivo',
+    'Tarjeta de Débito',
+    'Tarjeta de Crédito',
+    'Transferencia',
+    'Cheque',
+    'Otro',
+  ];
+
+  final List<String> _bancos = [
+    'Banco Nación',
+    'Banco Provincia',
+    'Banco Ciudad',
+    'Banco Santander',
+    'Banco Galicia',
+    'Banco Macro',
+    'Banco HSBC',
+    'Otro',
+  ];
 
   @override
   void initState() {
     super.initState();
-    _isEditing = widget.ventaId != null;
-    if (_isEditing) {
-      _loadVentaData();
-    }
     _loadData();
   }
 
   @override
   void dispose() {
-    _numeroFacturaController.dispose();
+    _codigoBarrasController.dispose();
     _observacionesController.dispose();
+    _referenciaPagoController.dispose();
+    _direccionEntregaController.dispose();
+    _telefonoClienteController.dispose();
+    _emailClienteController.dispose();
+    _notasInternasController.dispose();
     super.dispose();
   }
 
   Future<void> _loadData() async {
     try {
-      final isar = Isar.getInstance();
-      if (isar != null) {
-        final clientes = await isar.clientes.where().findAll();
-        final productos = await isar.productos.where().findAll();
-        final ofertas = await isar.ofertas.where().findAll();
+      setState(() => _isLoading = true);
 
-        setState(() {
-          _clientes = clientes;
-          _productos = productos;
-          _ofertas = ofertas;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar datos: $e')),
-        );
-      }
-    }
-  }
+      final isar = await ref.read(isarServiceProvider).db;
 
-  Future<void> _loadVentaData() async {
-    if (widget.ventaId == null) return;
+      // Cargar productos y clientes
+      _productos = await isar.productos.where().findAll();
+      _clientes = await isar.clientes.where().findAll();
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final isar = Isar.getInstance();
-      if (isar != null) {
-        final venta = await isar.ventas.get(widget.ventaId!);
-        if (venta != null) {
-          setState(() {
-            _numeroFacturaController.text = venta.numeroFactura ?? '';
-            _observacionesController.text = venta.observaciones ?? '';
-            _metodoPagoSeleccionado = venta.metodoPago;
-            _clienteSeleccionado = venta.clienteId;
-            _fechaSeleccionada = venta.fecha;
-            _totalCarrito = venta.total;
-          });
+      if (widget.ventaId != null) {
+        _venta = await isar.ventas.get(widget.ventaId!);
+        if (_venta != null) {
+          _loadVentaData();
+        }
+      } else {
+        // Generar números automáticos para nueva venta
+        if (_generarNumerosAutomaticos) {
+          await _generarNumerosAutomaticosVenta();
         }
       }
+
+      setState(() => _isLoading = false);
     } catch (e) {
+      setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar venta: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar datos: $e')));
       }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
-  void _agregarAlCarrito(Producto producto) {
-    // Verificar si el producto ya está en el carrito
-    final existingIndex = _carrito.indexWhere(
+  Future<void> _generarNumerosAutomaticosVenta() async {
+    try {
+      final isar = await ref.read(isarServiceProvider).db;
+      final numeracionService = NumeracionService();
+
+      final numeroFactura = await numeracionService.generarNumeroFacturaVenta(
+        isar,
+      );
+      final numeroRecibo = await numeracionService.generarNumeroReciboVenta(
+        isar,
+      );
+      final numeroTicket = await numeracionService.generarNumeroTicketVenta(
+        isar,
+      );
+
+      setState(() {
+        _numeroFactura = numeroFactura;
+        _numeroRecibo = numeroRecibo;
+        _numeroTicket = numeroTicket;
+      });
+    } catch (e) {
+      print('Error generando números automáticos: $e');
+    }
+  }
+
+  void _loadVentaData() {
+    if (_venta == null) return;
+
+    _clienteSeleccionadoId = _venta!.clienteId;
+    _metodoPago = _venta!.metodoPago;
+    _estado = _venta!.estado;
+    _total = _venta!.total;
+    _montoPagado = _venta!.montoPagado ?? 0.0;
+    _cambio = _venta!.cambio ?? 0.0;
+    _numeroFactura = _venta!.numeroFactura;
+    _numeroRecibo = _venta!.numeroRecibo;
+    _numeroTicket = _venta!.numeroTicket;
+    _numeroOrden = _venta!.numeroOrden;
+    _banco = _venta!.banco;
+    _numeroTarjeta = _venta!.numeroTarjeta;
+    _referenciaPagoController.text = _venta!.referenciaPago ?? '';
+    _direccionEntregaController.text = _venta!.direccionEntrega ?? '';
+    _telefonoClienteController.text = _venta!.telefonoCliente ?? '';
+    _emailClienteController.text = _venta!.emailCliente ?? '';
+    _condicionesVenta = _venta!.condicionesVenta;
+    _notasInternasController.text = _venta!.notasInternas ?? '';
+    _observacionesController.text = _venta!.observaciones ?? '';
+  }
+
+  void _buscarPorCodigoBarras() {
+    final codigo = _codigoBarrasController.text.trim();
+    if (codigo.isEmpty) return;
+
+    // Buscar por código de barras, SKU o nombre
+    final producto = _productos.firstWhere(
+      (p) =>
+          (p.codigoBarras?.toLowerCase() == codigo.toLowerCase()) ||
+          (p.sku?.toLowerCase() == codigo.toLowerCase()) ||
+          (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false),
+      orElse: () => Producto(),
+    );
+
+    if (producto.id != 0) {
+      _mostrarDialogoCantidad(producto);
+      _codigoBarrasController.clear();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Producto no encontrado: $codigo'),
+          backgroundColor: Colors.red,
+          action: SnackBarAction(
+            label: 'Buscar',
+            textColor: Colors.white,
+            onPressed: () => _mostrarBusquedaAvanzada(codigo),
+          ),
+        ),
+      );
+    }
+  }
+
+  void _mostrarBusquedaAvanzada(String codigo) {
+    final productosEncontrados =
+        _productos
+            .where(
+              (p) =>
+                  (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false) ||
+                  (p.codigoBarras?.toLowerCase().contains(
+                        codigo.toLowerCase(),
+                      ) ??
+                      false) ||
+                  (p.sku?.toLowerCase().contains(codigo.toLowerCase()) ??
+                      false),
+            )
+            .toList();
+
+    if (productosEncontrados.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'No se encontraron productos que coincidan con: $codigo',
+          ),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text('Productos encontrados para "$codigo"'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: productosEncontrados.length,
+                itemBuilder: (context, index) {
+                  final producto = productosEncontrados[index];
+                  return ListTile(
+                    title: Text(producto.nombre ?? 'Producto sin nombre'),
+                    subtitle: Text(
+                      'Precio: \$${producto.precio?.toStringAsFixed(2) ?? '0.00'} - '
+                      'Stock: ${producto.stock ?? 0}',
+                    ),
+                    trailing:
+                        producto.codigoBarras != null || producto.sku != null
+                            ? Text(
+                              '${producto.codigoBarras ?? ''} ${producto.sku ?? ''}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            )
+                            : null,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      _mostrarDialogoCantidad(producto);
+                    },
+                  );
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancelar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _mostrarDialogoCantidad(Producto producto) {
+    final cantidadController = TextEditingController(text: '1');
+    final precioController = TextEditingController(
+      text: (producto.precio ?? 0.0).toString(),
+    );
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Row(
+              children: [
+                Icon(Icons.add_shopping_cart, color: Colors.blue),
+                const SizedBox(width: 8),
+                Expanded(child: Text('Agregar ${producto.nombre ?? 'Producto'}')),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Información del producto
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          producto.nombre ?? 'Producto sin nombre',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Precio sugerido: \$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        if (producto.stock != null)
+                          Text(
+                            'Stock disponible: ${producto.stock}',
+                            style: TextStyle(
+                              color:
+                                  producto.stock! > 0
+                                      ? Colors.green
+                                      : Colors.red,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Campos de entrada
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: cantidadController,
+                        decoration: const InputDecoration(
+                          labelText: 'Cantidad',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.numbers),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          final cantidad = int.tryParse(value) ?? 1;
+                          final precio =
+                              double.tryParse(precioController.text) ?? 0.0;
+                          // Actualizar el precio total en tiempo real
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: precioController,
+                        decoration: const InputDecoration(
+                          labelText: 'Precio Unitario',
+                          border: OutlineInputBorder(),
+                          prefixText: '\$',
+                          prefixIcon: Icon(Icons.attach_money),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          final cantidad =
+                              int.tryParse(cantidadController.text) ?? 1;
+                          final precio = double.tryParse(value) ?? 0.0;
+                          // Actualizar el precio total en tiempo real
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Resumen del total
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.blue[200]!),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Subtotal:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '\$${((int.tryParse(cantidadController.text) ?? 1) * (double.tryParse(precioController.text) ?? 0.0)).toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final cantidad = int.tryParse(cantidadController.text) ?? 1;
+                  final precio = double.tryParse(precioController.text) ?? 0.0;
+
+                  if (cantidad <= 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('La cantidad debe ser mayor a 0'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (precio < 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('El precio no puede ser negativo'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  _agregarProductoConCantidad(producto, cantidad, precio);
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Agregar al Carrito'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _agregarProductoConCantidad(
+    Producto producto,
+    int cantidad,
+    double precio,
+  ) {
+    final subtotal = cantidad * precio;
+
+    // Buscar si el producto ya está en el carrito
+    final index = _carrito.indexWhere(
       (item) => item.producto.id == producto.id,
     );
 
-    if (existingIndex != -1) {
-      // Si ya existe, mostrar diálogo para actualizar cantidad
-      _mostrarDialogoCantidad(producto, existingIndex);
-    } else {
-      // Si es nuevo, mostrar diálogo para especificar cantidad
-      _mostrarDialogoCantidad(producto, null);
-    }
-  }
-
-  void _mostrarDialogoCantidad(Producto producto, int? indexExistente) {
-    final cantidadController = TextEditingController(text: '1');
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Agregar ${producto.nombre}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)}'),
-            Text('Stock disponible: ${producto.stock ?? 0}'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: cantidadController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Cantidad',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
+    if (index != -1) {
+      setState(() {
+        _carrito[index] = ItemCarritoVenta(
+          producto: producto,
+          cantidad: cantidad,
+          precioUnitario: precio,
+          subtotal: subtotal,
+        );
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${producto.nombre} actualizado en el carrito'),
+          backgroundColor: Colors.blue,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final cantidad = int.tryParse(cantidadController.text);
-              if (cantidad != null && cantidad > 0) {
-                if (cantidad > (producto.stock ?? 0)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('La cantidad excede el stock disponible'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-                
-                _agregarProductoConCantidad(producto, cantidad, indexExistente);
-                Navigator.of(context).pop();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Ingrese una cantidad válida'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: const Text('Agregar'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _agregarProductoConCantidad(Producto producto, int cantidad, int? indexExistente) {
-    // Buscar ofertas aplicables
-    final ofertasAplicables = _ofertas.where((oferta) =>
-      oferta.productoId == producto.id &&
-      oferta.activa &&
-      oferta.fechaInicio.isBefore(DateTime.now()) &&
-      oferta.fechaFin.isAfter(DateTime.now())
-    ).toList();
-
-    double precioFinal = producto.precio ?? 0.0;
-    double descuento = 0.0;
-
-    if (ofertasAplicables.isNotEmpty) {
-      final oferta = ofertasAplicables.first;
-      descuento = (precioFinal * oferta.porcentajeDescuento) / 100;
-      precioFinal -= descuento;
-    }
-
-    setState(() {
-      if (indexExistente != null) {
-        // Actualizar cantidad existente
-        _carrito[indexExistente].cantidad = cantidad;
-        _carrito[indexExistente].precioFinal = precioFinal;
-        _carrito[indexExistente].descuento = descuento;
-      } else {
-        // Agregar nuevo producto
+      );
+    } else {
+      setState(() {
         _carrito.add(
           ItemCarritoVenta(
             producto: producto,
             cantidad: cantidad,
-            precioUnitario: producto.precio ?? 0.0,
-            precioFinal: precioFinal,
-            descuento: descuento,
+            precioUnitario: precio,
+            subtotal: subtotal,
           ),
         );
-      }
-      _calcularTotal();
-    });
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${producto.nombre} agregado al carrito'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+
+    _calcularTotal();
   }
 
-  // Método para agregar producto por código de barras/SKU (preparado para futuro)
-  void _agregarPorCodigo(String codigo) {
-    // Buscar producto por código (cuando se agreguen los campos)
-    // Por ahora, buscar por nombre como fallback
-    final producto = _productos.firstWhere(
-      (p) => p.nombre.toLowerCase().contains(codigo.toLowerCase()),
-      orElse: () => throw Exception('Producto no encontrado'),
-    );
-    
-    _agregarAlCarrito(producto);
+  void _calcularTotal() {
+    _total = _carrito.fold(0.0, (sum, item) => sum + item.subtotal);
+    _cambio = _montoPagado - _total;
+    setState(() {});
   }
 
-  void _removerDelCarrito(int index) {
+  void _removerProducto(int index) {
     setState(() {
       _carrito.removeAt(index);
       _calcularTotal();
     });
   }
 
-  void _actualizarCantidad(int index, int nuevaCantidad) {
-    if (nuevaCantidad > 0) {
-      setState(() {
-        _carrito[index].cantidad = nuevaCantidad;
-        _calcularTotal();
-      });
-    }
-  }
-
-  void _calcularTotal() {
-    _totalCarrito = _carrito.fold(
-      0.0,
-      (total, item) => total + (item.precioFinal * item.cantidad),
-    );
-    _descuentoTotal = _carrito.fold(
-      0.0,
-      (total, item) => total + (item.descuento * item.cantidad),
-    );
-  }
-
   Future<void> _guardarVenta() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (_clienteSeleccionado == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debe seleccionar un cliente'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
     if (_carrito.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debe agregar productos al carrito'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Debe agregar al menos un producto')),
+      );
+      return;
+    }
+    if (_clienteSeleccionadoId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Debe seleccionar un cliente')),
       );
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
-      final isar = Isar.getInstance();
-      if (isar != null) {
-        final venta = Venta(
-          clienteId: _clienteSeleccionado ?? 1,
-          fecha: _fechaSeleccionada,
-          total: _totalCarrito,
-          metodoPago: _metodoPagoSeleccionado,
-          observaciones: _observacionesController.text,
-          estado: 'completada',
-          numeroFactura: _numeroFacturaController.text,
-          usuarioId: 1, // TODO: Obtener usuario actual
-        );
+      setState(() => _isSaving = true);
 
-        await isar.writeTxn(() async {
-          if (_isEditing) {
-            venta.id = widget.ventaId!;
-            await isar.ventas.put(venta);
-          } else {
-            await isar.ventas.put(venta);
-          }
+      final isar = await ref.read(isarServiceProvider).db;
 
-          // Actualizar stock de productos
-          for (final item in _carrito) {
-            final producto = item.producto;
-            producto.stock = (producto.stock ?? 0) - item.cantidad;
-            await isar.productos.put(producto);
-          }
-        });
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(_isEditing ? 'Venta actualizada' : 'Venta creada'),
-              backgroundColor: Colors.green,
-            ),
+      final venta =
+          _venta ??
+          Venta(
+            clienteId: _clienteSeleccionadoId!,
+            fecha: DateTime.now(),
+            total: _total,
+            metodoPago: _metodoPago,
+            observaciones:
+                _observacionesController.text.isEmpty
+                    ? null
+                    : _observacionesController.text,
+            estado: _estado,
+            numeroFactura: _numeroFactura,
+            numeroRecibo: _numeroRecibo,
+            numeroTicket: _numeroTicket,
+            numeroOrden: _numeroOrden,
+            montoPagado: _montoPagado,
+            cambio: _cambio,
+            referenciaPago:
+                _referenciaPagoController.text.isEmpty
+                    ? null
+                    : _referenciaPagoController.text,
+            banco: _banco,
+            numeroTarjeta: _numeroTarjeta,
+            direccionEntrega:
+                _direccionEntregaController.text.isEmpty
+                    ? null
+                    : _direccionEntregaController.text,
+            telefonoCliente:
+                _telefonoClienteController.text.isEmpty
+                    ? null
+                    : _telefonoClienteController.text,
+            emailCliente:
+                _emailClienteController.text.isEmpty
+                    ? null
+                    : _emailClienteController.text,
+            condicionesVenta: _condicionesVenta,
+            notasInternas:
+                _notasInternasController.text.isEmpty
+                    ? null
+                    : _notasInternasController.text,
+            usuarioId: 1, // TODO: Obtener ID del usuario actual
           );
-          context.pop();
-        }
+
+      // Actualizar datos de la venta
+      venta.clienteId = _clienteSeleccionadoId!;
+      venta.fecha = DateTime.now();
+      venta.total = _total;
+      venta.metodoPago = _metodoPago;
+      venta.observaciones =
+          _observacionesController.text.isEmpty
+              ? null
+              : _observacionesController.text;
+      venta.estado = _estado;
+      venta.numeroFactura = _numeroFactura;
+      venta.numeroRecibo = _numeroRecibo;
+      venta.numeroTicket = _numeroTicket;
+      venta.numeroOrden = _numeroOrden;
+      venta.montoPagado = _montoPagado;
+      venta.cambio = _cambio;
+      venta.referenciaPago =
+          _referenciaPagoController.text.isEmpty
+              ? null
+              : _referenciaPagoController.text;
+      venta.banco = _banco;
+      venta.numeroTarjeta = _numeroTarjeta;
+      venta.direccionEntrega =
+          _direccionEntregaController.text.isEmpty
+              ? null
+              : _direccionEntregaController.text;
+      venta.telefonoCliente =
+          _telefonoClienteController.text.isEmpty
+              ? null
+              : _telefonoClienteController.text;
+      venta.emailCliente =
+          _emailClienteController.text.isEmpty
+              ? null
+              : _emailClienteController.text;
+      venta.condicionesVenta = _condicionesVenta;
+      venta.notasInternas =
+          _notasInternasController.text.isEmpty
+              ? null
+              : _notasInternasController.text;
+
+      await isar.writeTxn(() async {
+        await isar.ventas.put(venta);
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Venta guardada exitosamente')),
+        );
+        context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al guardar venta: $e')));
       }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isSaving = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(_isEditing ? 'Editar Venta' : 'Nueva Venta'),
-        backgroundColor: Colors.grey[900],
+        title: Text(widget.ventaId == null ? 'Nueva Venta' : 'Editar Venta'),
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Información básica de la venta
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Información de la Venta',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            // Cliente
-                            PermissionWidget(
-                              action: 'create',
-                              resource: 'ventas',
-                              child: DropdownButtonFormField<int>(
-                                value: _clienteSeleccionado,
-                                decoration: InputDecoration(
-                                  labelText: 'Cliente *',
-                                  labelStyle: TextStyle(color: Colors.grey[400]),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.grey[700]!),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.indigo[700]!),
-                                  ),
-                                ),
-                                items: _clientes.map((cliente) {
-                                  return DropdownMenuItem(
-                                    value: cliente.id,
-                                    child: Text(cliente.nombre),
-                                  );
-                                }).toList(),
-                                onChanged: (int? value) {
-                                  setState(() {
-                                    _clienteSeleccionado = value;
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Debe seleccionar un cliente';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : PermissionWidget(
+                resource: 'ventas',
+                action: widget.ventaId == null ? 'create' : 'update',
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Información básica
+                        _buildInformacionBasica(),
+                        const SizedBox(height: 16),
 
-                            const SizedBox(height: 16),
+                        // Búsqueda de productos
+                        _buildBusquedaProductos(),
+                        const SizedBox(height: 16),
 
-                            // Fecha
-                            PermissionWidget(
-                              action: 'create',
-                              resource: 'ventas',
-                              child: InkWell(
-                                onTap: () async {
-                                  final DateTime? picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: _fechaSeleccionada,
-                                    firstDate: DateTime(2020),
-                                    lastDate: DateTime(2030),
-                                  );
-                                  if (picked != null && picked != _fechaSeleccionada) {
-                                    setState(() {
-                                      _fechaSeleccionada = picked;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey[700]!),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.calendar_today, color: Colors.grey[400]),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Fecha: ${_fechaSeleccionada.toString().split(' ')[0]}',
-                                        style: TextStyle(color: Colors.grey[400]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                        // Carrito de productos
+                        _buildCarritoProductos(),
+                        const SizedBox(height: 16),
 
-                            const SizedBox(height: 16),
+                        // Información de pago
+                        _buildInformacionPago(),
+                        const SizedBox(height: 16),
 
-                            // Número de Factura
-                            PermissionWidget(
-                              action: 'create',
-                              resource: 'ventas',
-                              child: TextFormField(
-                                controller: _numeroFacturaController,
-                                decoration: InputDecoration(
-                                  labelText: 'Número de Factura',
-                                  labelStyle: TextStyle(color: Colors.grey[400]),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.grey[700]!),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.indigo[700]!),
-                                  ),
-                                ),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // Método de Pago
-                            PermissionWidget(
-                              action: 'create',
-                              resource: 'ventas',
-                              child: DropdownButtonFormField<String>(
-                                value: _metodoPagoSeleccionado,
-                                decoration: InputDecoration(
-                                  labelText: 'Método de Pago',
-                                  labelStyle: TextStyle(color: Colors.grey[400]),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.grey[700]!),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.indigo[700]!),
-                                  ),
-                                ),
-                                items: const [
-                                  DropdownMenuItem(value: 'efectivo', child: Text('Efectivo')),
-                                  DropdownMenuItem(value: 'tarjeta', child: Text('Tarjeta')),
-                                  DropdownMenuItem(value: 'transferencia', child: Text('Transferencia')),
-                                  DropdownMenuItem(value: 'cheque', child: Text('Cheque')),
-                                ],
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _metodoPagoSeleccionado = value ?? 'efectivo';
-                                  });
-                                },
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // Observaciones
-                            PermissionWidget(
-                              action: 'create',
-                              resource: 'ventas',
-                              child: TextFormField(
-                                controller: _observacionesController,
-                                maxLines: 3,
-                                decoration: InputDecoration(
-                                  labelText: 'Observaciones',
-                                  labelStyle: TextStyle(color: Colors.grey[400]),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.grey[700]!),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Colors.indigo[700]!),
-                                  ),
-                                ),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                        // Información adicional
+                        _buildInformacionAdicional(),
+                      ],
                     ),
-
-                    const SizedBox(height: 16),
-
-                    // Sección de productos
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Productos',
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  'Total: \$${_totalCarrito.toStringAsFixed(2)}',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            // Campo de búsqueda rápida
-                            TextField(
-                              decoration: InputDecoration(
-                                labelText: 'Buscar producto por nombre',
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                hintText: 'Escriba el nombre del producto y presione Enter',
-                              ),
-                              onSubmitted: (codigo) {
-                                if (codigo.isNotEmpty) {
-                                  try {
-                                    _agregarPorCodigo(codigo);
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Producto no encontrado: $codigo'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            // Lista de productos disponibles
-                            Text(
-                              'Productos Disponibles:',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              height: 200,
-                              child: ListView.builder(
-                                itemCount: _productos.length,
-                                itemBuilder: (context, index) {
-                                  final producto = _productos[index];
-                                  return ListTile(
-                                    leading: CircleAvatar(
-                                      child: Text(producto.nombre[0].toUpperCase()),
-                                    ),
-                                    title: Text(producto.nombre),
-                                    subtitle: Text(
-                                      'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stock ?? 0}',
-                                    ),
-                                    trailing: ElevatedButton.icon(
-                                      icon: const Icon(Icons.add),
-                                      label: const Text('Agregar'),
-                                      onPressed: () => _agregarAlCarrito(producto),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.indigo[700],
-                                        foregroundColor: Colors.white,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Carrito de venta
-                    if (_carrito.isNotEmpty)
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Productos en la Venta:',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              const SizedBox(height: 16),
-                              ..._carrito.map((item) {
-                                return Card(
-                                  margin: const EdgeInsets.symmetric(vertical: 4),
-                                  child: ListTile(
-                                    title: Text(item.producto.nombre),
-                                    subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextFormField(
-                                                initialValue: item.cantidad.toString(),
-                                                decoration: const InputDecoration(
-                                                  labelText: 'Cantidad',
-                                                  isDense: true,
-                                                ),
-                                                keyboardType: TextInputType.number,
-                                                onChanged: (value) {
-                                                  final cantidad = int.tryParse(value);
-                                                  if (cantidad != null) {
-                                                    _actualizarCantidad(
-                                                      _carrito.indexOf(item),
-                                                      cantidad,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          'Precio: \$${item.precioFinal.toStringAsFixed(2)}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        if (item.descuento > 0)
-                                          Text(
-                                            'Descuento: \$${item.descuento.toStringAsFixed(2)}',
-                                            style: const TextStyle(
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.remove_circle,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () => _removerDelCarrito(
-                                        _carrito.indexOf(item),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                              if (_descuentoTotal > 0)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Text(
-                                    'Descuento Total: \$${_descuentoTotal.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                    const SizedBox(height: 32),
-
-                    // Botón Guardar
-                    PermissionWidget(
-                      action: 'create',
-                      resource: 'ventas',
-                      child: ElevatedButton(
-                        onPressed: _isLoading ? null : _guardarVenta,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo[700],
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text(
-                                'Guardar Venta',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: _isSaving ? null : _guardarVenta,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child:
+                    _isSaving
+                        ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                        : const Text('Guardar Venta'),
+              ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInformacionBasica() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Información Básica',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            // Cliente
+            DropdownButtonFormField<int?>(
+              value: _clienteSeleccionadoId,
+              decoration: const InputDecoration(
+                labelText: 'Cliente *',
+                border: OutlineInputBorder(),
+              ),
+              items: [
+                const DropdownMenuItem<int?>(
+                  value: null,
+                  child: Text('Seleccionar cliente...'),
+                ),
+                ..._clientes.map(
+                  (cliente) => DropdownMenuItem<int?>(
+                    value: cliente.id,
+                    child: Text(cliente.nombre),
+                  ),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() => _clienteSeleccionadoId = value);
+              },
+              validator: (value) {
+                if (value == null) return 'Debe seleccionar un cliente';
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Estado
+            DropdownButtonFormField<String>(
+              value: _estado,
+              decoration: const InputDecoration(
+                labelText: 'Estado',
+                border: OutlineInputBorder(),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'pendiente', child: Text('Pendiente')),
+                DropdownMenuItem(
+                  value: 'completada',
+                  child: Text('Completada'),
+                ),
+                DropdownMenuItem(value: 'cancelada', child: Text('Cancelada')),
+              ],
+              onChanged: (value) {
+                setState(() => _estado = value!);
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Método de pago
+            DropdownButtonFormField<String>(
+              value: _metodoPago,
+              decoration: const InputDecoration(
+                labelText: 'Método de Pago',
+                border: OutlineInputBorder(),
+              ),
+              items:
+                  _metodosPago
+                      .map(
+                        (metodo) => DropdownMenuItem(
+                          value: metodo,
+                          child: Text(metodo),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                setState(() => _metodoPago = value!);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBusquedaProductos() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Búsqueda de Productos',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _codigoBarrasController,
+                    decoration: const InputDecoration(
+                      labelText: 'Código de Barras, SKU o Nombre',
+                      border: OutlineInputBorder(),
+                      hintText: 'Escanear código o escribir...',
+                    ),
+                    onFieldSubmitted: (_) => _buscarPorCodigoBarras(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: _buscarPorCodigoBarras,
+                  icon: const Icon(Icons.search),
+                  tooltip: 'Buscar Producto',
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Presiona Enter o el botón de búsqueda para agregar productos',
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCarritoProductos() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Productos',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Total: \$${_total.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            if (_carrito.isEmpty)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: Text(
+                    'No hay productos en el carrito',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              )
+            else
+              ...List.generate(_carrito.length, (index) {
+                final item = _carrito[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    title: Text(item.producto.nombre ?? 'Producto sin nombre'),
+                    subtitle: Text(
+                      'Cantidad: ${item.cantidad} x \$${item.precioUnitario.toStringAsFixed(2)}',
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '\$${item.subtotal.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                          onPressed: () => _removerProducto(index),
+                          icon: const Icon(
+                            Icons.remove_circle,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInformacionPago() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Información de Pago',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _montoPagado.toString(),
+                    decoration: const InputDecoration(
+                      labelText: 'Monto Pagado',
+                      border: OutlineInputBorder(),
+                      prefixText: '\$',
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      _montoPagado = double.tryParse(value) ?? 0.0;
+                      _calcularTotal();
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _cambio.toString(),
+                    decoration: const InputDecoration(
+                      labelText: 'Cambio',
+                      border: OutlineInputBorder(),
+                      prefixText: '\$',
+                    ),
+                    keyboardType: TextInputType.number,
+                    readOnly: true,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _referenciaPagoController,
+              decoration: const InputDecoration(
+                labelText: 'Referencia de Pago (opcional)',
+                border: OutlineInputBorder(),
+                hintText: 'Número de transferencia, cheque, etc.',
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String?>(
+                    value: _banco,
+                    decoration: const InputDecoration(
+                      labelText: 'Banco (opcional)',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Seleccionar...'),
+                      ),
+                      ..._bancos.map(
+                        (banco) =>
+                            DropdownMenuItem(value: banco, child: Text(banco)),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() => _banco = value);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _numeroTarjeta,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Tarjeta (opcional)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _numeroTarjeta = value.isEmpty ? null : value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInformacionAdicional() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Información Adicional',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            // Números de documento
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _numeroFactura,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Factura',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _numeroFactura = value.isEmpty ? null : value;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _numeroRecibo,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Recibo',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _numeroRecibo = value.isEmpty ? null : value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _numeroTicket,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Ticket',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _numeroTicket = value.isEmpty ? null : value;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: _numeroOrden,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Orden',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _numeroOrden = value.isEmpty ? null : value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Información de entrega
+            TextFormField(
+              controller: _direccionEntregaController,
+              decoration: const InputDecoration(
+                labelText: 'Dirección de Entrega (opcional)',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _telefonoClienteController,
+                    decoration: const InputDecoration(
+                      labelText: 'Teléfono del Cliente',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: _emailClienteController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email del Cliente',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Observaciones
+            TextFormField(
+              controller: _observacionesController,
+              decoration: const InputDecoration(
+                labelText: 'Observaciones',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _notasInternasController,
+              decoration: const InputDecoration(
+                labelText: 'Notas Internas',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -774,14 +1163,12 @@ class ItemCarritoVenta {
   final Producto producto;
   int cantidad;
   double precioUnitario;
-  double precioFinal;
-  double descuento;
+  double subtotal;
 
   ItemCarritoVenta({
     required this.producto,
     required this.cantidad,
     required this.precioUnitario,
-    required this.precioFinal,
-    required this.descuento,
+    required this.subtotal,
   });
 }

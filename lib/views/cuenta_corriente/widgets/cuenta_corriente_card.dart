@@ -42,7 +42,7 @@ class CuentaCorrienteCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        cliente.w ?? 'Sin teléfono',
+                        cliente.whatsapp ?? 'Sin teléfono',
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
                     ],
@@ -215,4 +215,4 @@ class CuentaCorrienteCard extends StatelessWidget {
       ],
     );
   }
-} 
+}

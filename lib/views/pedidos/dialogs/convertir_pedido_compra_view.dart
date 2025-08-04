@@ -209,7 +209,7 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  producto.nombre,
+                                  producto.nombre ?? 'Producto sin nombre',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),

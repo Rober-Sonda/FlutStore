@@ -52,7 +52,7 @@ class _PedidoProveedorAddEditViewState
       // Cargar proveedores y productos
       final proveedoresRaw = await isar.proveedors.getAll([0]);
       _proveedores = proveedoresRaw.whereType<Proveedor>().toList();
-      
+
       final productosRaw = await isar.productos.getAll([0]);
       _productos = productosRaw.whereType<Producto>().toList();
 
@@ -151,7 +151,7 @@ class _PedidoProveedorAddEditViewState
                       _productos.map((producto) {
                         return DropdownMenuItem(
                           value: producto,
-                          child: Text(producto.nombre),
+                          child: Text(producto.nombre ?? 'Producto sin nombre'),
                         );
                       }).toList(),
                   onChanged: (producto) {

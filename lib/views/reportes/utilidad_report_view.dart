@@ -27,7 +27,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
   AppTheme? _currentTheme;
   FontConfig? _currentFontConfig;
   bool _isLoading = true;
-  
+
   // Filtros
   String _filtroSeleccionado = 'Todos';
   String _busqueda = '';
@@ -54,9 +54,12 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
 
       // Cargar datos de utilidad
       _utilidadPromedio = await pedidoCompraService.obtenerUtilidadPromedio();
-      _productosBajaUtilidad = await pedidoCompraService.obtenerProductosBajaUtilidad();
-      _productosAltaUtilidad = await pedidoCompraService.obtenerProductosAltaUtilidad();
-      _productosMediaUtilidad = await pedidoCompraService.obtenerProductosMediaUtilidad();
+      _productosBajaUtilidad =
+          await pedidoCompraService.obtenerProductosBajaUtilidad();
+      _productosAltaUtilidad =
+          await pedidoCompraService.obtenerProductosAltaUtilidad();
+      _productosMediaUtilidad =
+          await pedidoCompraService.obtenerProductosMediaUtilidad();
 
       // Cargar categorías
       final categoriasRaw = await isar.categorias.getAll([0]);
@@ -80,9 +83,9 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar datos: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar datos: $e')));
       }
     }
   }
@@ -92,40 +95,52 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
 
     // Filtro por búsqueda
     if (_busqueda.isNotEmpty) {
-      productosFiltrados = productosFiltrados.where((producto) {
-        return producto.nombre.toLowerCase().contains(_busqueda.toLowerCase());
-      }).toList();
+      productosFiltrados =
+          productosFiltrados.where((producto) {
+            return producto.nombre?.toLowerCase().contains(
+                  _busqueda.toLowerCase(),
+                ) ??
+                false;
+          }).toList();
     }
 
     // Filtro por categoría
     if (_categoriaSeleccionada != 'Todas') {
-      productosFiltrados = productosFiltrados.where((producto) {
-        return producto.categoriaId != null;
-      }).toList();
+      productosFiltrados =
+          productosFiltrados.where((producto) {
+            return producto.categoriaId != null;
+          }).toList();
     }
 
     // Filtro por rango de utilidad
-    productosFiltrados = productosFiltrados.where((producto) {
-      final utilidad = producto.utilidad ?? 0.0;
-      return utilidad >= _utilidadMinima && utilidad <= _utilidadMaxima;
-    }).toList();
+    productosFiltrados =
+        productosFiltrados.where((producto) {
+          final utilidad = producto.utilidad ?? 0.0;
+          return utilidad >= _utilidadMinima && utilidad <= _utilidadMaxima;
+        }).toList();
 
     // Filtro por tipo de utilidad
     switch (_filtroSeleccionado) {
       case 'Baja Utilidad':
-        productosFiltrados = productosFiltrados.where((p) => (p.utilidad ?? 0.0) < 20).toList();
+        productosFiltrados =
+            productosFiltrados.where((p) => (p.utilidad ?? 0.0) < 20).toList();
         break;
       case 'Media Utilidad':
-        productosFiltrados = productosFiltrados.where((p) {
-          final utilidad = p.utilidad ?? 0.0;
-          return utilidad >= 20 && utilidad <= 50;
-        }).toList();
+        productosFiltrados =
+            productosFiltrados.where((p) {
+              final utilidad = p.utilidad ?? 0.0;
+              return utilidad >= 20 && utilidad <= 50;
+            }).toList();
         break;
       case 'Alta Utilidad':
-        productosFiltrados = productosFiltrados.where((p) => (p.utilidad ?? 0.0) > 50).toList();
+        productosFiltrados =
+            productosFiltrados.where((p) => (p.utilidad ?? 0.0) > 50).toList();
         break;
       case 'Sin Utilidad':
-        productosFiltrados = productosFiltrados.where((p) => p.utilidad == null || p.utilidad == 0).toList();
+        productosFiltrados =
+            productosFiltrados
+                .where((p) => p.utilidad == null || p.utilidad == 0)
+                .toList();
         break;
     }
 
@@ -182,7 +197,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
             ),
             const SizedBox(height: 4),
             Text(
-              title.contains('Utilidad') 
+              title.contains('Utilidad')
                   ? '${value.toStringAsFixed(1)}%'
                   : value.toInt().toString(),
               style: TextStyle(
@@ -214,9 +229,10 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
     final theme = _currentTheme ?? AppTheme.darkTheme;
     final fontConfig = _currentFontConfig ?? FontConfig.defaultConfig;
     final utilidad = producto.utilidad ?? 0.0;
-    final color = utilidad < 20
-        ? Colors.red
-        : utilidad > 50
+    final color =
+        utilidad < 20
+            ? Colors.red
+            : utilidad > 50
             ? Colors.green
             : Colors.orange;
 
@@ -229,7 +245,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
           child: Icon(Icons.inventory, color: color),
         ),
         title: Text(
-          producto.nombre,
+          producto.nombre ?? 'Producto sin nombre',
           style: TextStyle(
             color: theme.textColor,
             fontFamily: fontConfig.bodyFont,
@@ -308,7 +324,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Búsqueda
             TextField(
               decoration: InputDecoration(
@@ -333,18 +349,19 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
                       labelText: 'Tipo de Utilidad',
                       border: OutlineInputBorder(),
                     ),
-                    items: [
-                      'Todos',
-                      'Baja Utilidad',
-                      'Media Utilidad',
-                      'Alta Utilidad',
-                      'Sin Utilidad',
-                    ].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                    items:
+                        [
+                          'Todos',
+                          'Baja Utilidad',
+                          'Media Utilidad',
+                          'Alta Utilidad',
+                          'Sin Utilidad',
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
                     onChanged: (String? newValue) {
                       setState(() => _filtroSeleccionado = newValue!);
                       _aplicarFiltros();
@@ -359,12 +376,13 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
                       labelText: 'Categoría',
                       border: OutlineInputBorder(),
                     ),
-                    items: _categorias.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                    items:
+                        _categorias.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
                     onChanged: (String? newValue) {
                       setState(() => _categoriaSeleccionada = newValue!);
                       _aplicarFiltros();

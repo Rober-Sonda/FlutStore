@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/cuenta_corriente.dart';
 import '../../models/cliente.dart';
-import '../../models/ganancia_perdida.dart';
+import '../../models/registrofinanciero.dart';
 import '../../services/isar_service.dart';
 import '../../widgets/permission_widget.dart';
 
@@ -11,7 +11,8 @@ class CuentaCorrienteView extends ConsumerStatefulWidget {
   const CuentaCorrienteView({super.key});
 
   @override
-  ConsumerState<CuentaCorrienteView> createState() => _CuentaCorrienteViewState();
+  ConsumerState<CuentaCorrienteView> createState() =>
+      _CuentaCorrienteViewState();
 }
 
 class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
@@ -44,9 +45,9 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar datos: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar datos: $e')));
       }
     }
   }
@@ -66,8 +67,11 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
     }
   }
 
-  double get _totalDeuda => _cuentas.where((c) => !c.estaPagada).fold(0.0, (total, cuenta) => total + cuenta.saldoPendiente);
-  int get _cuentasActivas => _cuentas.where((c) => c.activa && !c.estaPagada).length;
+  double get _totalDeuda => _cuentas
+      .where((c) => !c.estaPagada)
+      .fold(0.0, (total, cuenta) => total + cuenta.saldoPendiente);
+  int get _cuentasActivas =>
+      _cuentas.where((c) => c.activa && !c.estaPagada).length;
   int get _cuentasVencidas => _cuentas.where((c) => c.estaVencida).length;
 
   Color _getEstadoColor(CuentaCorriente cuenta) {
@@ -91,61 +95,62 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
 
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Registrar Pago'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: montoController,
-              decoration: const InputDecoration(
-                labelText: 'Monto a pagar',
-                prefixText: '\$',
-              ),
-              keyboardType: TextInputType.number,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Registrar Pago'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: montoController,
+                  decoration: const InputDecoration(
+                    labelText: 'Monto a pagar',
+                    prefixText: '\$',
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: metodoController,
+                  decoration: const InputDecoration(
+                    labelText: 'Método de pago (opcional)',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: referenciaController,
+                  decoration: const InputDecoration(
+                    labelText: 'Referencia (opcional)',
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: metodoController,
-              decoration: const InputDecoration(
-                labelText: 'Método de pago (opcional)',
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: referenciaController,
-              decoration: const InputDecoration(
-                labelText: 'Referencia (opcional)',
+              ElevatedButton(
+                onPressed: () {
+                  final monto = double.tryParse(montoController.text);
+                  if (monto != null && monto > 0) {
+                    Navigator.pop(context, {
+                      'monto': monto,
+                      'metodo': metodoController.text,
+                      'referencia': referenciaController.text,
+                    });
+                  }
+                },
+                child: const Text('Registrar'),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              final monto = double.tryParse(montoController.text);
-              if (monto != null && monto > 0) {
-                Navigator.pop(context, {
-                  'monto': monto,
-                  'metodo': metodoController.text,
-                  'referencia': referenciaController.text,
-                });
-              }
-            },
-            child: const Text('Registrar'),
-          ),
-        ],
-      ),
     );
 
     if (result != null) {
       try {
         final isar = await ref.read(isarServiceProvider).db;
-        
+
         cuenta.registrarPago(
           result['monto'],
           result['metodo'].isEmpty ? null : result['metodo'],
@@ -156,12 +161,12 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
           await isar.cuentaCorrientes.put(cuenta);
         });
 
-        // Registrar como ganancia si es un pago
-        final ganancia = GananciaPerdida(
+        // Registrar como registro financiero si es un pago
+        final registro = RegistroFinanciero(
           concepto: 'Pago cuenta corriente: ${cuenta.nombreCliente}',
           descripcion: 'Pago recibido de cuenta corriente',
           monto: result['monto'],
-          tipo: 'ganancia',
+          tipo: 'ingreso',
           categoria: 'cuenta_corriente',
           fecha: DateTime.now(),
           clienteId: cuenta.clienteId,
@@ -169,15 +174,17 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
         );
 
         await isar.writeTxn(() async {
-          await isar.gananciaPerdidas.put(ganancia);
+          await isar.registroFinancieros.put(registro);
         });
 
         setState(() {});
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Pago registrado: \$${result['monto'].toStringAsFixed(2)}'),
+              content: Text(
+                'Pago registrado: \$${result['monto'].toStringAsFixed(2)}',
+              ),
               backgroundColor: Colors.green,
             ),
           );
@@ -198,29 +205,30 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
   Future<void> _eliminarCuenta(CuentaCorriente cuenta) async {
     final confirmacion = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar eliminación'),
-        content: Text(
-          '¿Estás seguro de que quieres eliminar la cuenta corriente de "${cuenta.nombreCliente}"?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Confirmar eliminación'),
+            content: Text(
+              '¿Estás seguro de que quieres eliminar la cuenta corriente de "${cuenta.nombreCliente}"?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Eliminar'),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Eliminar'),
-          ),
-        ],
-      ),
     );
 
     if (confirmacion == true) {
       try {
         final isar = await ref.read(isarServiceProvider).db;
-        
+
         await isar.writeTxn(() async {
           await isar.cuentaCorrientes.delete(cuenta.id);
         });
@@ -228,7 +236,7 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
         setState(() {
           _cuentas.remove(cuenta);
         });
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -422,7 +430,12 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
     );
   }
 
-  Widget _buildStatItem(String title, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Icon(icon, size: 20, color: color),
@@ -435,13 +448,7 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
             color: color,
           ),
         ),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Colors.grey,
-          ),
-        ),
+        Text(title, style: const TextStyle(fontSize: 10, color: Colors.grey)),
       ],
     );
   }
@@ -463,103 +470,99 @@ class _CuentaCorrienteViewState extends ConsumerState<CuentaCorrienteView> {
             onSelected: (value) {
               setState(() => _filtroSeleccionado = value);
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'Todas',
-                child: Text('Todas'),
-              ),
-              const PopupMenuItem(
-                value: 'Activas',
-                child: Text('Activas'),
-              ),
-              const PopupMenuItem(
-                value: 'Pagadas',
-                child: Text('Pagadas'),
-              ),
-              const PopupMenuItem(
-                value: 'Vencidas',
-                child: Text('Vencidas'),
-              ),
-              const PopupMenuItem(
-                value: 'Pendientes',
-                child: Text('Pendientes'),
-              ),
-            ],
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(value: 'Todas', child: Text('Todas')),
+                  const PopupMenuItem(value: 'Activas', child: Text('Activas')),
+                  const PopupMenuItem(value: 'Pagadas', child: Text('Pagadas')),
+                  const PopupMenuItem(
+                    value: 'Vencidas',
+                    child: Text('Vencidas'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'Pendientes',
+                    child: Text('Pendientes'),
+                  ),
+                ],
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                // Resumen de cuentas corrientes
-                Card(
-                  margin: const EdgeInsets.all(16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Resumen de Cuentas Corrientes',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                children: [
+                  // Resumen de cuentas corrientes
+                  Card(
+                    margin: const EdgeInsets.all(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Resumen de Cuentas Corrientes',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildStatCard(
-                                'Total Deuda',
-                                _totalDeuda,
-                                Colors.red,
-                                Icons.money_off,
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  'Total Deuda',
+                                  _totalDeuda,
+                                  Colors.red,
+                                  Icons.money_off,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildStatCard(
-                                'Activas',
-                                _cuentasActivas.toDouble(),
-                                Colors.blue,
-                                Icons.account_balance_wallet,
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  'Activas',
+                                  _cuentasActivas.toDouble(),
+                                  Colors.blue,
+                                  Icons.account_balance_wallet,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildStatCard(
-                                'Vencidas',
-                                _cuentasVencidas.toDouble(),
-                                Colors.orange,
-                                Icons.warning,
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  'Vencidas',
+                                  _cuentasVencidas.toDouble(),
+                                  Colors.orange,
+                                  Icons.warning,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                // Lista de cuentas corrientes
-                Expanded(
-                  child: _cuentasFiltradas.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'No hay cuentas corrientes registradas',
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          itemCount: _cuentasFiltradas.length,
-                          itemBuilder: (context, index) {
-                            return _buildCuentaCard(_cuentasFiltradas[index]);
-                          },
-                        ),
-                ),
-              ],
-            ),
+                  // Lista de cuentas corrientes
+                  Expanded(
+                    child:
+                        _cuentasFiltradas.isEmpty
+                            ? const Center(
+                              child: Text(
+                                'No hay cuentas corrientes registradas',
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                            )
+                            : ListView.builder(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              itemCount: _cuentasFiltradas.length,
+                              itemBuilder: (context, index) {
+                                return _buildCuentaCard(
+                                  _cuentasFiltradas[index],
+                                );
+                              },
+                            ),
+                  ),
+                ],
+              ),
       floatingActionButton: PermissionFAB(
         onPressed: () {
           context.push('/account-balance/add');

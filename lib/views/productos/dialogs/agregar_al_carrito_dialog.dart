@@ -76,7 +76,7 @@ class _AgregarAlCarritoDialogState
       builder:
           (context) => ProveedorSelectorDialog(
             productoId: widget.producto.id,
-            nombreProducto: widget.producto.nombre,
+            nombreProducto: widget.producto.nombre ?? 'Producto sin nombre',
             onProveedorSeleccionado: _seleccionarProveedor,
           ),
     );
@@ -107,7 +107,7 @@ class _AgregarAlCarritoDialogState
     try {
       final carritoService = ref.read(carritoCompraServiceProvider);
       await carritoService.agregarAlCarrito(
-        nombreProducto: widget.producto.nombre,
+        nombreProducto: widget.producto.nombre ?? 'Producto sin nombre',
         productoId: widget.producto.id,
         proveedorId: proveedorSeleccionado!.id,
         nombreProveedor: proveedorSeleccionado!.nombre,
@@ -179,7 +179,7 @@ class _AgregarAlCarritoDialogState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.producto.nombre,
+                              widget.producto.nombre ?? 'Producto sin nombre',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -265,7 +265,9 @@ class _AgregarAlCarritoDialogState
                                       style: TextStyle(
                                         color:
                                             productoProveedorSeleccionado!
-                                                    .hayStockSuficiente(cantidad)
+                                                    .hayStockSuficiente(
+                                                      cantidad,
+                                                    )
                                                 ? Colors.green[700]
                                                 : Colors.orange[700],
                                         fontWeight: FontWeight.bold,

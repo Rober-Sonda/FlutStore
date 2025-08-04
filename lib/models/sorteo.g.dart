@@ -105,7 +105,8 @@ const SorteoSchema = CollectionSchema(
     r'premios': PropertySchema(
       id: 17,
       name: r'premios',
-      type: IsarType.stringList,
+      type: IsarType.objectList,
+      target: r'PremioSorteo',
     ),
     r'puedeFinalizar': PropertySchema(
       id: 18,
@@ -141,11 +142,6 @@ const SorteoSchema = CollectionSchema(
       id: 24,
       name: r'usuarioId',
       type: IsarType.long,
-    ),
-    r'valoresPremios': PropertySchema(
-      id: 25,
-      name: r'valoresPremios',
-      type: IsarType.doubleList,
     )
   },
   estimateSize: _sorteoEstimateSize,
@@ -155,7 +151,7 @@ const SorteoSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {},
+  embeddedSchemas: {r'PremioSorteo': PremioSorteoSchema},
   getId: _sorteoGetId,
   getLinks: _sorteoGetLinks,
   attach: _sorteoAttach,
@@ -182,13 +178,13 @@ int _sorteoEstimateSize(
   bytesCount += 3 + object.participantesIds.length * 8;
   bytesCount += 3 + object.premios.length * 3;
   {
+    final offsets = allOffsets[PremioSorteo]!;
     for (var i = 0; i < object.premios.length; i++) {
       final value = object.premios[i];
-      bytesCount += value.length * 3;
+      bytesCount += PremioSorteoSchema.estimateSize(value, offsets, allOffsets);
     }
   }
   bytesCount += 3 + object.tipoSorteo.length * 3;
-  bytesCount += 3 + object.valoresPremios.length * 8;
   return bytesCount;
 }
 
@@ -215,7 +211,12 @@ void _sorteoSerialize(
   writer.writeString(offsets[14], object.nombre);
   writer.writeLong(offsets[15], object.numGanadores);
   writer.writeLongList(offsets[16], object.participantesIds);
-  writer.writeStringList(offsets[17], object.premios);
+  writer.writeObjectList<PremioSorteo>(
+    offsets[17],
+    allOffsets,
+    PremioSorteoSchema.serialize,
+    object.premios,
+  );
   writer.writeBool(offsets[18], object.puedeFinalizar);
   writer.writeBool(offsets[19], object.puedeIniciar);
   writer.writeBool(offsets[20], object.tieneGanadores);
@@ -223,7 +224,6 @@ void _sorteoSerialize(
   writer.writeLong(offsets[22], object.totalGanadores);
   writer.writeLong(offsets[23], object.totalParticipantes);
   writer.writeLong(offsets[24], object.usuarioId);
-  writer.writeDoubleList(offsets[25], object.valoresPremios);
 }
 
 Sorteo _sorteoDeserialize(
@@ -248,8 +248,13 @@ Sorteo _sorteoDeserialize(
   object.ganadoresIds = reader.readLongList(offsets[12]) ?? [];
   object.id = id;
   object.participantesIds = reader.readLongList(offsets[16]) ?? [];
-  object.premios = reader.readStringList(offsets[17]) ?? [];
-  object.valoresPremios = reader.readDoubleList(offsets[25]) ?? [];
+  object.premios = reader.readObjectList<PremioSorteo>(
+        offsets[17],
+        PremioSorteoSchema.deserialize,
+        allOffsets,
+        PremioSorteo(),
+      ) ??
+      [];
   return object;
 }
 
@@ -295,7 +300,13 @@ P _sorteoDeserializeProp<P>(
     case 16:
       return (reader.readLongList(offset) ?? []) as P;
     case 17:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readObjectList<PremioSorteo>(
+            offset,
+            PremioSorteoSchema.deserialize,
+            allOffsets,
+            PremioSorteo(),
+          ) ??
+          []) as P;
     case 18:
       return (reader.readBool(offset)) as P;
     case 19:
@@ -310,8 +321,6 @@ P _sorteoDeserializeProp<P>(
       return (reader.readLong(offset)) as P;
     case 24:
       return (reader.readLong(offset)) as P;
-    case 25:
-      return (reader.readDoubleList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1825,137 +1834,6 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'premios',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'premios',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'premios',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'premios',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      premiosElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'premios',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosLengthEqualTo(
       int length) {
     return QueryBuilder.apply(this, (query) {
@@ -2360,163 +2238,16 @@ extension SorteoQueryFilter on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
       ));
     });
   }
+}
 
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosElementEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
+extension SorteoQueryObject on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {
+  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> premiosElement(
+      FilterQuery<PremioSorteo> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'valoresPremios',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosElementGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'valoresPremios',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosElementLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'valoresPremios',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosElementBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'valoresPremios',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition> valoresPremiosIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QAfterFilterCondition>
-      valoresPremiosLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'valoresPremios',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
+      return query.object(q, r'premios');
     });
   }
 }
-
-extension SorteoQueryObject on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {}
 
 extension SorteoQueryLinks on QueryBuilder<Sorteo, Sorteo, QFilterCondition> {}
 
@@ -3173,12 +2904,6 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
     });
   }
 
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPremios() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'premios');
-    });
-  }
-
   QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByPuedeFinalizar() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'puedeFinalizar');
@@ -3219,12 +2944,6 @@ extension SorteoQueryWhereDistinct on QueryBuilder<Sorteo, Sorteo, QDistinct> {
   QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByUsuarioId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'usuarioId');
-    });
-  }
-
-  QueryBuilder<Sorteo, Sorteo, QDistinct> distinctByValoresPremios() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'valoresPremios');
     });
   }
 }
@@ -3339,7 +3058,7 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Sorteo, List<String>, QQueryOperations> premiosProperty() {
+  QueryBuilder<Sorteo, List<PremioSorteo>, QQueryOperations> premiosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'premios');
     });
@@ -3384,13 +3103,6 @@ extension SorteoQueryProperty on QueryBuilder<Sorteo, Sorteo, QQueryProperty> {
   QueryBuilder<Sorteo, int, QQueryOperations> usuarioIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'usuarioId');
-    });
-  }
-
-  QueryBuilder<Sorteo, List<double>, QQueryOperations>
-      valoresPremiosProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'valoresPremios');
     });
   }
 }

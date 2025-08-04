@@ -19,9 +19,9 @@ import '../models/carrito_compra.dart';
 import '../models/producto_proveedor.dart';
 import '../models/oferta.dart';
 import '../models/flujo_caja.dart';
-import '../models/ganancia_perdida.dart';
 import '../models/cierre_caja.dart';
 import '../models/sorteo.dart';
+import '../models/premio_sorteo.dart';
 import '../models/gasto_fijo.dart';
 import '../models/movimiento_financiero.dart';
 import '../models/cuenta_corriente.dart';
@@ -80,7 +80,6 @@ class IsarService {
           ProductoProveedorSchema,
           OfertaSchema,
           FlujoCajaSchema,
-          GananciaPerdidaSchema,
           CierreCajaSchema,
           SorteoSchema,
           GastoFijoSchema,

@@ -22,104 +22,209 @@ const CompraSchema = CollectionSchema(
       name: r'colorEstado',
       type: IsarType.string,
     ),
-    r'esUrgente': PropertySchema(
+    r'compraOriginalId': PropertySchema(
       id: 1,
+      name: r'compraOriginalId',
+      type: IsarType.long,
+    ),
+    r'condicionesPago': PropertySchema(
+      id: 2,
+      name: r'condicionesPago',
+      type: IsarType.string,
+    ),
+    r'contactoProveedor': PropertySchema(
+      id: 3,
+      name: r'contactoProveedor',
+      type: IsarType.string,
+    ),
+    r'direccionEntrega': PropertySchema(
+      id: 4,
+      name: r'direccionEntrega',
+      type: IsarType.string,
+    ),
+    r'emailProveedor': PropertySchema(
+      id: 5,
+      name: r'emailProveedor',
+      type: IsarType.string,
+    ),
+    r'esDevolucion': PropertySchema(
+      id: 6,
+      name: r'esDevolucion',
+      type: IsarType.bool,
+    ),
+    r'esDevolucionValida': PropertySchema(
+      id: 7,
+      name: r'esDevolucionValida',
+      type: IsarType.bool,
+    ),
+    r'esUrgente': PropertySchema(
+      id: 8,
       name: r'esUrgente',
       type: IsarType.bool,
     ),
     r'estaPagada': PropertySchema(
-      id: 2,
+      id: 9,
       name: r'estaPagada',
       type: IsarType.bool,
     ),
     r'estaRecibida': PropertySchema(
-      id: 3,
+      id: 10,
       name: r'estaRecibida',
       type: IsarType.bool,
     ),
     r'estado': PropertySchema(
-      id: 4,
+      id: 11,
       name: r'estado',
       type: IsarType.string,
     ),
     r'estadoFormateado': PropertySchema(
-      id: 5,
+      id: 12,
       name: r'estadoFormateado',
       type: IsarType.string,
     ),
+    r'estadoFormateadoCompleto': PropertySchema(
+      id: 13,
+      name: r'estadoFormateadoCompleto',
+      type: IsarType.string,
+    ),
     r'fecha': PropertySchema(
-      id: 6,
+      id: 14,
       name: r'fecha',
       type: IsarType.dateTime,
     ),
     r'fechaActualizacion': PropertySchema(
-      id: 7,
+      id: 15,
       name: r'fechaActualizacion',
       type: IsarType.dateTime,
     ),
     r'fechaCreacion': PropertySchema(
-      id: 8,
+      id: 16,
       name: r'fechaCreacion',
       type: IsarType.dateTime,
     ),
+    r'fechaDevolucion': PropertySchema(
+      id: 17,
+      name: r'fechaDevolucion',
+      type: IsarType.dateTime,
+    ),
     r'fechaRecepcion': PropertySchema(
-      id: 9,
+      id: 18,
       name: r'fechaRecepcion',
       type: IsarType.dateTime,
     ),
     r'metodoPago': PropertySchema(
-      id: 10,
+      id: 19,
       name: r'metodoPago',
       type: IsarType.string,
     ),
     r'metodoPagoFormateado': PropertySchema(
-      id: 11,
+      id: 20,
       name: r'metodoPagoFormateado',
       type: IsarType.string,
     ),
     r'montoPagado': PropertySchema(
-      id: 12,
+      id: 21,
       name: r'montoPagado',
       type: IsarType.double,
     ),
+    r'motivoDevolucion': PropertySchema(
+      id: 22,
+      name: r'motivoDevolucion',
+      type: IsarType.string,
+    ),
+    r'numeroDocumento': PropertySchema(
+      id: 23,
+      name: r'numeroDocumento',
+      type: IsarType.string,
+    ),
     r'numeroFactura': PropertySchema(
-      id: 13,
+      id: 24,
       name: r'numeroFactura',
       type: IsarType.string,
     ),
+    r'numeroGuia': PropertySchema(
+      id: 25,
+      name: r'numeroGuia',
+      type: IsarType.string,
+    ),
+    r'numeroOrden': PropertySchema(
+      id: 26,
+      name: r'numeroOrden',
+      type: IsarType.string,
+    ),
+    r'numeroRemito': PropertySchema(
+      id: 27,
+      name: r'numeroRemito',
+      type: IsarType.string,
+    ),
     r'observaciones': PropertySchema(
-      id: 14,
+      id: 28,
       name: r'observaciones',
       type: IsarType.string,
     ),
+    r'plazoEntrega': PropertySchema(
+      id: 29,
+      name: r'plazoEntrega',
+      type: IsarType.string,
+    ),
     r'prioridad': PropertySchema(
-      id: 15,
+      id: 30,
       name: r'prioridad',
       type: IsarType.string,
     ),
     r'productos': PropertySchema(
-      id: 16,
+      id: 31,
       name: r'productos',
       type: IsarType.objectList,
       target: r'CompraProducto',
     ),
     r'proveedorId': PropertySchema(
-      id: 17,
+      id: 32,
       name: r'proveedorId',
       type: IsarType.long,
     ),
+    r'puedeDevolver': PropertySchema(
+      id: 33,
+      name: r'puedeDevolver',
+      type: IsarType.bool,
+    ),
+    r'referenciaProveedor': PropertySchema(
+      id: 34,
+      name: r'referenciaProveedor',
+      type: IsarType.string,
+    ),
     r'saldoPendiente': PropertySchema(
-      id: 18,
+      id: 35,
       name: r'saldoPendiente',
       type: IsarType.double,
     ),
+    r'telefonoProveedor': PropertySchema(
+      id: 36,
+      name: r'telefonoProveedor',
+      type: IsarType.string,
+    ),
+    r'tipoDocumento': PropertySchema(
+      id: 37,
+      name: r'tipoDocumento',
+      type: IsarType.string,
+    ),
     r'total': PropertySchema(
-      id: 19,
+      id: 38,
       name: r'total',
       type: IsarType.double,
     ),
+    r'totalConSigno': PropertySchema(
+      id: 39,
+      name: r'totalConSigno',
+      type: IsarType.string,
+    ),
+    r'usuarioDevolucion': PropertySchema(
+      id: 40,
+      name: r'usuarioDevolucion',
+      type: IsarType.long,
+    ),
     r'usuarioId': PropertySchema(
-      id: 20,
+      id: 41,
       name: r'usuarioId',
       type: IsarType.long,
     )
@@ -145,13 +250,69 @@ int _compraEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.colorEstado.length * 3;
+  {
+    final value = object.condicionesPago;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.contactoProveedor;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.direccionEntrega;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.emailProveedor;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.estado.length * 3;
   bytesCount += 3 + object.estadoFormateado.length * 3;
+  bytesCount += 3 + object.estadoFormateadoCompleto.length * 3;
   bytesCount += 3 + object.metodoPago.length * 3;
   bytesCount += 3 + object.metodoPagoFormateado.length * 3;
+  {
+    final value = object.motivoDevolucion;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.numeroDocumento.length * 3;
   bytesCount += 3 + object.numeroFactura.length * 3;
   {
+    final value = object.numeroGuia;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.numeroOrden;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.numeroRemito;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.observaciones;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.plazoEntrega;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -171,6 +332,20 @@ int _compraEstimateSize(
           CompraProductoSchema.estimateSize(value, offsets, allOffsets);
     }
   }
+  {
+    final value = object.referenciaProveedor;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.telefonoProveedor;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.tipoDocumento.length * 3;
+  bytesCount += 3 + object.totalConSigno.length * 3;
   return bytesCount;
 }
 
@@ -181,31 +356,52 @@ void _compraSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.colorEstado);
-  writer.writeBool(offsets[1], object.esUrgente);
-  writer.writeBool(offsets[2], object.estaPagada);
-  writer.writeBool(offsets[3], object.estaRecibida);
-  writer.writeString(offsets[4], object.estado);
-  writer.writeString(offsets[5], object.estadoFormateado);
-  writer.writeDateTime(offsets[6], object.fecha);
-  writer.writeDateTime(offsets[7], object.fechaActualizacion);
-  writer.writeDateTime(offsets[8], object.fechaCreacion);
-  writer.writeDateTime(offsets[9], object.fechaRecepcion);
-  writer.writeString(offsets[10], object.metodoPago);
-  writer.writeString(offsets[11], object.metodoPagoFormateado);
-  writer.writeDouble(offsets[12], object.montoPagado);
-  writer.writeString(offsets[13], object.numeroFactura);
-  writer.writeString(offsets[14], object.observaciones);
-  writer.writeString(offsets[15], object.prioridad);
+  writer.writeLong(offsets[1], object.compraOriginalId);
+  writer.writeString(offsets[2], object.condicionesPago);
+  writer.writeString(offsets[3], object.contactoProveedor);
+  writer.writeString(offsets[4], object.direccionEntrega);
+  writer.writeString(offsets[5], object.emailProveedor);
+  writer.writeBool(offsets[6], object.esDevolucion);
+  writer.writeBool(offsets[7], object.esDevolucionValida);
+  writer.writeBool(offsets[8], object.esUrgente);
+  writer.writeBool(offsets[9], object.estaPagada);
+  writer.writeBool(offsets[10], object.estaRecibida);
+  writer.writeString(offsets[11], object.estado);
+  writer.writeString(offsets[12], object.estadoFormateado);
+  writer.writeString(offsets[13], object.estadoFormateadoCompleto);
+  writer.writeDateTime(offsets[14], object.fecha);
+  writer.writeDateTime(offsets[15], object.fechaActualizacion);
+  writer.writeDateTime(offsets[16], object.fechaCreacion);
+  writer.writeDateTime(offsets[17], object.fechaDevolucion);
+  writer.writeDateTime(offsets[18], object.fechaRecepcion);
+  writer.writeString(offsets[19], object.metodoPago);
+  writer.writeString(offsets[20], object.metodoPagoFormateado);
+  writer.writeDouble(offsets[21], object.montoPagado);
+  writer.writeString(offsets[22], object.motivoDevolucion);
+  writer.writeString(offsets[23], object.numeroDocumento);
+  writer.writeString(offsets[24], object.numeroFactura);
+  writer.writeString(offsets[25], object.numeroGuia);
+  writer.writeString(offsets[26], object.numeroOrden);
+  writer.writeString(offsets[27], object.numeroRemito);
+  writer.writeString(offsets[28], object.observaciones);
+  writer.writeString(offsets[29], object.plazoEntrega);
+  writer.writeString(offsets[30], object.prioridad);
   writer.writeObjectList<CompraProducto>(
-    offsets[16],
+    offsets[31],
     allOffsets,
     CompraProductoSchema.serialize,
     object.productos,
   );
-  writer.writeLong(offsets[17], object.proveedorId);
-  writer.writeDouble(offsets[18], object.saldoPendiente);
-  writer.writeDouble(offsets[19], object.total);
-  writer.writeLong(offsets[20], object.usuarioId);
+  writer.writeLong(offsets[32], object.proveedorId);
+  writer.writeBool(offsets[33], object.puedeDevolver);
+  writer.writeString(offsets[34], object.referenciaProveedor);
+  writer.writeDouble(offsets[35], object.saldoPendiente);
+  writer.writeString(offsets[36], object.telefonoProveedor);
+  writer.writeString(offsets[37], object.tipoDocumento);
+  writer.writeDouble(offsets[38], object.total);
+  writer.writeString(offsets[39], object.totalConSigno);
+  writer.writeLong(offsets[40], object.usuarioDevolucion);
+  writer.writeLong(offsets[41], object.usuarioId);
 }
 
 Compra _compraDeserialize(
@@ -215,25 +411,40 @@ Compra _compraDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Compra(
-    esUrgente: reader.readBoolOrNull(offsets[1]) ?? false,
-    estado: reader.readStringOrNull(offsets[4]) ?? 'pendiente',
-    fecha: reader.readDateTime(offsets[6]),
-    metodoPago: reader.readStringOrNull(offsets[10]) ?? 'efectivo',
-    montoPagado: reader.readDoubleOrNull(offsets[12]) ?? 0.0,
-    numeroFactura: reader.readString(offsets[13]),
-    observaciones: reader.readStringOrNull(offsets[14]),
-    prioridad: reader.readStringOrNull(offsets[15]),
-    proveedorId: reader.readLongOrNull(offsets[17]),
-    saldoPendiente: reader.readDoubleOrNull(offsets[18]) ?? 0.0,
-    total: reader.readDouble(offsets[19]),
-    usuarioId: reader.readLongOrNull(offsets[20]) ?? 1,
+    compraOriginalId: reader.readLongOrNull(offsets[1]),
+    condicionesPago: reader.readStringOrNull(offsets[2]),
+    contactoProveedor: reader.readStringOrNull(offsets[3]),
+    direccionEntrega: reader.readStringOrNull(offsets[4]),
+    emailProveedor: reader.readStringOrNull(offsets[5]),
+    esDevolucion: reader.readBoolOrNull(offsets[6]) ?? false,
+    esUrgente: reader.readBoolOrNull(offsets[8]) ?? false,
+    estado: reader.readStringOrNull(offsets[11]) ?? 'pendiente',
+    fecha: reader.readDateTime(offsets[14]),
+    fechaDevolucion: reader.readDateTimeOrNull(offsets[17]),
+    metodoPago: reader.readStringOrNull(offsets[19]) ?? 'efectivo',
+    montoPagado: reader.readDoubleOrNull(offsets[21]) ?? 0.0,
+    motivoDevolucion: reader.readStringOrNull(offsets[22]),
+    numeroFactura: reader.readString(offsets[24]),
+    numeroGuia: reader.readStringOrNull(offsets[25]),
+    numeroOrden: reader.readStringOrNull(offsets[26]),
+    numeroRemito: reader.readStringOrNull(offsets[27]),
+    observaciones: reader.readStringOrNull(offsets[28]),
+    plazoEntrega: reader.readStringOrNull(offsets[29]),
+    prioridad: reader.readStringOrNull(offsets[30]),
+    proveedorId: reader.readLongOrNull(offsets[32]),
+    referenciaProveedor: reader.readStringOrNull(offsets[34]),
+    saldoPendiente: reader.readDoubleOrNull(offsets[35]) ?? 0.0,
+    telefonoProveedor: reader.readStringOrNull(offsets[36]),
+    total: reader.readDouble(offsets[38]),
+    usuarioDevolucion: reader.readLongOrNull(offsets[40]),
+    usuarioId: reader.readLongOrNull(offsets[41]) ?? 1,
   );
-  object.fechaActualizacion = reader.readDateTimeOrNull(offsets[7]);
-  object.fechaCreacion = reader.readDateTime(offsets[8]);
-  object.fechaRecepcion = reader.readDateTimeOrNull(offsets[9]);
+  object.fechaActualizacion = reader.readDateTimeOrNull(offsets[15]);
+  object.fechaCreacion = reader.readDateTime(offsets[16]);
+  object.fechaRecepcion = reader.readDateTimeOrNull(offsets[18]);
   object.id = id;
   object.productos = reader.readObjectList<CompraProducto>(
-        offsets[16],
+        offsets[31],
         CompraProductoSchema.deserialize,
         allOffsets,
         CompraProducto(),
@@ -252,36 +463,66 @@ P _compraDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset) ?? 'pendiente') as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 7:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 9:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 10:
-      return (reader.readStringOrNull(offset) ?? 'efectivo') as P;
+      return (reader.readBool(offset)) as P;
     case 11:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? 'pendiente') as P;
     case 12:
-      return (reader.readDoubleOrNull(offset) ?? 0.0) as P;
+      return (reader.readString(offset)) as P;
     case 13:
       return (reader.readString(offset)) as P;
     case 14:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 15:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 16:
+      return (reader.readDateTime(offset)) as P;
+    case 17:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 18:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 19:
+      return (reader.readStringOrNull(offset) ?? 'efectivo') as P;
+    case 20:
+      return (reader.readString(offset)) as P;
+    case 21:
+      return (reader.readDoubleOrNull(offset) ?? 0.0) as P;
+    case 22:
+      return (reader.readStringOrNull(offset)) as P;
+    case 23:
+      return (reader.readString(offset)) as P;
+    case 24:
+      return (reader.readString(offset)) as P;
+    case 25:
+      return (reader.readStringOrNull(offset)) as P;
+    case 26:
+      return (reader.readStringOrNull(offset)) as P;
+    case 27:
+      return (reader.readStringOrNull(offset)) as P;
+    case 28:
+      return (reader.readStringOrNull(offset)) as P;
+    case 29:
+      return (reader.readStringOrNull(offset)) as P;
+    case 30:
+      return (reader.readStringOrNull(offset)) as P;
+    case 31:
       return (reader.readObjectList<CompraProducto>(
             offset,
             CompraProductoSchema.deserialize,
@@ -289,13 +530,25 @@ P _compraDeserializeProp<P>(
             CompraProducto(),
           ) ??
           []) as P;
-    case 17:
+    case 32:
       return (reader.readLongOrNull(offset)) as P;
-    case 18:
+    case 33:
+      return (reader.readBool(offset)) as P;
+    case 34:
+      return (reader.readStringOrNull(offset)) as P;
+    case 35:
       return (reader.readDoubleOrNull(offset) ?? 0.0) as P;
-    case 19:
+    case 36:
+      return (reader.readStringOrNull(offset)) as P;
+    case 37:
+      return (reader.readString(offset)) as P;
+    case 38:
       return (reader.readDouble(offset)) as P;
-    case 20:
+    case 39:
+      return (reader.readString(offset)) as P;
+    case 40:
+      return (reader.readLongOrNull(offset)) as P;
+    case 41:
       return (reader.readLongOrNull(offset) ?? 1) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -516,6 +769,697 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'colorEstado',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> compraOriginalIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'compraOriginalId',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      compraOriginalIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'compraOriginalId',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> compraOriginalIdEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'compraOriginalId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      compraOriginalIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'compraOriginalId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> compraOriginalIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'compraOriginalId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> compraOriginalIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'compraOriginalId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'condicionesPago',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      condicionesPagoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'condicionesPago',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      condicionesPagoGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'condicionesPago',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'condicionesPago',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'condicionesPago',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> condicionesPagoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'condicionesPago',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      condicionesPagoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'condicionesPago',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'contactoProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'contactoProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'contactoProveedor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'contactoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> contactoProveedorMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'contactoProveedor',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contactoProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      contactoProveedorIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'contactoProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'direccionEntrega',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      direccionEntregaIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'direccionEntrega',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      direccionEntregaGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'direccionEntrega',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      direccionEntregaStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'direccionEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> direccionEntregaMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'direccionEntrega',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      direccionEntregaIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'direccionEntrega',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      direccionEntregaIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'direccionEntrega',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'emailProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      emailProveedorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'emailProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'emailProveedor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'emailProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'emailProveedor',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> emailProveedorIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'emailProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      emailProveedorIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'emailProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> esDevolucionEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'esDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> esDevolucionValidaEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'esDevolucionValida',
+        value: value,
       ));
     });
   }
@@ -814,6 +1758,144 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'estadoFormateadoCompleto',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoContains(String value,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'estadoFormateadoCompleto',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoMatches(String pattern,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'estadoFormateadoCompleto',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'estadoFormateadoCompleto',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      estadoFormateadoCompletoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'estadoFormateadoCompleto',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterFilterCondition> fechaEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -985,6 +2067,77 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'fechaCreacion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> fechaDevolucionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'fechaDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      fechaDevolucionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'fechaDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> fechaDevolucionEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fechaDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      fechaDevolucionGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fechaDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> fechaDevolucionLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fechaDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> fechaDevolucionBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fechaDevolucion',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1443,6 +2596,289 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'motivoDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      motivoDevolucionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'motivoDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      motivoDevolucionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'motivoDevolucion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      motivoDevolucionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'motivoDevolucion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> motivoDevolucionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'motivoDevolucion',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      motivoDevolucionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'motivoDevolucion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      motivoDevolucionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'motivoDevolucion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      numeroDocumentoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numeroDocumento',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'numeroDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'numeroDocumento',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroDocumentoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroDocumento',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      numeroDocumentoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'numeroDocumento',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroFacturaEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1569,6 +3005,444 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'numeroFactura',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numeroGuia',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numeroGuia',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numeroGuia',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'numeroGuia',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'numeroGuia',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroGuia',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroGuiaIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'numeroGuia',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numeroOrden',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numeroOrden',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numeroOrden',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'numeroOrden',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'numeroOrden',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroOrden',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroOrdenIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'numeroOrden',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numeroRemito',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numeroRemito',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numeroRemito',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'numeroRemito',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'numeroRemito',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroRemito',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> numeroRemitoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'numeroRemito',
         value: '',
       ));
     });
@@ -1716,6 +3590,152 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'observaciones',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'plazoEntrega',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'plazoEntrega',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'plazoEntrega',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'plazoEntrega',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'plazoEntrega',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'plazoEntrega',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> plazoEntregaIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'plazoEntrega',
         value: '',
       ));
     });
@@ -2021,6 +4041,170 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> puedeDevolverEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'puedeDevolver',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'referenciaProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'referenciaProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'referenciaProveedor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'referenciaProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'referenciaProveedor',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'referenciaProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      referenciaProveedorIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'referenciaProveedor',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterFilterCondition> saldoPendienteEqualTo(
     double value, {
     double epsilon = Query.epsilon,
@@ -2083,6 +4267,289 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'telefonoProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'telefonoProveedor',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'telefonoProveedor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'telefonoProveedor',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> telefonoProveedorMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'telefonoProveedor',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'telefonoProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      telefonoProveedorIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'telefonoProveedor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoDocumento',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoDocumento',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoDocumento',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> tipoDocumentoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoDocumento',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      tipoDocumentoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoDocumento',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterFilterCondition> totalEqualTo(
     double value, {
     double epsilon = Query.epsilon,
@@ -2141,6 +4608,209 @@ extension CompraQueryFilter on QueryBuilder<Compra, Compra, QFilterCondition> {
         upper: upper,
         includeUpper: includeUpper,
         epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalConSigno',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'totalConSigno',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'totalConSigno',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> totalConSignoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalConSigno',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      totalConSignoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'totalConSigno',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      usuarioDevolucionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'usuarioDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      usuarioDevolucionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'usuarioDevolucion',
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> usuarioDevolucionEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'usuarioDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition>
+      usuarioDevolucionGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'usuarioDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> usuarioDevolucionLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'usuarioDevolucion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterFilterCondition> usuarioDevolucionBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'usuarioDevolucion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -2223,6 +4893,90 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByCompraOriginalId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'compraOriginalId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByCompraOriginalIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'compraOriginalId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByCondicionesPago() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'condicionesPago', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByCondicionesPagoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'condicionesPago', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByContactoProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contactoProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByContactoProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contactoProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByDireccionEntrega() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'direccionEntrega', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByDireccionEntregaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'direccionEntrega', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEmailProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'emailProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEmailProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'emailProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEsDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEsDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEsDevolucionValida() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucionValida', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEsDevolucionValidaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucionValida', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByEsUrgente() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'esUrgente', Sort.asc);
@@ -2283,6 +5037,19 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByEstadoFormateadoCompleto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateadoCompleto', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy>
+      sortByEstadoFormateadoCompletoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateadoCompleto', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.asc);
@@ -2316,6 +5083,18 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByFechaCreacionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fechaCreacion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByFechaDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByFechaDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaDevolucion', Sort.desc);
     });
   }
 
@@ -2367,6 +5146,30 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByMotivoDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'motivoDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByMotivoDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'motivoDevolucion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroDocumento() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroDocumento', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroDocumentoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroDocumento', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroFactura() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numeroFactura', Sort.asc);
@@ -2379,6 +5182,42 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroGuia() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroGuia', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroGuiaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroGuia', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroOrden() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroOrden', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroOrdenDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroOrden', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroRemito() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroRemito', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByNumeroRemitoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroRemito', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByObservaciones() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'observaciones', Sort.asc);
@@ -2388,6 +5227,18 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByObservacionesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'observaciones', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByPlazoEntrega() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plazoEntrega', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByPlazoEntregaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plazoEntrega', Sort.desc);
     });
   }
 
@@ -2415,6 +5266,30 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByPuedeDevolver() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'puedeDevolver', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByPuedeDevolverDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'puedeDevolver', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByReferenciaProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'referenciaProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByReferenciaProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'referenciaProveedor', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortBySaldoPendiente() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'saldoPendiente', Sort.asc);
@@ -2427,6 +5302,30 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTelefonoProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefonoProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTelefonoProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefonoProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTipoDocumento() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoDocumento', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTipoDocumentoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoDocumento', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByTotal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'total', Sort.asc);
@@ -2436,6 +5335,30 @@ extension CompraQuerySortBy on QueryBuilder<Compra, Compra, QSortBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> sortByTotalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'total', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTotalConSigno() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalConSigno', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByTotalConSignoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalConSigno', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByUsuarioDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuarioDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> sortByUsuarioDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuarioDevolucion', Sort.desc);
     });
   }
 
@@ -2462,6 +5385,90 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByColorEstadoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorEstado', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByCompraOriginalId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'compraOriginalId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByCompraOriginalIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'compraOriginalId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByCondicionesPago() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'condicionesPago', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByCondicionesPagoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'condicionesPago', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByContactoProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contactoProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByContactoProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contactoProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByDireccionEntrega() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'direccionEntrega', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByDireccionEntregaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'direccionEntrega', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEmailProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'emailProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEmailProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'emailProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEsDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEsDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEsDevolucionValida() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucionValida', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEsDevolucionValidaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esDevolucionValida', Sort.desc);
     });
   }
 
@@ -2525,6 +5532,19 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByEstadoFormateadoCompleto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateadoCompleto', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy>
+      thenByEstadoFormateadoCompletoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'estadoFormateadoCompleto', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.asc);
@@ -2558,6 +5578,18 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByFechaCreacionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fechaCreacion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByFechaDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByFechaDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaDevolucion', Sort.desc);
     });
   }
 
@@ -2621,6 +5653,30 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByMotivoDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'motivoDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByMotivoDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'motivoDevolucion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroDocumento() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroDocumento', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroDocumentoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroDocumento', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroFactura() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numeroFactura', Sort.asc);
@@ -2633,6 +5689,42 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroGuia() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroGuia', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroGuiaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroGuia', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroOrden() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroOrden', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroOrdenDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroOrden', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroRemito() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroRemito', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByNumeroRemitoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroRemito', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByObservaciones() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'observaciones', Sort.asc);
@@ -2642,6 +5734,18 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByObservacionesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'observaciones', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByPlazoEntrega() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plazoEntrega', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByPlazoEntregaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plazoEntrega', Sort.desc);
     });
   }
 
@@ -2669,6 +5773,30 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByPuedeDevolver() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'puedeDevolver', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByPuedeDevolverDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'puedeDevolver', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByReferenciaProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'referenciaProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByReferenciaProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'referenciaProveedor', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> thenBySaldoPendiente() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'saldoPendiente', Sort.asc);
@@ -2681,6 +5809,30 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTelefonoProveedor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefonoProveedor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTelefonoProveedorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefonoProveedor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTipoDocumento() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoDocumento', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTipoDocumentoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoDocumento', Sort.desc);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByTotal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'total', Sort.asc);
@@ -2690,6 +5842,30 @@ extension CompraQuerySortThenBy on QueryBuilder<Compra, Compra, QSortThenBy> {
   QueryBuilder<Compra, Compra, QAfterSortBy> thenByTotalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'total', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTotalConSigno() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalConSigno', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByTotalConSignoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalConSigno', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByUsuarioDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuarioDevolucion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QAfterSortBy> thenByUsuarioDevolucionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuarioDevolucion', Sort.desc);
     });
   }
 
@@ -2711,6 +5887,56 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'colorEstado', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByCompraOriginalId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'compraOriginalId');
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByCondicionesPago(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'condicionesPago',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByContactoProveedor(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'contactoProveedor',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByDireccionEntrega(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'direccionEntrega',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByEmailProveedor(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'emailProveedor',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByEsDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'esDevolucion');
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByEsDevolucionValida() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'esDevolucionValida');
     });
   }
 
@@ -2747,6 +5973,14 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QDistinct> distinctByEstadoFormateadoCompleto(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'estadoFormateadoCompleto',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QDistinct> distinctByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fecha');
@@ -2762,6 +5996,12 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
   QueryBuilder<Compra, Compra, QDistinct> distinctByFechaCreacion() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fechaCreacion');
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByFechaDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fechaDevolucion');
     });
   }
 
@@ -2792,6 +6032,22 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QDistinct> distinctByMotivoDevolucion(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'motivoDevolucion',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByNumeroDocumento(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numeroDocumento',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QDistinct> distinctByNumeroFactura(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2800,11 +6056,39 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QDistinct> distinctByNumeroGuia(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numeroGuia', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByNumeroOrden(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numeroOrden', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByNumeroRemito(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numeroRemito', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QDistinct> distinctByObservaciones(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'observaciones',
           caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByPlazoEntrega(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'plazoEntrega', caseSensitive: caseSensitive);
     });
   }
 
@@ -2821,15 +6105,59 @@ extension CompraQueryWhereDistinct on QueryBuilder<Compra, Compra, QDistinct> {
     });
   }
 
+  QueryBuilder<Compra, Compra, QDistinct> distinctByPuedeDevolver() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'puedeDevolver');
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByReferenciaProveedor(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'referenciaProveedor',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QDistinct> distinctBySaldoPendiente() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'saldoPendiente');
     });
   }
 
+  QueryBuilder<Compra, Compra, QDistinct> distinctByTelefonoProveedor(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'telefonoProveedor',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByTipoDocumento(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoDocumento',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Compra, Compra, QDistinct> distinctByTotal() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'total');
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByTotalConSigno(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalConSigno',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Compra, Compra, QDistinct> distinctByUsuarioDevolucion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'usuarioDevolucion');
     });
   }
 
@@ -2850,6 +6178,48 @@ extension CompraQueryProperty on QueryBuilder<Compra, Compra, QQueryProperty> {
   QueryBuilder<Compra, String, QQueryOperations> colorEstadoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'colorEstado');
+    });
+  }
+
+  QueryBuilder<Compra, int?, QQueryOperations> compraOriginalIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'compraOriginalId');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> condicionesPagoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'condicionesPago');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> contactoProveedorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'contactoProveedor');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> direccionEntregaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'direccionEntrega');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> emailProveedorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'emailProveedor');
+    });
+  }
+
+  QueryBuilder<Compra, bool, QQueryOperations> esDevolucionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'esDevolucion');
+    });
+  }
+
+  QueryBuilder<Compra, bool, QQueryOperations> esDevolucionValidaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'esDevolucionValida');
     });
   }
 
@@ -2883,6 +6253,13 @@ extension CompraQueryProperty on QueryBuilder<Compra, Compra, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Compra, String, QQueryOperations>
+      estadoFormateadoCompletoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'estadoFormateadoCompleto');
+    });
+  }
+
   QueryBuilder<Compra, DateTime, QQueryOperations> fechaProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fecha');
@@ -2899,6 +6276,12 @@ extension CompraQueryProperty on QueryBuilder<Compra, Compra, QQueryProperty> {
   QueryBuilder<Compra, DateTime, QQueryOperations> fechaCreacionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fechaCreacion');
+    });
+  }
+
+  QueryBuilder<Compra, DateTime?, QQueryOperations> fechaDevolucionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fechaDevolucion');
     });
   }
 
@@ -2927,15 +6310,51 @@ extension CompraQueryProperty on QueryBuilder<Compra, Compra, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Compra, String?, QQueryOperations> motivoDevolucionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'motivoDevolucion');
+    });
+  }
+
+  QueryBuilder<Compra, String, QQueryOperations> numeroDocumentoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numeroDocumento');
+    });
+  }
+
   QueryBuilder<Compra, String, QQueryOperations> numeroFacturaProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'numeroFactura');
     });
   }
 
+  QueryBuilder<Compra, String?, QQueryOperations> numeroGuiaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numeroGuia');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> numeroOrdenProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numeroOrden');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> numeroRemitoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numeroRemito');
+    });
+  }
+
   QueryBuilder<Compra, String?, QQueryOperations> observacionesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'observaciones');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations> plazoEntregaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'plazoEntrega');
     });
   }
 
@@ -2958,15 +6377,52 @@ extension CompraQueryProperty on QueryBuilder<Compra, Compra, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Compra, bool, QQueryOperations> puedeDevolverProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'puedeDevolver');
+    });
+  }
+
+  QueryBuilder<Compra, String?, QQueryOperations>
+      referenciaProveedorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'referenciaProveedor');
+    });
+  }
+
   QueryBuilder<Compra, double, QQueryOperations> saldoPendienteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'saldoPendiente');
     });
   }
 
+  QueryBuilder<Compra, String?, QQueryOperations> telefonoProveedorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'telefonoProveedor');
+    });
+  }
+
+  QueryBuilder<Compra, String, QQueryOperations> tipoDocumentoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoDocumento');
+    });
+  }
+
   QueryBuilder<Compra, double, QQueryOperations> totalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'total');
+    });
+  }
+
+  QueryBuilder<Compra, String, QQueryOperations> totalConSignoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalConSigno');
+    });
+  }
+
+  QueryBuilder<Compra, int?, QQueryOperations> usuarioDevolucionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'usuarioDevolucion');
     });
   }
 

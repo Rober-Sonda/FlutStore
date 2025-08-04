@@ -7,7 +7,9 @@ part 'producto.g.dart';
 class Producto {
   Id id = Isar.autoIncrement;
 
-  late String nombre;
+  String? nombre;
+  String? codigoBarras; // Código de barras del producto
+  String? sku; // SKU del producto
   double? precio;
   double? precioCosto; // Precio de costo para calcular utilidad
   double? utilidad; // Porcentaje de utilidad

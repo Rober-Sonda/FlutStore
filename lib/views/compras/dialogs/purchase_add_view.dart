@@ -183,7 +183,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     // Buscar producto por código (cuando se agreguen los campos)
     // Por ahora, buscar por nombre como fallback
     final producto = _productos.firstWhere(
-      (p) => p.nombre.toLowerCase().contains(codigo.toLowerCase()),
+      (p) => (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false),
       orElse: () => throw Exception('Producto no encontrado'),
     );
 
@@ -272,7 +272,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
           compra.productos.add(
             CompraProducto(
               productoId: item.producto.id,
-              nombreProducto: item.producto.nombre,
+              nombreProducto: item.producto.nombre ?? 'Producto sin nombre',
               cantidad: item.cantidad,
               precioUnitario: item.precioUnitario,
             ),
@@ -480,10 +480,14 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                                     return ListTile(
                                       leading: CircleAvatar(
                                         child: Text(
-                                          producto.nombre[0].toUpperCase(),
+                                          (producto.nombre?[0] ?? 'P')
+                                              .toUpperCase(),
                                         ),
                                       ),
-                                      title: Text(producto.nombre),
+                                      title: Text(
+                                        producto.nombre ??
+                                            'Producto sin nombre',
+                                      ),
                                       subtitle: Text(
                                         'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stock ?? 0}',
                                       ),
@@ -527,7 +531,10 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                                       vertical: 4,
                                     ),
                                     child: ListTile(
-                                      title: Text(item.producto.nombre),
+                                      title: Text(
+                                        item.producto.nombre ??
+                                            'Producto sin nombre',
+                                      ),
                                       subtitle: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -658,7 +665,9 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                 children: [
                   ..._carrito.map(
                     (item) => ListTile(
-                      title: Text(item.producto.nombre),
+                      title: Text(
+                        item.producto.nombre ?? 'Producto sin nombre',
+                      ),
                       subtitle: Text(
                         'Cantidad: ${item.cantidad} | Precio: \$${item.precioUnitario}',
                       ),

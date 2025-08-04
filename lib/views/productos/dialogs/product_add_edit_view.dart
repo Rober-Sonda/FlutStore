@@ -124,7 +124,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   Future<void> _cargarDatosProducto() async {
     if (_producto == null) return;
 
-    _nombreController.text = _producto!.nombre;
+    _nombreController.text = _producto!.nombre ?? 'Producto sin nombre';
     _precioController.text = _producto!.precio?.toString() ?? '';
     _stockController.text = _producto!.stock?.toString() ?? '';
 
@@ -346,7 +346,10 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
       // Crear o actualizar producto
       final producto = _producto ?? Producto();
-      producto.nombre = _nombreController.text.trim();
+      producto.nombre =
+          _nombreController.text.trim().isEmpty
+              ? null
+              : _nombreController.text.trim();
       producto.precio = double.tryParse(_precioController.text) ?? 0.0;
       producto.stock = int.tryParse(_stockController.text) ?? 0;
       producto.categoriaId = _categoriaSeleccionada!.id;

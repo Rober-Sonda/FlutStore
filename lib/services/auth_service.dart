@@ -89,6 +89,20 @@ class AuthService {
     }
   }
 
+  /// Cierra la sesión del usuario actual
+  Future<void> logout() async {
+    try {
+      // Aquí podrías agregar lógica adicional como:
+      // - Limpiar tokens de sesión
+      // - Registrar el logout en logs
+      // - Limpiar caché local
+      
+      print('Usuario ha cerrado sesión');
+    } catch (e) {
+      print('Error durante el logout: $e');
+    }
+  }
+
   Future<bool> canDeleteUser(int userId) async {
     try {
       final isar = await db;

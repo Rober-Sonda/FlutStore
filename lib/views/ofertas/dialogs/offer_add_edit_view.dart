@@ -381,7 +381,10 @@ class _OfferAddEditViewState extends ConsumerState<OfferAddEditView> {
                                   _productos.map((producto) {
                                     return DropdownMenuItem(
                                       value: producto,
-                                      child: Text(producto.nombre),
+                                      child: Text(
+                                        producto.nombre ??
+                                            'Producto sin nombre',
+                                      ),
                                     );
                                   }).toList(),
                               onChanged: (Producto? producto) {

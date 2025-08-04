@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/oferta.dart';
 import '../../models/producto.dart';
-import '../../models/ganancia_perdida.dart';
+import '../../models/registrofinanciero.dart';
 import '../../services/isar_service.dart';
 import '../../widgets/permission_widget.dart';
 
@@ -233,19 +233,18 @@ class _OffersViewState extends ConsumerState<OffersView> {
       final isar = await ref.read(isarServiceProvider).db;
 
       // Crear registro de pérdida por ofertas
-      final perdidaOferta = GananciaPerdida(
+      final perdidaOferta = RegistroFinanciero(
         concepto: 'Pérdida por oferta: ${oferta.nombre}',
         descripcion: 'Pérdida generada por descuento en oferta',
         monto: oferta.ahorroEnPesos * oferta.ventasRealizadas,
-        tipo: 'perdida',
+        tipo: 'egreso',
         categoria: 'descuentos',
         fecha: DateTime.now(),
-        ofertaId: oferta.id,
         usuarioId: 1, // TODO: Obtener ID del usuario actual
       );
 
       await isar.writeTxn(() async {
-        await isar.gananciaPerdidas.put(perdidaOferta);
+        await isar.registroFinancieros.put(perdidaOferta);
       });
 
       if (mounted) {

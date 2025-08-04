@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/sorteo.dart';
-import '../../models/ganancia_perdida.dart';
+import '../../models/registrofinanciero.dart';
 import '../../services/isar_service.dart';
 import '../../widgets/permission_widget.dart';
 
@@ -206,25 +206,23 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
 
       // Calcular pérdida total de premios
       double perdidaTotal = 0.0;
-      for (int i = 0; i < sorteo.premios.length; i++) {
-        if (i < sorteo.valoresPremios.length) {
-          perdidaTotal += sorteo.valoresPremios[i];
-        }
+      for (final premio in sorteo.premios) {
+        perdidaTotal += premio.valorTotal;
       }
 
       // Crear registro de pérdida por sorteo
-      final perdidaSorteo = GananciaPerdida(
+      final perdidaSorteo = RegistroFinanciero(
         concepto: 'Pérdida por sorteo: ${sorteo.nombre}',
         descripcion: 'Pérdida generada por premios de sorteo',
         monto: perdidaTotal,
-        tipo: 'perdida',
+        tipo: 'egreso',
         categoria: 'sorteos',
         fecha: DateTime.now(),
         usuarioId: 1, // TODO: Obtener ID del usuario actual
       );
 
       await isar.writeTxn(() async {
-        await isar.gananciaPerdidas.put(perdidaSorteo);
+        await isar.registroFinancieros.put(perdidaSorteo);
       });
 
       if (mounted) {
@@ -335,6 +333,40 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
               ],
             ),
             const SizedBox(height: 16),
+
+            // Detalles de premios
+            if (sorteo.premios.isNotEmpty) ...[
+              const Divider(),
+              const SizedBox(height: 8),
+              const Text(
+                'Premios:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              const SizedBox(height: 8),
+              ...sorteo.premios.map(
+                (premio) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.card_giftcard,
+                        size: 16,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          premio.descripcionPremio,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

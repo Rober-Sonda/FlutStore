@@ -24,13 +24,11 @@ import '../views/carrito/carrito_compra_view.dart';
 import '../views/autenticacion/login_view.dart';
 import '../views/ofertas/offers_view.dart';
 import '../views/finanzas/cash_flow_view.dart';
-import '../views/finanzas/profit_loss_view.dart';
 import '../views/finanzas/cash_register_view.dart';
 import '../views/sorteos/sweepstakes_view.dart';
 import '../views/finanzas/fixed_expenses_view.dart';
 import '../views/ofertas/dialogs/offer_add_edit_view.dart';
 import '../views/finanzas/dialogs/cash_flow_add_edit_view.dart';
-import '../views/finanzas/dialogs/profit_loss_add_edit_view.dart';
 import '../views/finanzas/dialogs/cash_register_add_edit_view.dart';
 import '../views/cuenta_corriente/cuenta_corriente_view.dart';
 import '../views/configuracion/business_config_view.dart';
@@ -113,21 +111,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
-            path: '/purchases',
-            builder: (context, state) => const PurchasesView(),
-          ),
-          GoRoute(
-            path: '/purchases/add',
-            builder: (context, state) => const PurchaseAddView(),
-          ),
-          GoRoute(
-            path: '/purchases/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return PurchaseAddEditView(compraId: id);
-            },
-          ),
-          GoRoute(
             path: '/clients',
             builder: (context, state) => const ClientsView(),
           ),
@@ -144,6 +127,61 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
+            path: '/orders',
+            builder: (context, state) => const OrdersView(),
+          ),
+          GoRoute(
+            path: '/carrito-compra',
+            builder: (context, state) => const CarritoCompraView(),
+          ),
+          // Nuevas rutas
+          GoRoute(
+            path: '/offers',
+            builder: (context, state) => const OffersView(),
+          ),
+          GoRoute(
+            path: '/offers/add',
+            builder: (context, state) => const OfferAddEditView(),
+          ),
+          GoRoute(
+            path: '/offers/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return OfferAddEditView(ofertaId: id);
+            },
+          ),
+          GoRoute(
+            path: '/cash-flow',
+            builder: (context, state) => const CashFlowView(),
+          ),
+          GoRoute(
+            path: '/cash-flow/add',
+            builder: (context, state) => const CashFlowAddEditView(),
+          ),
+          GoRoute(
+            path: '/cash-flow/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return CashFlowAddEditView(flujoId: id);
+            },
+          ),
+          GoRoute(
+            path: '/account-balance',
+            builder: (context, state) => const CuentaCorrienteView(),
+          ),
+          GoRoute(
+            path: '/account-balance/add',
+            builder: (context, state) => const CuentaCorrienteAddEditView(),
+          ),
+          GoRoute(
+            path: '/account-balance/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return CuentaCorrienteAddEditView(cuentaId: id);
+            },
+          ),
+          // Ventas
+          GoRoute(
             path: '/sales',
             builder: (context, state) => const SalesView(),
           ),
@@ -156,6 +194,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               final id = int.parse(state.pathParameters['id']!);
               return SaleAddEditView(ventaId: id);
+            },
+          ),
+          // Compras
+          GoRoute(
+            path: '/purchases',
+            builder: (context, state) => const PurchasesView(),
+          ),
+          GoRoute(
+            path: '/purchases/add',
+            builder: (context, state) => const PurchaseAddView(),
+          ),
+          GoRoute(
+            path: '/purchases/edit/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return PurchaseAddEditView(compraId: id);
             },
           ),
           GoRoute(
@@ -227,107 +281,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               final id = int.parse(state.pathParameters['id']!);
               return UserAddEditView(userId: id);
-            },
-          ),
-          GoRoute(
-            path: '/orders',
-            builder: (context, state) => const OrdersView(),
-          ),
-          GoRoute(
-            path: '/carrito-compra',
-            builder: (context, state) => const CarritoCompraView(),
-          ),
-          // Nuevas rutas
-          GoRoute(
-            path: '/offers',
-            builder: (context, state) => const OffersView(),
-          ),
-          GoRoute(
-            path: '/offers/add',
-            builder: (context, state) => const OfferAddEditView(),
-          ),
-          GoRoute(
-            path: '/offers/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return OfferAddEditView(ofertaId: id);
-            },
-          ),
-          GoRoute(
-            path: '/cash-flow',
-            builder: (context, state) => const CashFlowView(),
-          ),
-          GoRoute(
-            path: '/cash-flow/add',
-            builder: (context, state) => const CashFlowAddEditView(),
-          ),
-          GoRoute(
-            path: '/cash-flow/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return CashFlowAddEditView(flujoId: id);
-            },
-          ),
-          GoRoute(
-            path: '/profit-loss',
-            builder: (context, state) => const ProfitLossView(),
-          ),
-          GoRoute(
-            path: '/profit-loss/add',
-            builder: (context, state) => const ProfitLossAddEditView(),
-          ),
-          GoRoute(
-            path: '/account-balance',
-            builder: (context, state) => const CuentaCorrienteView(),
-          ),
-          GoRoute(
-            path: '/account-balance/add',
-            builder: (context, state) => const CuentaCorrienteAddEditView(),
-          ),
-          GoRoute(
-            path: '/account-balance/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return CuentaCorrienteAddEditView(cuentaId: id);
-            },
-          ),
-          GoRoute(
-            path: '/profit-loss/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return ProfitLossAddEditView(profitLossId: id);
-            },
-          ),
-          // Ventas
-          GoRoute(
-            path: '/sales',
-            builder: (context, state) => const SalesView(),
-          ),
-          GoRoute(
-            path: '/sales/add',
-            builder: (context, state) => const SaleAddEditView(),
-          ),
-          GoRoute(
-            path: '/sales/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return SaleAddEditView(ventaId: id);
-            },
-          ),
-          // Compras
-          GoRoute(
-            path: '/purchases',
-            builder: (context, state) => const PurchasesView(),
-          ),
-          GoRoute(
-            path: '/purchases/add',
-            builder: (context, state) => const PurchaseAddView(),
-          ),
-          GoRoute(
-            path: '/purchases/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return PurchaseAddEditView(compraId: id);
             },
           ),
           GoRoute(

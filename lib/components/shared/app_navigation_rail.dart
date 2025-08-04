@@ -178,14 +178,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       action: 'read',
     ),
     _NavItemData(
-      icon: Icons.trending_up_rounded,
-      label: 'Ganancias y Pérdidas',
-      route: AppRoutes.profitLoss,
-      color: Color(0xFFF472B6), // Pink-400 moderno
-      resource: 'finanzas',
-      action: 'read',
-    ),
-    _NavItemData(
       icon: Icons.point_of_sale_rounded,
       label: 'Cierre de Caja',
       route: AppRoutes.cashRegister,
@@ -241,7 +233,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
 
     final currentUser = ref.read(currentUserProvider);
     final permissionService = ref.read(permissionServiceProvider);
-    
+
     if (currentUser == null) {
       setState(() {
         _filteredItems = [];
@@ -251,14 +243,14 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     }
 
     final filteredItems = <_NavItemData>[];
-    
+
     for (final item in _allItems) {
       final hasPermission = await permissionService.canPerformAction(
         currentUser,
         item.action,
         item.resource,
       );
-      
+
       if (hasPermission) {
         filteredItems.add(item);
       }
@@ -295,7 +287,9 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     final railWidth = isCompact ? 80.0 : 240.0;
 
     // Actualizar permisos cuando cambie el usuario
-    if (currentUser != null && _filteredItems.isEmpty && !_isLoadingPermissions) {
+    if (currentUser != null &&
+        _filteredItems.isEmpty &&
+        !_isLoadingPermissions) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _filterItemsByPermissions();
       });
@@ -317,9 +311,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
           ),
         ),
         child: const Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
+          child: CircularProgressIndicator(color: Colors.white),
         ),
       );
     }
@@ -490,7 +482,8 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                   );
                 }
 
-                final itemHeight = (constraints.maxHeight - 40) / _filteredItems.length;
+                final itemHeight =
+                    (constraints.maxHeight - 40) / _filteredItems.length;
                 final minItemHeight = 52.0;
                 final actualItemHeight =
                     itemHeight < minItemHeight ? minItemHeight : itemHeight;
@@ -645,8 +638,20 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        // lógica logout
+                      onTap: () async {
+                        // Lógica de logout
+                        final authService = ref.read(authServiceProvider);
+                        await authService.logout();
+
+                        // Limpiar el usuario actual
+                        ref.read(currentUserProvider.notifier).state = null;
+                        ref.read(isAuthenticatedProvider.notifier).state =
+                            false;
+
+                        // Navegar a la pantalla de login
+                        if (context.mounted) {
+                          context.go('/');
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -740,7 +745,8 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
 
     for (int i = 0; i < _filteredItems.length; i++) {
       // Coincidencia exacta o path segmentado
-      if (path == _filteredItems[i].route || path.startsWith('${_filteredItems[i].route}/')) {
+      if (path == _filteredItems[i].route ||
+          path.startsWith('${_filteredItems[i].route}/')) {
         return i;
       }
     }

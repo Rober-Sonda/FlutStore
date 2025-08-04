@@ -73,25 +73,25 @@ class PermissionService {
         return action == 'create' ||
             action == 'read'; // Pueden crear y ver ventas
       case 'pedidos':
-        return action == 'read'; // Solo pueden ver pedidos
+        return false; // Los vendedores no pueden ver pedidos de proveedores
       case 'proveedores':
-        return action == 'read'; // Solo pueden ver proveedores
+        return false; // Los vendedores no pueden ver proveedores
       case 'compras':
         return false; // No pueden gestionar compras
       case 'carrito':
-        return action == 'read'; // Solo pueden ver carrito
+        return false; // Los vendedores no pueden ver carrito de compras
       case 'cuenta_corriente':
         return action == 'read'; // Solo pueden ver cuenta corriente
       case 'stock':
-        return action == 'read'; // Solo pueden ver movimientos de stock
+        return false; // Los vendedores no pueden ver movimientos de stock
       case 'finanzas':
-        return action == 'read'; // Solo pueden ver registros financieros
+        return false; // Los vendedores no pueden ver registros financieros
       case 'reportes':
-        return action == 'read'; // Solo pueden ver reportes
+        return false; // Los vendedores no pueden ver reportes
       case 'ofertas':
         return action == 'read'; // Solo pueden ver ofertas
       case 'sorteos':
-        return action == 'read'; // Solo pueden ver sorteos
+        return false; // Los vendedores no pueden ver sorteos
       case 'configuracion':
         return false; // No pueden modificar configuración
       default:

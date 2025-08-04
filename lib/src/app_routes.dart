@@ -108,11 +108,6 @@ class AppRoutes {
   static const cashFlowAdd = '/cash-flow/add';
   static const cashFlowEdit = '/cash-flow/edit/:id';
 
-  // Ganancias y Pérdidas
-  static const profitLoss = '/profit-loss';
-  static const profitLossAdd = '/profit-loss/add';
-  static const profitLossEdit = '/profit-loss/edit/:id';
-
   // Cierre de Caja
   static const cashRegister = '/cash-register';
   static const cashRegisterAdd = '/cash-register/add';

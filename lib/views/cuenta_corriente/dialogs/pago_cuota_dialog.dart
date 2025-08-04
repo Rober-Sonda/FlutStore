@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/cuenta_corriente.dart';
 import '../../../models/pago_cuota.dart';
-import '../../../models/ganancia_perdida.dart';
+import '../../../models/registrofinanciero.dart';
 import '../../../services/isar_service.dart';
 
 class PagoCuotaDialog extends ConsumerStatefulWidget {
@@ -99,17 +99,17 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
 
         await isar.cuentaCorrientes.put(widget.cuentaCorriente);
 
-        // 3. Registrar en ganancias y pérdidas si está habilitado
+        // 3. Registrar en registros financieros si está habilitado
         if (_registrarEnGanancias) {
-          final ganancia = GananciaPerdida(
+          final registro = RegistroFinanciero(
             concepto: 'Pago de cuota - ${widget.cuentaCorriente.nombreCliente}',
             descripcion:
                 _observacionesController.text.isEmpty
                     ? null
                     : _observacionesController.text,
             monto: monto,
-            tipo: 'ganancia',
-            categoria: 'Pagos de Cuotas',
+            tipo: 'ingreso',
+            categoria: 'pagos_cuotas',
             fecha: DateTime.now(),
             numeroComprobante: _referenciaPago,
             clienteId: widget.cuentaCorriente.clienteId,
@@ -120,7 +120,7 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
             usuarioId: 1, // TODO: Obtener ID del usuario actual
           );
 
-          await isar.gananciaPerdidas.put(ganancia);
+          await isar.registroFinancieros.put(registro);
 
           // Marcar el pago como registrado en ganancias
           pagoCuota.marcarComoRegistradoEnGanancias();
@@ -140,9 +140,9 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error registrando pago: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error registrando pago: $e')));
       }
     }
   }
@@ -224,12 +224,13 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
                   labelText: 'Método de pago',
                   border: OutlineInputBorder(),
                 ),
-                items: _metodosPago.map((metodo) {
-                  return DropdownMenuItem(
-                    value: metodo,
-                    child: Text(metodo),
-                  );
-                }).toList(),
+                items:
+                    _metodosPago.map((metodo) {
+                      return DropdownMenuItem(
+                        value: metodo,
+                        child: Text(metodo),
+                      );
+                    }).toList(),
                 onChanged: (value) {
                   setState(() => _metodoPago = value!);
                 },
@@ -243,7 +244,8 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
                   border: OutlineInputBorder(),
                   hintText: 'Número de transferencia, cheque, etc.',
                 ),
-                onChanged: (value) => _referenciaPago = value.isEmpty ? null : value,
+                onChanged:
+                    (value) => _referenciaPago = value.isEmpty ? null : value,
               ),
               const SizedBox(height: 16),
 
@@ -285,15 +287,16 @@ class _PagoCuotaDialogState extends ConsumerState<PagoCuotaDialog> {
             backgroundColor: Colors.amber[700],
             foregroundColor: Colors.white,
           ),
-          child: _isLoading
-              ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Registrar Pago'),
+          child:
+              _isLoading
+                  ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                  : const Text('Registrar Pago'),
         ),
       ],
     );
   }
-} 
+}

@@ -11,13 +11,36 @@ class Venta {
   late double total;
   late String metodoPago;
   String? observaciones;
-  late String estado; // 'pendiente', 'completada', 'cancelada'
-  
-  // Información adicional
+  late String estado; // 'pendiente', 'completada', 'cancelada', 'devuelta'
+
+  // Información profesional
   String? numeroFactura;
   String? numeroRecibo;
   String? vendedor;
-  
+  String? numeroTicket;
+  String? numeroOrden;
+
+  // Información de pago
+  double? montoPagado;
+  double? cambio;
+  String? referenciaPago;
+  String? banco;
+  String? numeroTarjeta;
+
+  // Información de devolución
+  bool esDevolucion = false;
+  int? ventaOriginalId; // ID de la venta original si es una devolución
+  String? motivoDevolucion;
+  DateTime? fechaDevolucion;
+  int? usuarioDevolucion;
+
+  // Información adicional
+  String? direccionEntrega;
+  String? telefonoCliente;
+  String? emailCliente;
+  String? condicionesVenta;
+  String? notasInternas;
+
   // Auditoría
   int usuarioId; // Usuario que creó la venta
   DateTime fechaCreacion = DateTime.now();
@@ -33,6 +56,23 @@ class Venta {
     this.numeroFactura,
     this.numeroRecibo,
     this.vendedor,
+    this.numeroTicket,
+    this.numeroOrden,
+    this.montoPagado,
+    this.cambio,
+    this.referenciaPago,
+    this.banco,
+    this.numeroTarjeta,
+    this.esDevolucion = false,
+    this.ventaOriginalId,
+    this.motivoDevolucion,
+    this.fechaDevolucion,
+    this.usuarioDevolucion,
+    this.direccionEntrega,
+    this.telefonoCliente,
+    this.emailCliente,
+    this.condicionesVenta,
+    this.notasInternas,
     required this.usuarioId,
   });
 
@@ -127,8 +167,8 @@ class Venta {
   bool get esDelDia {
     final ahora = DateTime.now();
     return fecha.year == ahora.year &&
-           fecha.month == ahora.month &&
-           fecha.day == ahora.day;
+        fecha.month == ahora.month &&
+        fecha.day == ahora.day;
   }
 
   // Método para verificar si es una venta de la semana
@@ -137,7 +177,7 @@ class Venta {
     final inicioSemana = ahora.subtract(Duration(days: ahora.weekday - 1));
     final finSemana = inicioSemana.add(const Duration(days: 6));
     return fecha.isAfter(inicioSemana.subtract(const Duration(days: 1))) &&
-           fecha.isBefore(finSemana.add(const Duration(days: 1)));
+        fecha.isBefore(finSemana.add(const Duration(days: 1)));
   }
 
   // Método para verificar si es una venta del mes
@@ -167,4 +207,59 @@ class Venta {
         return 'grey';
     }
   }
-} 
+
+  // Métodos para devoluciones
+  bool get puedeDevolver => estado == 'completada' && !esDevolucion;
+  bool get esDevolucionValida => esDevolucion && ventaOriginalId != null;
+
+  // Método para crear una devolución
+  Venta crearDevolucion({
+    required String motivo,
+    required int usuarioId,
+    String? observaciones,
+  }) {
+    return Venta(
+      clienteId: clienteId,
+      fecha: DateTime.now(),
+      total: -total, // Total negativo para indicar devolución
+      metodoPago: metodoPago,
+      observaciones: observaciones ?? 'Devolución de venta #$id',
+      estado: 'devuelta',
+      numeroFactura: numeroFactura != null ? 'DEV-$numeroFactura' : null,
+      numeroRecibo: numeroRecibo != null ? 'DEV-$numeroRecibo' : null,
+      vendedor: vendedor,
+      esDevolucion: true,
+      ventaOriginalId: id,
+      motivoDevolucion: motivo,
+      fechaDevolucion: DateTime.now(),
+      usuarioDevolucion: usuarioId,
+      usuarioId: usuarioId,
+    );
+  }
+
+  // Método para obtener el tipo de documento
+  String get tipoDocumento {
+    if (esDevolucion) return 'Devolución';
+    if (numeroFactura != null) return 'Factura';
+    if (numeroRecibo != null) return 'Recibo';
+    if (numeroTicket != null) return 'Ticket';
+    return 'Venta';
+  }
+
+  // Método para obtener el número de documento
+  String get numeroDocumento {
+    if (esDevolucion) return 'DEV-${id.toString().padLeft(6, '0')}';
+    if (numeroFactura != null) return numeroFactura!;
+    if (numeroRecibo != null) return numeroRecibo!;
+    if (numeroTicket != null) return numeroTicket!;
+    return 'V-${id.toString().padLeft(6, '0')}';
+  }
+
+  // Método para obtener el total con signo
+  String get totalConSigno {
+    if (esDevolucion) {
+      return '-\$${total.abs().toStringAsFixed(2)}';
+    }
+    return '\$${total.toStringAsFixed(2)}';
+  }
+}

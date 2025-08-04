@@ -12,7 +12,7 @@ class Compra {
   double total = 0.0;
   String? observaciones;
   String estado =
-      'pendiente'; // 'pendiente', 'confirmada', 'cancelada', 'recibida'
+      'pendiente'; // 'pendiente', 'confirmada', 'cancelada', 'recibida', 'devuelta'
 
   // Relaciones
   int? proveedorId;
@@ -26,6 +26,25 @@ class Compra {
       'efectivo'; // 'efectivo', 'tarjeta', 'transferencia', 'cheque'
   double montoPagado = 0.0;
   double saldoPendiente = 0.0;
+
+  // Información profesional
+  String? numeroOrden;
+  String? numeroRemito;
+  String? numeroGuia;
+  String? referenciaProveedor;
+  String? condicionesPago;
+  String? plazoEntrega;
+  String? direccionEntrega;
+  String? contactoProveedor;
+  String? telefonoProveedor;
+  String? emailProveedor;
+
+  // Información de devolución
+  bool esDevolucion = false;
+  int? compraOriginalId; // ID de la compra original si es una devolución
+  String? motivoDevolucion;
+  DateTime? fechaDevolucion;
+  int? usuarioDevolucion;
 
   // Auditoría
   DateTime fechaCreacion = DateTime.now();
@@ -47,6 +66,21 @@ class Compra {
     this.metodoPago = 'efectivo',
     this.montoPagado = 0.0,
     this.saldoPendiente = 0.0,
+    this.numeroOrden,
+    this.numeroRemito,
+    this.numeroGuia,
+    this.referenciaProveedor,
+    this.condicionesPago,
+    this.plazoEntrega,
+    this.direccionEntrega,
+    this.contactoProveedor,
+    this.telefonoProveedor,
+    this.emailProveedor,
+    this.esDevolucion = false,
+    this.compraOriginalId,
+    this.motivoDevolucion,
+    this.fechaDevolucion,
+    this.usuarioDevolucion,
     this.esUrgente = false,
     this.prioridad,
   });
@@ -138,6 +172,82 @@ class Compra {
   // Método para verificar si está recibida
   bool get estaRecibida {
     return estado == 'recibida';
+  }
+
+  // Métodos para devoluciones
+  bool get puedeDevolver => estado == 'recibida' && !esDevolucion;
+  bool get esDevolucionValida => esDevolucion && compraOriginalId != null;
+
+  // Método para crear una devolución
+  Compra crearDevolucion({
+    required String motivo,
+    required int usuarioId,
+    String? observaciones,
+  }) {
+    return Compra(
+      numeroFactura:
+          numeroFactura != null
+              ? 'DEV-$numeroFactura'
+              : 'DEV-${id.toString().padLeft(6, '0')}',
+      fecha: DateTime.now(),
+      total: -total, // Total negativo para indicar devolución
+      observaciones: observaciones ?? 'Devolución de compra #$id',
+      estado: 'devuelta',
+      proveedorId: proveedorId,
+      metodoPago: metodoPago,
+      montoPagado: 0.0,
+      saldoPendiente: 0.0,
+      esDevolucion: true,
+      compraOriginalId: id,
+      motivoDevolucion: motivo,
+      fechaDevolucion: DateTime.now(),
+      usuarioDevolucion: usuarioId,
+      usuarioId: usuarioId,
+    );
+  }
+
+  // Método para obtener el tipo de documento
+  String get tipoDocumento {
+    if (esDevolucion) return 'Devolución';
+    if (numeroOrden != null) return 'Orden de Compra';
+    if (numeroRemito != null) return 'Remito';
+    if (numeroGuia != null) return 'Guía';
+    return 'Compra';
+  }
+
+  // Método para obtener el número de documento
+  String get numeroDocumento {
+    if (esDevolucion) return 'DEV-${id.toString().padLeft(6, '0')}';
+    if (numeroFactura != null) return numeroFactura!;
+    if (numeroOrden != null) return numeroOrden!;
+    if (numeroRemito != null) return numeroRemito!;
+    return 'C-${id.toString().padLeft(6, '0')}';
+  }
+
+  // Método para obtener el total con signo
+  String get totalConSigno {
+    if (esDevolucion) {
+      return '-\$${total.abs().toStringAsFixed(2)}';
+    }
+    return '\$${total.toStringAsFixed(2)}';
+  }
+
+  // Método para obtener el estado formateado actualizado
+  String get estadoFormateadoCompleto {
+    switch (estado) {
+      case 'pendiente':
+        return 'Pendiente';
+      case 'confirmada':
+        return 'Confirmada';
+      case 'cancelada':
+        return 'Cancelada';
+      case 'recibida':
+        return 'Recibida';
+      case 'devuelta':
+        return 'Devuelta';
+      default:
+        return estado;
+    }
   }
 }
 

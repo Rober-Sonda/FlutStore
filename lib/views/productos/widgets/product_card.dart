@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    producto.nombre,
+                    producto.nombre ?? 'Producto sin nombre',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
