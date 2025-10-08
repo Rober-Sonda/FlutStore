@@ -4,10 +4,11 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:tienda_app/widgets/top_bar_actions.dart';
 import 'package:tienda_app/services/theme_service.dart';
 import 'package:tienda_app/models/app_theme.dart';
+import '../providers/carrito_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class ModernTitleBar extends ConsumerStatefulWidget {
   const ModernTitleBar({super.key});
-
   @override
   ConsumerState<ModernTitleBar> createState() => _ModernTitleBarState();
 }
@@ -43,6 +44,7 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
   @override
   Widget build(BuildContext context) {
     final currentTheme = ref.watch(currentThemeProvider);
+    final carrito = ref.watch(carritoProvider);
 
     return Container(
       height: 50,
@@ -308,7 +310,39 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
           // Modern Top Bar Actions
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: const TopBarActions(),
+            child: Row(
+              children: [
+                // Icono de carrito con punto rojo si hay productos
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      tooltip: 'Carrito de compras',
+                      onPressed: () {
+                        GoRouter.of(context).go('/carrito-compra');
+                      },
+                    ),
+                    if (carrito.isNotEmpty)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 1.5),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                // ...otros posibles botones de TopBarActions...
+                // Elimina cualquier otro IconButton de carrito aquí.
+                const TopBarActions(),
+              ],
+            ),
           ),
 
           // Modern separator

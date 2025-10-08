@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/app_theme.dart';
 import '../../../models/custom_theme.dart';
-import '../../../services/app_config_service.dart';
 import '../../../services/theme_service.dart';
 import '../../../services/auth_service.dart';
 import 'theme_card.dart';

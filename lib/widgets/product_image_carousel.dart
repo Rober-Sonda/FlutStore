@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 
@@ -50,124 +51,127 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
       return _buildImagenVacia();
     }
 
-    return Column(
-      children: [
-        // Carrusel principal
-        SizedBox(
-          height: widget.altura,
-          width: widget.ancho,
-          child: Swiper(
-            controller: _swiperController,
-            itemCount: widget.imagenes.length,
-            itemBuilder: (context, index) {
-              return _buildImagenCarousel(widget.imagenes[index]);
-            },
-            onIndexChanged: (index) {
-              setState(() {
-                _indiceActual = index;
-              });
-              if (widget.onImagenSeleccionada != null) {
-                widget.onImagenSeleccionada!(widget.imagenes[index]);
-              }
-            },
-            loop: false,
-            autoplay: false,
-            pagination: const SwiperPagination(),
-            control: const SwiperControl(),
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // Indicadores y controles
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Indicadores de puntos
-            ...widget.imagenes.asMap().entries.map((entry) {
-              return GestureDetector(
-                onTap: () => _swiperController.move(entry.key),
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:
-                        _indiceActual == entry.key
-                            ? Colors.blue[600]
-                            : Colors.grey[300],
-                  ),
-                ),
-              );
-            }),
-
-            const SizedBox(width: 16),
-
-            // Contador de imágenes
-            Text(
-              '${_indiceActual + 1} de ${widget.imagenes.length}',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Carrusel principal
+          SizedBox(
+            width: double.infinity,
+            height: widget.altura,
+            child: Swiper(
+              controller: _swiperController,
+              itemCount: widget.imagenes.length,
+              itemBuilder: (context, index) {
+                return _buildImagenCarousel(widget.imagenes[index]);
+              },
+              onIndexChanged: (index) {
+                setState(() {
+                  _indiceActual = index;
+                });
+                if (widget.onImagenSeleccionada != null) {
+                  widget.onImagenSeleccionada!(widget.imagenes[index]);
+                }
+              },
+              loop: false,
+              autoplay: false,
+              pagination: const SwiperPagination(),
+              control: const SwiperControl(),
             ),
-          ],
-        ),
+          ),
 
-        // Controles adicionales si es editable
-        if (widget.esEditable) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
+
+          // Indicadores y controles
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Botón para agregar imagen
-              if (widget.onAgregarImagen != null)
-                ElevatedButton.icon(
-                  onPressed: widget.onAgregarImagen,
-                  icon: const Icon(Icons.add_photo_alternate, size: 18),
-                  label: const Text('Agregar Imagen'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[600],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+              // Indicadores de puntos
+              ...widget.imagenes.asMap().entries.map((entry) {
+                return GestureDetector(
+                  onTap: () => _swiperController.move(entry.key),
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          _indiceActual == entry.key
+                              ? Colors.blue[600]
+                              : Colors.grey[300],
                     ),
                   ),
-                ),
+                );
+              }),
 
-              const SizedBox(width: 8),
+              const SizedBox(width: 16),
 
-              // Botón para eliminar imagen actual
-              if (widget.onImagenEliminada != null &&
-                  widget.imagenes.isNotEmpty)
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _mostrarDialogoConfirmacion();
-                  },
-                  icon: const Icon(Icons.delete, size: 18),
-                  label: const Text('Eliminar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[600],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                  ),
+              // Contador de imágenes
+              Text(
+                '${_indiceActual + 1} de ${widget.imagenes.length}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
             ],
           ),
+
+          // Controles adicionales si es editable
+          if (widget.esEditable) ...[
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Botón para agregar imagen
+                if (widget.onAgregarImagen != null)
+                  ElevatedButton.icon(
+                    onPressed: widget.onAgregarImagen,
+                    icon: const Icon(Icons.add_photo_alternate, size: 18),
+                    label: const Text('Agregar Imagen'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[600],
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                    ),
+                  ),
+
+                const SizedBox(width: 8),
+
+                // Botón para eliminar imagen actual
+                if (widget.onImagenEliminada != null &&
+                    widget.imagenes.isNotEmpty)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      _mostrarDialogoConfirmacion();
+                    },
+                    icon: const Icon(Icons.delete, size: 18),
+                    label: const Text('Eliminar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red[600],
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 
   Widget _buildImagenCarousel(String imagen) {
     return Container(
-      width: widget.ancho,
+      width: double.infinity,
       height: widget.altura,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -183,49 +187,15 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            // Imagen principal
-            Positioned.fill(
-              child: Image.network(
-                imagen,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: Colors.grey[200],
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        value:
-                            loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                        color: Colors.blue[600],
-                      ),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[200],
-                    child: const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Error al cargar imagen',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+            // Imagen principal - centrada y cuadrada
+            Center(
+              child: AspectRatio(
+                aspectRatio: 1.0, // Forzar aspecto cuadrado
+                child: SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: _buildImageWidget(imagen),
+                ),
               ),
             ),
 
@@ -305,6 +275,75 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
         ],
       ),
     );
+  }
+
+  Widget _buildImageWidget(String imagen) {
+    // Verificar si es un archivo local (comienza con 'file://')
+    if (imagen.startsWith('file://')) {
+      final filePath = imagen.substring(7); // Remover 'file://'
+      return Image.file(
+        File(filePath),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                  SizedBox(height: 8),
+                  Text(
+                    'Error al cargar imagen',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      // Es una URL de red
+      return Image.network(
+        imagen,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            color: Colors.grey[200],
+            child: Center(
+              child: CircularProgressIndicator(
+                value:
+                    loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                color: Colors.blue[600],
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                  SizedBox(height: 8),
+                  Text(
+                    'Error al cargar imagen',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 
   void _mostrarDialogoConfirmacion() {

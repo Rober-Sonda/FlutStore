@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
 import 'package:tienda_app/models/registrofinanciero.dart';
-import 'package:tienda_app/src/app_routes.dart';
 import 'package:tienda_app/widgets/permission_widget.dart';
 
 class FinancialRecordAddEditView extends ConsumerStatefulWidget {
@@ -178,6 +177,19 @@ class _FinancialRecordAddEditViewState
         ),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Si está en un diálogo, Navigator.pop() funciona.
+            // Si está en una ruta GoRouter, usa context.go para ir a la vista principal.
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/financial-records');
+            }
+          },
+          tooltip: 'Volver',
+        ),
       ),
       body:
           _isLoading

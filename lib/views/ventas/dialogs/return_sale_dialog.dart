@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
 import '../../../models/venta.dart';
 import '../../../services/isar_service.dart';
-import '../../../widgets/permission_widget.dart';
 
 class ReturnSaleDialog extends ConsumerStatefulWidget {
   final Venta venta;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tienda_app/models/app_theme.dart';
 import '../../src/app_routes.dart';
 import '../../widgets/permission_widget.dart';
 
@@ -15,20 +16,35 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text(
-          'Listado de Proveedores',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Proveedores'),
       ),
-      body: const Center(
-        child: Text(
-          'Aquí irá la lista de proveedores.',
-          style: TextStyle(color: Colors.white),
-        ),
+      body: Column(
+        children: [
+          // NUEVO: Descripción de la sección de proveedores
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Aquí puedes registrar y consultar los datos de tus proveedores. Mantén actualizada la información para gestionar tus compras y reposiciones de stock.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                'Aquí irá la lista de proveedores.',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: PermissionFAB(
         onPressed: () {

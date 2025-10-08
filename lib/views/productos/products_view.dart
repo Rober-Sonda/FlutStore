@@ -7,22 +7,25 @@ import 'package:tienda_app/models/categoria.dart';
 import 'package:tienda_app/services/product_service.dart';
 import 'package:tienda_app/src/app_routes.dart';
 import 'package:tienda_app/widgets/permission_widget.dart';
+import 'package:tienda_app/models/app_theme.dart';
 import 'widgets/product_card.dart';
-import 'widgets/dashboard_widget.dart';
 import 'widgets/filters_widget.dart';
 import 'widgets/empty_state_widget.dart';
 
+// Corrige la clase para que sea un ConsumerStatefulWidget y permita recargar datos y filtrar correctamente.
 class ProductsView extends ConsumerStatefulWidget {
   const ProductsView({super.key});
 
   @override
-  _ProductsViewState createState() => _ProductsViewState();
+  ConsumerState<ProductsView> createState() => _ProductsViewState();
 }
 
 class _ProductsViewState extends ConsumerState<ProductsView> {
   List<Producto>? productos;
   List<Categoria>? categorias;
   bool isLoading = true;
+
+  // Filtros y controles
   String searchQuery = '';
   int? selectedCategoryId;
   String sortBy = 'nombre';
@@ -30,94 +33,41 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
   bool showLowStock = false;
   bool showOutOfStock = false;
 
-  // Datos para análisis
-  List<Map<String, dynamic>> _productosMasVendidos = [];
-  List<Map<String, dynamic>> _tendenciasPorMes = [];
-  List<Map<String, dynamic>> _categoriasMasPopulares = [];
-
   @override
   void initState() {
     super.initState();
     _loadData();
-    _generarDatosAnalisis();
-  }
-
-  void _generarDatosAnalisis() {
-    // Simular datos de productos más vendidos
-    _productosMasVendidos = [
-      {'nombre': 'Camisa Azul', 'ventas': 45, 'color': Colors.blue},
-      {'nombre': 'Pantalón Negro', 'ventas': 38, 'color': Colors.black},
-      {'nombre': 'Vestido Rojo', 'ventas': 32, 'color': Colors.red},
-      {'nombre': 'Blazer Gris', 'ventas': 28, 'color': Colors.grey},
-      {'nombre': 'Falda Verde', 'ventas': 25, 'color': Colors.green},
-    ];
-
-    // Simular tendencias por mes
-    _tendenciasPorMes = [
-      {'mes': 'Ene', 'ventas': 120, 'color': Colors.blue},
-      {'mes': 'Feb', 'ventas': 150, 'color': Colors.green},
-      {'mes': 'Mar', 'ventas': 180, 'color': Colors.orange},
-      {'mes': 'Abr', 'ventas': 200, 'color': Colors.purple},
-      {'mes': 'May', 'ventas': 220, 'color': Colors.red},
-      {'mes': 'Jun', 'ventas': 250, 'color': Colors.teal},
-    ];
-
-    // Simular categorías más populares
-    _categoriasMasPopulares = [
-      {'nombre': 'Camisas', 'porcentaje': 35, 'color': Colors.blue},
-      {'nombre': 'Pantalones', 'porcentaje': 28, 'color': Colors.green},
-      {'nombre': 'Vestidos', 'porcentaje': 22, 'color': Colors.purple},
-      {'nombre': 'Accesorios', 'porcentaje': 15, 'color': Colors.orange},
-    ];
   }
 
   Future<void> _loadData() async {
     setState(() => isLoading = true);
-
-    try {
-      final productService = ref.read(productServiceProvider);
-      final isar = await productService.db;
-
-      final productosData = await isar.productos.where().findAll();
-      final categoriasData = await isar.categorias.where().findAll();
-
-      setState(() {
-        productos = productosData;
-        categorias = categoriasData;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() => isLoading = false);
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error al cargar datos: $e')));
-      }
-    }
+    final productService = ref.read(productServiceProvider);
+    final isar = await productService.db;
+    final productosDb = await isar.productos.where().findAll();
+    final categoriasDb = await isar.categorias.where().findAll();
+    setState(() {
+      productos = productosDb;
+      categorias = categoriasDb;
+      isLoading = false;
+    });
   }
 
   List<Producto> get filteredProducts {
     if (productos == null) return [];
-
     return productos!.where((producto) {
-        // Filtro por búsqueda
-        final matchesSearch = (producto.nombre?.toLowerCase().contains(
-          searchQuery.toLowerCase(),
-        ) ?? false);
-
-        // Filtro por categoría
+        final matchesSearch =
+            searchQuery.isEmpty ||
+            (producto.nombre?.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ) ??
+                false);
         final matchesCategory =
             selectedCategoryId == null ||
             producto.categoriaId == selectedCategoryId;
-
-        // Filtro por stock bajo
         final matchesLowStock =
             !showLowStock || (producto.stock != null && producto.stock! <= 10);
-
-        // Filtro por sin stock
         final matchesOutOfStock =
             !showOutOfStock || (producto.stock != null && producto.stock! == 0);
-
         return matchesSearch &&
             matchesCategory &&
             matchesLowStock &&
@@ -155,7 +105,6 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
 
   Map<String, dynamic> get inventoryStats {
     if (productos == null) return {};
-
     final totalProducts = productos!.length;
     final productsWithStock =
         productos!.where((p) => p.stock != null && p.stock! > 0).length;
@@ -167,7 +116,6 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
       0,
       (sum, p) => sum + ((p.precio ?? 0) * (p.stock ?? 0)),
     );
-
     return {
       'total': totalProducts,
       'withStock': productsWithStock,
@@ -237,11 +185,102 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
 
   @override
   Widget build(BuildContext context) {
-    final stats = inventoryStats;
-    final filteredProducts = this.filteredProducts;
-
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Productos'),
+      ),
+      body: Column(
+        children: [
+          // NUEVO: Descripción de la sección de productos
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Aquí puedes ver, agregar, editar y eliminar productos de tu tienda. Mantén actualizado tu inventario y consulta detalles de cada producto.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          // Filtros y controles
+          FiltersWidget(
+            searchQuery: searchQuery,
+            selectedCategoryId: selectedCategoryId,
+            sortBy: sortBy,
+            showLowStock: showLowStock,
+            showOutOfStock: showOutOfStock,
+            categorias: categorias,
+            onSearchChanged:
+                (value) => setState(() => searchQuery = value),
+            onCategoryChanged:
+                (value) => setState(() => selectedCategoryId = value),
+            onSortChanged: (value) => setState(() => sortBy = value),
+            onLowStockChanged:
+                (value) => setState(() => showLowStock = value),
+            onOutOfStockChanged:
+                (value) => setState(() => showOutOfStock = value),
+          ),
+          const SizedBox(height: 16),
+          // Lista de productos ocupa todo el alto disponible
+          Expanded(
+            child: productos == null || productos!.isEmpty
+                ? const EmptyStateWidget()
+                : filteredProducts.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No hay productos que coincidan con los filtros',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                      )
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          // Calcula el ancho ideal de la card (máximo 320, mínimo 200)
+                          const double minCardWidth = 200;
+                          const double maxCardWidth = 320;
+                          final double gridWidth = constraints.maxWidth;
+                          // Calcula cuántas cards entran por fila según el ancho disponible
+                          int crossAxisCount = (gridWidth / maxCardWidth).floor();
+                          if (crossAxisCount < 1) crossAxisCount = 1;
+                          // Si hay mucho espacio, reduce el ancho de la card para que entren más
+                          double cardWidth = (gridWidth / crossAxisCount).clamp(minCardWidth, maxCardWidth);
+
+                          return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: crossAxisCount,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                              childAspectRatio: cardWidth / (cardWidth / 0.7),
+                            ),
+                            itemCount: filteredProducts.length,
+                            itemBuilder: (context, index) {
+                              final producto = filteredProducts[index];
+                              return ProductCard(
+                                producto: producto,
+                                categorias: categorias,
+                                inventoryStats: inventoryStats, // <-- corrige aquí, antes era 'stats'
+                                onEdit: () async {
+                                  final result = await context.push(
+                                    AppRoutes.productEdit.replaceAll(
+                                      ':id',
+                                      producto.id.toString(),
+                                    ),
+                                  );
+                                  if (result == true) _loadData();
+                                },
+                                onDelete: () => _showDeleteDialog(producto),
+                                getCategoryName: getCategoryName,
+                              );
+                            },
+                          );
+                        },
+                      ),
+          ),
+        ],
+      ),
       floatingActionButton: PermissionFAB(
         onPressed: () async {
           final result = await context.push(AppRoutes.productAdd);
@@ -256,85 +295,6 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
         backgroundColor: Colors.deepPurpleAccent,
         foregroundColor: Colors.white,
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    // Dashboard con estadísticas
-                    if (productos != null && productos!.isNotEmpty) ...[
-                      DashboardWidget(inventoryStats: stats),
-                      const SizedBox(height: 24),
-                    ],
-
-                    // Filtros y controles
-                    FiltersWidget(
-                      searchQuery: searchQuery,
-                      selectedCategoryId: selectedCategoryId,
-                      sortBy: sortBy,
-                      showLowStock: showLowStock,
-                      showOutOfStock: showOutOfStock,
-                      categorias: categorias,
-                      onSearchChanged:
-                          (value) => setState(() => searchQuery = value),
-                      onCategoryChanged:
-                          (value) => setState(() => selectedCategoryId = value),
-                      onSortChanged: (value) => setState(() => sortBy = value),
-                      onLowStockChanged:
-                          (value) => setState(() => showLowStock = value),
-                      onOutOfStockChanged:
-                          (value) => setState(() => showOutOfStock = value),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Lista de productos
-                    SizedBox(
-                      height:
-                          400, // Altura fija para evitar conflictos de layout
-                      child:
-                          productos == null || productos!.isEmpty
-                              ? const EmptyStateWidget()
-                              : filteredProducts.isEmpty
-                              ? const Center(
-                                child: Text(
-                                  'No hay productos que coincidan con los filtros',
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                              )
-                              : ListView.builder(
-                                itemCount: filteredProducts.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: ProductCard(
-                                      producto: filteredProducts[index],
-                                      categorias: categorias,
-                                      inventoryStats: inventoryStats,
-                                      onEdit: () async {
-                                        final result = await context.push(
-                                          AppRoutes.productEdit.replaceAll(
-                                            ':id',
-                                            filteredProducts[index].id
-                                                .toString(),
-                                          ),
-                                        );
-                                        if (result == true) _loadData();
-                                      },
-                                      onDelete:
-                                          () => _showDeleteDialog(
-                                            filteredProducts[index],
-                                          ),
-                                      getCategoryName: getCategoryName,
-                                    ),
-                                  );
-                                },
-                              ),
-                    ),
-                  ],
-                ),
-              ),
     );
   }
 }

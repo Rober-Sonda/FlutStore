@@ -127,9 +127,26 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Compras'),
+      ),
       body: Column(
         children: [
+          // NUEVO: Descripción de la sección de compras
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Registra y consulta todas las compras realizadas a tus proveedores. Mantén el control de tus egresos y la reposición de productos en tu inventario.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
           // Header con filtros
           Container(
             padding: const EdgeInsets.all(16),

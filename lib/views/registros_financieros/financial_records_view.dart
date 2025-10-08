@@ -5,6 +5,8 @@ import '../../src/app_routes.dart';
 import '../../widgets/permission_widget.dart';
 import '../../models/registrofinanciero.dart';
 import '../../services/isar_service.dart';
+import '../finanzas/fixed_expenses_view.dart';
+import '../finanzas/cash_register_view.dart';
 
 class FinancialRecordsView extends ConsumerStatefulWidget {
   const FinancialRecordsView({super.key});
@@ -86,79 +88,135 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text(
-          'Registros Financieros',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          // Botón para cambiar entre vistas
-          IconButton(
-            icon: Icon(
-              _vistaSeleccionada == 'registros' ? Icons.analytics : Icons.list,
-              color: Colors.white,
+    return DefaultTabController(
+      length: 3,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Registros Financieros')),
+        body: Column(
+          children: [
+            // Descripción y navegación
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                color: Colors.blueGrey[900],
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'En esta sección puedes consultar y registrar todos los movimientos financieros de tu negocio: ingresos, egresos, balances y más. Utiliza los filtros para analizar el flujo de dinero y accede rápidamente al flujo de caja, caja y los gastos fijos desde aquí.',
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      TabBar(
+                        indicatorColor: Colors.orange,
+                        labelColor: Colors.orange,
+                        unselectedLabelColor: Colors.white70,
+                        tabs: const [
+                          Tab(icon: Icon(Icons.analytics), text: 'General'),
+                          Tab(
+                            icon: Icon(Icons.receipt_long),
+                            text: 'Gastos Fijos',
+                          ),
+                          Tab(
+                            icon: Icon(Icons.account_balance_wallet),
+                            text: 'Caja',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            onPressed: () {
-              setState(() {
-                _vistaSeleccionada =
-                    _vistaSeleccionada == 'registros'
-                        ? 'analisis'
-                        : 'registros';
-              });
-            },
-            tooltip:
-                _vistaSeleccionada == 'registros'
-                    ? 'Ver Análisis'
-                    : 'Ver Registros',
-          ),
-          // Filtro
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.filter_list, color: Colors.white),
-            onSelected: (value) {
-              setState(() => _filtroSeleccionado = value);
-            },
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(value: 'Todos', child: Text('Todos')),
-                  const PopupMenuItem(
-                    value: 'Ingresos',
-                    child: Text('Ingresos'),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  // General
+                  _isLoading
+                      ? const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      )
+                      : _buildAnalisisView(),
+                  // Gastos Fijos
+                  Builder(
+                    builder: (context) {
+                      return Navigator(
+                        onGenerateRoute:
+                            (settings) => MaterialPageRoute(
+                              builder: (context) => const FixedExpensesView(),
+                            ),
+                      );
+                    },
                   ),
-                  const PopupMenuItem(value: 'Egresos', child: Text('Egresos')),
-                  const PopupMenuItem(
-                    value: 'Pendientes',
-                    child: Text('Pendientes'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'Confirmados',
-                    child: Text('Confirmados'),
+                  // Caja
+                  Builder(
+                    builder: (context) {
+                      return Navigator(
+                        onGenerateRoute:
+                            (settings) => MaterialPageRoute(
+                              builder: (context) => const CashRegisterView(),
+                            ),
+                      );
+                    },
                   ),
                 ],
-          ),
-        ],
-      ),
-      body:
-          _isLoading
-              ? const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              )
-              : _vistaSeleccionada == 'registros'
-              ? _buildRegistrosView()
-              : _buildAnalisisView(),
-      floatingActionButton: PermissionFAB(
-        onPressed: () {
-          context.go(AppRoutes.financialRecordAdd);
-        },
-        action: 'create',
-        resource: 'finanzas',
-        icon: Icons.add,
-        tooltip: 'Agregar Registro',
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        // FAB correspondiente a cada sección
+        floatingActionButton: Builder(
+          builder: (context) {
+            final tabIndex = DefaultTabController.of(context)?.index ?? 0;
+            if (tabIndex == 0) {
+              // General
+              return PermissionFAB(
+                onPressed: () {
+                  context.go(AppRoutes.financialRecordAdd);
+                },
+                action: 'create',
+                resource: 'finanzas',
+                icon: Icons.add,
+                tooltip: 'Agregar Registro General',
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+              );
+            }
+            if (tabIndex == 1) {
+              // Gastos Fijos
+              return PermissionFAB(
+                onPressed: () {
+                  context.go('/finanzas/add-gasto-fijo');
+                },
+                action: 'create',
+                resource: 'finanzas',
+                icon: Icons.add,
+                tooltip: 'Agregar Gasto Fijo',
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              );
+            }
+            if (tabIndex == 2) {
+              // Caja
+              return PermissionFAB(
+                onPressed: () {
+                  context.go('/finanzas/add-caja');
+                },
+                action: 'create',
+                resource: 'finanzas',
+                icon: Icons.add,
+                tooltip: 'Agregar Movimiento de Caja',
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              );
+            }
+            // Solución: Retorna un SizedBox.shrink() en vez de null
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }

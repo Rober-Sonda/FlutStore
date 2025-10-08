@@ -64,7 +64,7 @@ class ItemPedidoProveedor {
   // Método para convertir a compra
   void convertirACompra(double precioFinal, int compraItemId) {
     this.precioFinal = precioFinal;
-    this.convertidoEnCompra = true;
+    convertidoEnCompra = true;
     this.compraItemId = compraItemId;
   }
 } 

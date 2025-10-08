@@ -50,47 +50,45 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
 
   Future<void> _calculateStats(Isar isar) async {
     final now = DateTime.now();
-    DateTime startDate;
-    DateTime endDate;
+    DateTime start;
+    DateTime end;
 
     switch (selectedPeriod) {
       case 'Diario':
-        startDate = DateTime(now.year, now.month, now.day);
-        endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+        start = DateTime(now.year, now.month, now.day);
+        end = DateTime(now.year, now.month, now.day, 23, 59, 59);
         break;
       case 'Semanal':
         final weekStart = now.subtract(Duration(days: now.weekday - 1));
-        startDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
-        endDate = startDate.add(const Duration(days: 6));
+        start = DateTime(weekStart.year, weekStart.month, weekStart.day);
+        end = start.add(const Duration(days: 6));
         break;
       case 'Mensual':
-        startDate = DateTime(now.year, now.month, 1);
-        endDate = DateTime(now.year, now.month + 1, 0);
+        start = DateTime(now.year, now.month, 1);
+        end = DateTime(now.year, now.month + 1, 0);
         break;
       case 'Anual':
-        startDate = DateTime(now.year, 1, 1);
-        endDate = DateTime(now.year, 12, 31);
+        start = DateTime(now.year, 1, 1);
+        end = DateTime(now.year, 12, 31);
         break;
       case 'Personalizado':
-        if (this.startDate != null && this.endDate != null) {
-          startDate = this.startDate!;
-          endDate = this.endDate!;
+        if (startDate != null && endDate != null) {
+          start = startDate!;
+          end = endDate!;
         } else {
-          startDate = DateTime(now.year, now.month, 1);
-          endDate = DateTime(now.year, now.month + 1, 0);
+          start = DateTime(now.year, now.month, 1);
+          end = DateTime(now.year, now.month + 1, 0);
         }
         break;
       default:
-        startDate = DateTime(now.year, now.month, 1);
-        endDate = DateTime(now.year, now.month + 1, 0);
+        start = DateTime(now.year, now.month, 1);
+        end = DateTime(now.year, now.month + 1, 0);
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(startDate, endDate).findAll();
-
+        await isar.pedidos.filter().fechaBetween(start, end).findAll();
     final compras =
-        await isar.compras.filter().fechaBetween(startDate, endDate).findAll();
-
+        await isar.compras.filter().fechaBetween(start, end).findAll();
     final productos = await isar.productos.where().findAll();
     final clientes = await isar.clientes.where().findAll();
 
@@ -116,53 +114,51 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
 
   Future<void> _generateChartData(Isar isar) async {
     final now = DateTime.now();
-    DateTime startDate;
-    DateTime endDate;
+    DateTime start;
+    DateTime end;
 
     switch (selectedPeriod) {
       case 'Diario':
-        startDate = DateTime(now.year, now.month, now.day);
-        endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+        start = DateTime(now.year, now.month, now.day);
+        end = DateTime(now.year, now.month, now.day, 23, 59, 59);
         break;
       case 'Semanal':
         final weekStart = now.subtract(Duration(days: now.weekday - 1));
-        startDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
-        endDate = startDate.add(const Duration(days: 6));
+        start = DateTime(weekStart.year, weekStart.month, weekStart.day);
+        end = start.add(const Duration(days: 6));
         break;
       case 'Mensual':
-        startDate = DateTime(now.year, now.month, 1);
-        endDate = DateTime(now.year, now.month + 1, 0);
+        start = DateTime(now.year, now.month, 1);
+        end = DateTime(now.year, now.month + 1, 0);
         break;
       case 'Anual':
-        startDate = DateTime(now.year, 1, 1);
-        endDate = DateTime(now.year, 12, 31);
+        start = DateTime(now.year, 1, 1);
+        end = DateTime(now.year, 12, 31);
         break;
       case 'Personalizado':
-        if (this.startDate != null && this.endDate != null) {
-          startDate = this.startDate!;
-          endDate = this.endDate!;
+        if (startDate != null && endDate != null) {
+          start = startDate!;
+          end = endDate!;
         } else {
-          startDate = DateTime(now.year, now.month, 1);
-          endDate = DateTime(now.year, now.month + 1, 0);
+          start = DateTime(now.year, now.month, 1);
+          end = DateTime(now.year, now.month + 1, 0);
         }
         break;
       default:
-        startDate = DateTime(now.year, now.month, 1);
-        endDate = DateTime(now.year, now.month + 1, 0);
+        start = DateTime(now.year, now.month, 1);
+        end = DateTime(now.year, now.month + 1, 0);
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(startDate, endDate).findAll();
-
+        await isar.pedidos.filter().fechaBetween(start, end).findAll();
     final productos = await isar.productos.where().findAll();
     final categorias = await isar.categorias.where().findAll();
 
-    // Datos de ventas por día
+    // Ventas por día
     Map<int, double> ventasPorDia = {};
-    for (int i = 1; i <= endDate.day; i++) {
+    for (int i = 1; i <= end.day; i++) {
       ventasPorDia[i] = 0;
     }
-
     for (final pedido in pedidos) {
       if (pedido.fecha != null) {
         final dia = pedido.fecha!.day;
@@ -178,7 +174,6 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
             (ventasPorProducto[productoId] ?? 0) + 1;
       }
     }
-
     final sortedProducts =
         ventasPorProducto.entries.toList()
           ..sort((a, b) => b.value.compareTo(a.value));
@@ -222,18 +217,202 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
           }).toList();
 
       categoriesData =
-          ventasPorCategoria.entries
-              .map(
-                (e) => {
-                  'categoria': e.key,
-                  'ventas': e.value,
-                  'color':
-                      Colors.primaries[e.key.hashCode %
-                          Colors.primaries.length],
-                },
-              )
-              .toList();
+          ventasPorCategoria.entries.map((e) {
+            return {
+              'categoria': e.key,
+              'ventas': e.value,
+              'color':
+                  Colors.primaries[e.key.hashCode % Colors.primaries.length],
+            };
+          }).toList();
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final accentColor = theme.colorScheme.secondary;
+    final backgroundColor = theme.scaffoldBackgroundColor;
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        title: const Text('Reportes'),
+        backgroundColor: theme.colorScheme.primary,
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Descripción de la sección de reportes
+              Card(
+                color: Colors.blueGrey[900],
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    'Consulta y analiza los reportes de tu negocio. Aquí puedes ver el resumen de ventas, compras, utilidad, inventario y otros indicadores clave. Usa los filtros y exporta los datos para tomar mejores decisiones.',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Filtros
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Período de Análisis',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              value: selectedPeriod,
+                              decoration: const InputDecoration(
+                                labelText: 'Período',
+                                border: OutlineInputBorder(),
+                              ),
+                              items:
+                                  periods.map((period) {
+                                    return DropdownMenuItem(
+                                      value: period,
+                                      child: Text(period),
+                                    );
+                                  }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedPeriod = value!;
+                                });
+                                _loadData();
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          if (selectedPeriod == 'Personalizado') ...[
+                            Expanded(
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  final date = await showDatePicker(
+                                    context: context,
+                                    initialDate: startDate ?? DateTime.now(),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime.now(),
+                                  );
+                                  if (date != null) {
+                                    setState(() {
+                                      startDate = date;
+                                    });
+                                    _loadData();
+                                  }
+                                },
+                                icon: const Icon(Icons.calendar_today),
+                                label: Text(
+                                  startDate != null
+                                      ? DateFormat(
+                                        'dd/MM/yyyy',
+                                      ).format(startDate!)
+                                      : 'Fecha inicio',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  final date = await showDatePicker(
+                                    context: context,
+                                    initialDate: endDate ?? DateTime.now(),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime.now(),
+                                  );
+                                  if (date != null) {
+                                    setState(() {
+                                      endDate = date;
+                                    });
+                                    _loadData();
+                                  }
+                                },
+                                icon: const Icon(Icons.calendar_today),
+                                label: Text(
+                                  endDate != null
+                                      ? DateFormat(
+                                        'dd/MM/yyyy',
+                                      ).format(endDate!)
+                                      : 'Fecha fin',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Estadísticas principales
+              GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.5,
+                children: [
+                  _buildStatCard(
+                    'Total Ventas',
+                    '\$${stats['totalVentas']?.toStringAsFixed(2) ?? '0.00'}',
+                    Icons.attach_money,
+                    Colors.green,
+                  ),
+                  _buildStatCard(
+                    'Ganancia',
+                    '\$${stats['ganancia']?.toStringAsFixed(2) ?? '0.00'}',
+                    Icons.trending_up,
+                    Colors.blue,
+                  ),
+                  _buildStatCard(
+                    'Pedidos',
+                    '${stats['numPedidos'] ?? 0}',
+                    Icons.shopping_bag,
+                    Colors.orange,
+                  ),
+                  _buildStatCard(
+                    'Promedio Venta',
+                    '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
+                    Icons.analytics,
+                    Colors.purple,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Gráficos
+              _buildSalesChart(),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _buildTopProductsChart()),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildCategoriesChart()),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildStatCard(
@@ -298,7 +477,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                   maxY:
                       salesData
                           .map((d) => d['ventas'] as double)
-                          .reduce((a, b) => a > b ? a : b) *
+                          .fold<double>(0, (a, b) => a > b ? a : b) *
                       1.2,
                   barTouchData: BarTouchData(enabled: false),
                   titlesData: FlTitlesData(
@@ -518,173 +697,6 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                 ),
               );
             }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reportes'),
-        backgroundColor: Colors.purple[700],
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Filtros
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Período de Análisis',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            value: selectedPeriod,
-                            decoration: const InputDecoration(
-                              labelText: 'Período',
-                              border: OutlineInputBorder(),
-                            ),
-                            items:
-                                periods.map((period) {
-                                  return DropdownMenuItem(
-                                    value: period,
-                                    child: Text(period),
-                                  );
-                                }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedPeriod = value!;
-                              });
-                              _loadData();
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        if (selectedPeriod == 'Personalizado') ...[
-                          Expanded(
-                            child: TextButton.icon(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: startDate ?? DateTime.now(),
-                                  firstDate: DateTime(2020),
-                                  lastDate: DateTime.now(),
-                                );
-                                if (date != null) {
-                                  setState(() {
-                                    startDate = date;
-                                  });
-                                  _loadData();
-                                }
-                              },
-                              icon: const Icon(Icons.calendar_today),
-                              label: Text(
-                                startDate != null
-                                    ? DateFormat(
-                                      'dd/MM/yyyy',
-                                    ).format(startDate!)
-                                    : 'Fecha inicio',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TextButton.icon(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: endDate ?? DateTime.now(),
-                                  firstDate: DateTime(2020),
-                                  lastDate: DateTime.now(),
-                                );
-                                if (date != null) {
-                                  setState(() {
-                                    endDate = date;
-                                  });
-                                  _loadData();
-                                }
-                              },
-                              icon: const Icon(Icons.calendar_today),
-                              label: Text(
-                                endDate != null
-                                    ? DateFormat('dd/MM/yyyy').format(endDate!)
-                                    : 'Fecha fin',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Estadísticas principales
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.5,
-              children: [
-                _buildStatCard(
-                  'Total Ventas',
-                  '\$${stats['totalVentas']?.toStringAsFixed(2) ?? '0.00'}',
-                  Icons.attach_money,
-                  Colors.green,
-                ),
-                _buildStatCard(
-                  'Ganancia',
-                  '\$${stats['ganancia']?.toStringAsFixed(2) ?? '0.00'}',
-                  Icons.trending_up,
-                  Colors.blue,
-                ),
-                _buildStatCard(
-                  'Pedidos',
-                  '${stats['numPedidos'] ?? 0}',
-                  Icons.shopping_bag,
-                  Colors.orange,
-                ),
-                _buildStatCard(
-                  'Promedio Venta',
-                  '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
-                  Icons.analytics,
-                  Colors.purple,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Gráficos
-            _buildSalesChart(),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(child: _buildTopProductsChart()),
-                const SizedBox(width: 16),
-                Expanded(child: _buildCategoriesChart()),
-              ],
-            ),
           ],
         ),
       ),

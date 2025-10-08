@@ -152,17 +152,18 @@ Cliente _clienteDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Cliente();
-  object.apellido = reader.readStringOrNull(offsets[0]);
-  object.cuil = reader.readStringOrNull(offsets[1]);
-  object.direccion = reader.readStringOrNull(offsets[2]);
-  object.dni = reader.readStringOrNull(offsets[3]);
-  object.email = reader.readStringOrNull(offsets[4]);
-  object.fechaRegistro = reader.readDateTimeOrNull(offsets[5]);
-  object.id = id;
-  object.instagram = reader.readStringOrNull(offsets[6]);
-  object.nombre = reader.readString(offsets[7]);
-  object.whatsapp = reader.readStringOrNull(offsets[8]);
+  final object = Cliente(
+    apellido: reader.readStringOrNull(offsets[0]),
+    cuil: reader.readStringOrNull(offsets[1]),
+    direccion: reader.readStringOrNull(offsets[2]),
+    dni: reader.readStringOrNull(offsets[3]),
+    email: reader.readStringOrNull(offsets[4]),
+    fechaRegistro: reader.readDateTimeOrNull(offsets[5]),
+    id: id,
+    instagram: reader.readStringOrNull(offsets[6]),
+    nombre: reader.readString(offsets[7]),
+    whatsapp: reader.readStringOrNull(offsets[8]),
+  );
   return object;
 }
 

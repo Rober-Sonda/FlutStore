@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tienda_app/views/sorteos/sweepstakes_edit_loader.dart';
+import 'package:tienda_app/views/sorteos/sweepstakes_edit_view.dart';
 import '../views/productos/dialogs/product_add_edit_view.dart';
 import '../views/main_view.dart';
 import '../views/dashboard/dashboard_view.dart';
@@ -37,7 +40,6 @@ import '../views/pedidos/dialogs/pedido_proveedor_add_edit_view.dart';
 import '../views/reportes/utilidad_report_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/auth_service.dart';
-import '../services/isar_service.dart';
 import '../views/sorteos/dialogs/sweepstake_add_edit_view.dart';
 import '../views/cuenta_corriente/dialogs/cuenta_corriente_add_edit_view.dart';
 import '../views/configuracion/optimization_view.dart';
@@ -45,7 +47,6 @@ import '../views/finanzas/dialogs/fixed_expense_add_edit_view.dart';
 import '../views/ventas/dialogs/sale_add_edit_view.dart';
 import '../views/compras/dialogs/purchase_add_edit_view.dart';
 import '../views/compras/dialogs/purchase_add_view.dart';
-import '../views/finanzas/dialogs/cash_flow_add_edit_view.dart';
 import '../views/registros_financieros/dialogs/financial_record_add_edit_view.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -150,21 +151,32 @@ final routerProvider = Provider<GoRouter>((ref) {
               return OfferAddEditView(ofertaId: id);
             },
           ),
+          // Finanzas (unificadas)
           GoRoute(
-            path: '/cash-flow',
+            path: '/finanzas',
             builder: (context, state) => const CashFlowView(),
           ),
           GoRoute(
-            path: '/cash-flow/add',
+            path: '/finanzas/caja',
+            builder: (context, state) => const CashRegisterView(),
+          ),
+          GoRoute(
+            path: '/finanzas/gastos-fijos',
+            builder: (context, state) => const FixedExpensesView(),
+          ),
+          GoRoute(
+            path: '/finanzas/add-gasto-fijo',
+            builder: (context, state) => const FixedExpenseAddEditView(),
+          ),
+          GoRoute(
+            path: '/finanzas/add-flujo',
             builder: (context, state) => const CashFlowAddEditView(),
           ),
           GoRoute(
-            path: '/cash-flow/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return CashFlowAddEditView(flujoId: id);
-            },
+            path: '/finanzas/add-caja',
+            builder: (context, state) => const CashRegisterAddEditView(),
           ),
+          // Eliminadas las rutas individuales de /cash-flow, /cash-register, /fixed-expenses
           GoRoute(
             path: '/account-balance',
             builder: (context, state) => const CuentaCorrienteView(),
@@ -284,48 +296,23 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
-            path: '/cash-register',
-            builder: (context, state) => const CashRegisterView(),
-          ),
-          GoRoute(
-            path: '/cash-register/add',
-            builder: (context, state) => const CashRegisterAddEditView(),
-          ),
-          GoRoute(
-            path: '/cash-register/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return CashRegisterAddEditView(cashRegisterId: id);
-            },
-          ),
-          GoRoute(
             path: '/sweepstakes',
             builder: (context, state) => const SweepstakesView(),
           ),
           GoRoute(
             path: '/sweepstakes/add',
-            builder: (context, state) => const SweepstakeAddEditView(),
+            builder: (context, state) => const SweepstakesEditView(),
           ),
           GoRoute(
             path: '/sweepstakes/edit/:id',
             builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return SweepstakeAddEditView(sorteoId: id);
-            },
-          ),
-          GoRoute(
-            path: '/fixed-expenses',
-            builder: (context, state) => const FixedExpensesView(),
-          ),
-          GoRoute(
-            path: '/fixed-expenses/add',
-            builder: (context, state) => const FixedExpenseAddEditView(),
-          ),
-          GoRoute(
-            path: '/fixed-expenses/edit/:id',
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return FixedExpenseAddEditView(gastoId: id);
+              final id = int.tryParse(state.pathParameters['id'] ?? '');
+              if (id == null) {
+                return const Scaffold(
+                  body: Center(child: Text('ID de sorteo inválido')),
+                );
+              }
+              return SweepstakesEditLoader(sorteoId: id);
             },
           ),
           // Configuración del Negocio

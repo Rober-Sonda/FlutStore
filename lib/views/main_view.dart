@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_app/components/shared/app_navigation_rail.dart';
 import 'package:tienda_app/widgets/modern_title_bar.dart';
 
@@ -19,7 +20,11 @@ class MainView extends StatelessWidget {
             const ModernTitleBar(),
             Expanded(
               child: Row(
-                children: [const AppNavigationRail(), Expanded(child: child)],
+                children: [
+                  // Usa el AppNavigationRail que ahora muestra el punto rojo
+                  const AppNavigationRail(),
+                  Expanded(child: child),
+                ],
               ),
             ),
           ],

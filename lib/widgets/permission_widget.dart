@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/usuario.dart';
 import '../services/permission_service.dart';
 import '../services/auth_service.dart';
 

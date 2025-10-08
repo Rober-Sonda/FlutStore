@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../src/app_routes.dart';
 import '../../widgets/permission_widget.dart';
+import '../../providers/clientes_provider.dart';
 
 class ClientsView extends ConsumerStatefulWidget {
   const ClientsView({super.key});
@@ -14,21 +15,65 @@ class ClientsView extends ConsumerStatefulWidget {
 class _ClientsViewState extends ConsumerState<ClientsView> {
   @override
   Widget build(BuildContext context) {
+    final clientesAsync = ref.watch(clientesProvider);
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text(
-          'Listado de Clientes',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: const Center(
-        child: Text(
-          'Aquí irá la lista de clientes.',
-          style: TextStyle(color: Colors.white),
-        ),
+      appBar: AppBar(title: const Text('Clientes')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'En esta sección puedes registrar y consultar los datos de tus clientes. Mantén actualizada la información para mejorar la atención y el seguimiento de ventas.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: clientesAsync.when(
+              data: (clientes) {
+                if (clientes.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No hay clientes registrados.',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: clientes.length,
+                  itemBuilder: (context, index) {
+                    final cliente = clientes[index];
+                    return ListTile(
+                      title: Text(
+                        cliente.nombre,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        cliente.email ?? '',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error:
+                  (err, stack) => Center(
+                    child: Text(
+                      'Error: $err',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: PermissionFAB(
         onPressed: () {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import '../../src/app_routes.dart';
+import '../../models/pedido.dart';
+import '../../models/cliente.dart';
 
 class OrdersView extends ConsumerStatefulWidget {
   const OrdersView({super.key});
@@ -11,15 +14,63 @@ class OrdersView extends ConsumerStatefulWidget {
 }
 
 class _OrdersViewState extends ConsumerState<OrdersView> {
-  final bool _isLoading = false;
   String _filtroSeleccionado = 'Todos';
+  List<Pedido> _pedidos = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPedidos();
+  }
+
+  Future<void> _loadPedidos() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final isar = Isar.getInstance();
+    if (isar == null) {
+      setState(() {
+        _pedidos = [];
+        _isLoading = false;
+      });
+      return;
+    }
+    List<Pedido> pedidos = await isar.pedidos.where().sortByFechaDesc().findAll();
+    setState(() {
+      _pedidos = pedidos;
+      _isLoading = false;
+    });
+  }
+
+  List<Pedido> _getPedidosFiltrados() {
+    if (_filtroSeleccionado == 'Todos') return _pedidos;
+    return _pedidos.where((p) => (p.estado ?? 'Pendiente') == _filtroSeleccionado).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final pedidosFiltrados = _getPedidosFiltrados();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
         children: [
+          // NUEVO: Descripción de la sección de pedidos
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'En esta sección puedes consultar y gestionar los pedidos realizados por tus clientes. Crea nuevos pedidos, revisa su estado y mantén el control de las ventas.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
           // Header con filtros
           Container(
             padding: const EdgeInsets.all(16),
@@ -42,8 +93,9 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        context.push(AppRoutes.orderAdd);
+                      onPressed: () async {
+                        final result = await context.push(AppRoutes.orderAdd);
+                        if (result == true) _loadPedidos();
                       },
                       icon: const Icon(Icons.add),
                       tooltip: 'Nuevo Pedido',
@@ -54,33 +106,32 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                           _filtroSeleccionado = value;
                         });
                       },
-                      itemBuilder:
-                          (context) => [
-                            const PopupMenuItem(
-                              value: 'Todos',
-                              child: Text('Todos los pedidos'),
-                            ),
-                            const PopupMenuItem(
-                              value: 'Pendientes',
-                              child: Text('Pendientes'),
-                            ),
-                            const PopupMenuItem(
-                              value: 'Aprobados',
-                              child: Text('Aprobados'),
-                            ),
-                            const PopupMenuItem(
-                              value: 'En Proceso',
-                              child: Text('En Proceso'),
-                            ),
-                            const PopupMenuItem(
-                              value: 'Completados',
-                              child: Text('Completados'),
-                            ),
-                            const PopupMenuItem(
-                              value: 'Cancelados',
-                              child: Text('Cancelados'),
-                            ),
-                          ],
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'Todos',
+                          child: Text('Todos los pedidos'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Pendiente',
+                          child: Text('Pendientes'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Aprobado',
+                          child: Text('Aprobados'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'En Proceso',
+                          child: Text('En Proceso'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Completado',
+                          child: Text('Completados'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Cancelado',
+                          child: Text('Cancelados'),
+                        ),
+                      ],
                       child: Chip(
                         label: Text(_filtroSeleccionado),
                         avatar: const Icon(Icons.filter_list),
@@ -89,14 +140,13 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                   ],
                 ),
                 const SizedBox(height: 16),
-
                 // Estadísticas rápidas
                 Row(
                   children: [
                     Expanded(
                       child: _buildStatCard(
                         'Total Pedidos',
-                        '0',
+                        '${_pedidos.length}',
                         Icons.receipt_long,
                         Colors.orange,
                       ),
@@ -105,7 +155,7 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                     Expanded(
                       child: _buildStatCard(
                         'Pendientes',
-                        '0',
+                        '${_pedidos.where((p) => (p.estado ?? 'Pendiente') == 'Pendiente').length}',
                         Icons.pending,
                         Colors.red,
                       ),
@@ -114,7 +164,7 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                     Expanded(
                       child: _buildStatCard(
                         'Completados',
-                        '0',
+                        '${_pedidos.where((p) => (p.estado ?? '') == 'Completado').length}',
                         Icons.check_circle,
                         Colors.green,
                       ),
@@ -124,11 +174,10 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
               ],
             ),
           ),
-
           // Contenido principal
           Expanded(
             child: DefaultTabController(
-              length: 3,
+              length: 2,
               child: Column(
                 children: [
                   TabBar(
@@ -137,7 +186,6 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                     indicatorColor: Colors.orange[700],
                     tabs: const [
                       Tab(text: 'Pedidos', icon: Icon(Icons.receipt_long)),
-                      Tab(text: 'Carrito', icon: Icon(Icons.shopping_cart)),
                       Tab(text: 'Análisis', icon: Icon(Icons.analytics)),
                     ],
                   ),
@@ -145,112 +193,71 @@ class _OrdersViewState extends ConsumerState<OrdersView> {
                     child: TabBarView(
                       children: [
                         // Tab de Pedidos
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.receipt_long_outlined,
-                                size: 64,
-                                color: Colors.grey[600],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'No hay pedidos registrados',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey[300],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Crea tu primer pedido desde el carrito',
-                                style: TextStyle(color: Colors.grey[400]),
-                              ),
-                              const SizedBox(height: 24),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      context.push(AppRoutes.orderAdd);
-                                    },
-                                    icon: const Icon(Icons.add_shopping_cart),
-                                    label: const Text('Nuevo Pedido'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.orange[700],
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24,
-                                        vertical: 12,
-                                      ),
+                        _isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : pedidosFiltrados.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.receipt_long_outlined,
+                                          size: 64,
+                                          color: Colors.grey[600],
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          'No hay pedidos registrados',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[300],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Crea tu primer pedido',
+                                          style: TextStyle(color: Colors.grey[400]),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        ElevatedButton.icon(
+                                          onPressed: () async {
+                                            final result = await context.push(AppRoutes.orderAdd);
+                                            if (result == true) _loadPedidos();
+                                          },
+                                          icon: const Icon(Icons.add_shopping_cart),
+                                          label: const Text('Nuevo Pedido'),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.orange[700],
+                                            foregroundColor: Colors.white,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 24,
+                                              vertical: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      context.push(AppRoutes.carritoCompra);
+                                  )
+                                : ListView.separated(
+                                    padding: const EdgeInsets.all(16),
+                                    itemCount: pedidosFiltrados.length,
+                                    separatorBuilder: (_, __) => const Divider(height: 1),
+                                    itemBuilder: (context, index) {
+                                      final pedido = pedidosFiltrados[index];
+                                      return ListTile(
+                                        leading: const Icon(Icons.receipt_long, color: Colors.orange),
+                                        title: Text('Pedido #${pedido.id}'),
+                                        subtitle: Text(
+                                          'Fecha: ${pedido.fecha?.toString().substring(0, 16) ?? '-'}\n'
+                                          'Total: \$${pedido.total?.toStringAsFixed(2) ?? '0.00'}',
+                                        ),
+                                        trailing: Text(pedido.estado ?? 'Pendiente'),
+                                        onTap: () {
+                                          // Aquí puedes mostrar detalles del pedido
+                                        },
+                                      );
                                     },
-                                    icon: const Icon(Icons.shopping_cart),
-                                    label: const Text('Ver Carrito'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue[700],
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24,
-                                        vertical: 12,
-                                      ),
-                                    ),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Tab de Carrito
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.shopping_cart_outlined,
-                                size: 64,
-                                color: Colors.grey[600],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Carrito vacío',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey[300],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Agrega productos al carrito para crear un pedido',
-                                style: TextStyle(color: Colors.grey[400]),
-                              ),
-                              const SizedBox(height: 24),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  context.push(AppRoutes.products);
-                                },
-                                icon: const Icon(Icons.inventory),
-                                label: const Text('Ver Productos'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green[700],
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
                         // Tab de Análisis
                         Center(
                           child: Column(

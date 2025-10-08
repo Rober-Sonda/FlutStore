@@ -500,27 +500,12 @@ class _PedidosProveedorViewState extends ConsumerState<PedidosProveedorView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      final theme = _currentTheme ?? AppTheme.darkTheme;
-      return Scaffold(
-        backgroundColor: theme.backgroundColor,
-        body: Center(
-          child: CircularProgressIndicator(color: theme.primaryColor),
-        ),
-      );
-    }
-
     final theme = _currentTheme ?? AppTheme.darkTheme;
     final fontConfig = _currentFontConfig ?? FontConfig.defaultConfig;
 
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
       appBar: AppBar(
-        backgroundColor: theme.backgroundColor,
-        title: Text(
-          'Pedidos a Proveedores',
-          style: TextStyle(color: theme.textColor),
-        ),
+        title: const Text('Pedidos a Proveedores'),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: theme.textColor),
@@ -529,45 +514,66 @@ class _PedidosProveedorViewState extends ConsumerState<PedidosProveedorView> {
           ),
         ],
       ),
-      body:
-          _pedidos.isEmpty
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 64,
-                      color: theme.textSecondaryColor,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No hay pedidos a proveedores',
-                      style: TextStyle(
-                        color: theme.textSecondaryColor,
-                        fontSize: 18,
-                        fontFamily: fontConfig.titleFont,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Crea tu primer pedido para comenzar',
-                      style: TextStyle(
-                        color: theme.textSecondaryColor,
-                        fontSize: 14,
-                        fontFamily: fontConfig.bodyFont,
-                      ),
-                    ),
-                  ],
+      body: Column(
+        children: [
+          // Descripción de la sección de pedidos a proveedores
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'En esta sección puedes gestionar los pedidos realizados a proveedores. Aquí puedes registrar nuevos pedidos, consultar el estado de los pedidos existentes y llevar el control de las compras y abastecimiento de tu tienda.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
-              )
-              : ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: _pedidos.length,
-                itemBuilder: (context, index) {
-                  return _buildPedidoCard(_pedidos[index]);
-                },
               ),
+            ),
+          ),
+          Expanded(
+            child:
+                _pedidos.isEmpty
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inventory_2_outlined,
+                            size: 64,
+                            color: theme.textSecondaryColor,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No hay pedidos a proveedores',
+                            style: TextStyle(
+                              color: theme.textSecondaryColor,
+                              fontSize: 18,
+                              fontFamily: fontConfig.titleFont,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Crea tu primer pedido para comenzar',
+                            style: TextStyle(
+                              color: theme.textSecondaryColor,
+                              fontSize: 14,
+                              fontFamily: fontConfig.bodyFont,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      itemCount: _pedidos.length,
+                      itemBuilder: (context, index) {
+                        return _buildPedidoCard(_pedidos[index]);
+                      },
+                    ),
+          ),
+        ],
+      ),
       floatingActionButton: PermissionFAB(
         onPressed: () {
           context.push(AppRoutes.pedidoProveedorAdd);

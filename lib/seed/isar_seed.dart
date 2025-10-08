@@ -9,6 +9,7 @@ import '../models/rol.dart';
 import '../models/compra.dart';
 import '../models/pedido.dart';
 import '../models/valor_propiedad_producto.dart';
+import '../models/venta.dart';
 
 Future<void> seedIsar(Isar isar) async {
   // Solo ejecutar si la base de datos está vacía
@@ -347,43 +348,91 @@ Future<void> seedIsar(Isar isar) async {
       observaciones: 'Zapatillas de alta calidad',
     );
 
-    await isar.proveedors.putAll([proveedor1, proveedor2, proveedor3]);
+    final proveedor4 = Proveedor(
+      nombre: 'Accesorios Plus',
+      razonSocial: 'Accesorios Plus S.R.L.',
+      email: 'info@accesoriosplus.com',
+      telefono: '011-5678-1234',
+      direccion: 'Av. Rivadavia 321, CABA',
+      cuit: '30-55667788-2',
+      contacto: 'Lucía Fernández',
+      observaciones: 'Proveedor de accesorios',
+    );
+    await isar.proveedors.putAll([
+      proveedor1,
+      proveedor2,
+      proveedor3,
+      proveedor4,
+    ]);
 
     // 5. Crear clientes
-    final cliente1 =
-        Cliente()
-          ..nombre = 'María'
-          ..apellido = 'García'
-          ..email = 'maria.garcia@email.com'
-          ..whatsapp = '011-1234-5678'
-          ..direccion = 'Av. Santa Fe 123, CABA'
-          ..dni = '12345678'
-          ..cuil = '20-12345678-9'
-          ..fechaRegistro = DateTime.now();
+    final cliente1 = Cliente(
+      id: 0,
+      nombre: 'María',
+      apellido: 'García',
+      email: 'maria.garcia@email.com',
+      whatsapp: '011-1234-5678',
+      direccion: 'Av. Santa Fe 123, CABA',
+      dni: '12345678',
+      cuil: '20-12345678-9',
+      fechaRegistro: DateTime.now(),
+    );
 
-    final cliente2 =
-        Cliente()
-          ..nombre = 'Carlos'
-          ..apellido = 'López'
-          ..email = 'carlos.lopez@email.com'
-          ..whatsapp = '011-2345-6789'
-          ..direccion = 'Corrientes 456, CABA'
-          ..dni = '23456789'
-          ..cuil = '20-23456789-0'
-          ..fechaRegistro = DateTime.now();
+    final cliente2 = Cliente(
+      id: 0,
+      nombre: 'Carlos',
+      apellido: 'López',
+      email: 'carlos.lopez@email.com',
+      whatsapp: '011-2345-6789',
+      direccion: 'Corrientes 456, CABA',
+      dni: '23456789',
+      cuil: '20-23456789-0',
+      fechaRegistro: DateTime.now(),
+    );
 
-    final cliente3 =
-        Cliente()
-          ..nombre = 'Ana'
-          ..apellido = 'Martínez'
-          ..email = 'ana.martinez@email.com'
-          ..whatsapp = '011-3456-7890'
-          ..direccion = 'Belgrano 789, CABA'
-          ..dni = '34567890'
-          ..cuil = '20-34567890-1'
-          ..fechaRegistro = DateTime.now();
+    final cliente3 = Cliente(
+      id: 0,
+      nombre: 'Ana',
+      apellido: 'Martínez',
+      email: 'ana.martinez@email.com',
+      whatsapp: '011-3456-7890',
+      direccion: 'Belgrano 789, CABA',
+      dni: '34567890',
+      cuil: '20-34567890-1',
+      fechaRegistro: DateTime.now(),
+    );
 
-    await isar.clientes.putAll([cliente1, cliente2, cliente3]);
+    final cliente4 = Cliente(
+      id: 0,
+      nombre: 'Roberto',
+      apellido: 'Fernández',
+      email: 'roberto.fernandez@email.com',
+      whatsapp: '011-4567-8901',
+      direccion: 'Mitre 321, CABA',
+      dni: '45678901',
+      cuil: '20-45678901-2',
+      fechaRegistro: DateTime.now().subtract(const Duration(days: 10)),
+    );
+
+    final cliente5 = Cliente(
+      id: 0,
+      nombre: 'Laura',
+      apellido: 'Sánchez',
+      email: 'laura.sanchez@email.com',
+      whatsapp: '011-5678-1234',
+      direccion: 'San Martín 654, CABA',
+      dni: '56789012',
+      cuil: '20-56789012-3',
+      fechaRegistro: DateTime.now().subtract(const Duration(days: 20)),
+    );
+
+    await isar.clientes.putAll([
+      cliente1,
+      cliente2,
+      cliente3,
+      cliente4,
+      cliente5,
+    ]);
 
     // 6. Crear productos
     final producto1 =
@@ -482,12 +531,48 @@ Future<void> seedIsar(Isar isar) async {
               ..valor = 'Sí',
           ];
 
+    final producto6 =
+        Producto()
+          ..nombre = 'Accesorio Pulsera Dorada'
+          ..precio = 1200.0
+          ..stock = 40
+          ..categoriaId = accesorios.id
+          ..valoresPropiedades = [
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Color'
+              ..valor = 'Dorado',
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Material'
+              ..valor = 'Metal',
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Tamaño'
+              ..valor = 'Mediano',
+          ];
+    final producto7 =
+        Producto()
+          ..nombre = 'Remera Urbana Vintage'
+          ..precio = 2800.0
+          ..stock = 10
+          ..categoriaId = urbanas.id
+          ..valoresPropiedades = [
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Color'
+              ..valor = 'Gris',
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Talle'
+              ..valor = 'L',
+            ValorPropiedadProducto()
+              ..nombrePropiedad = 'Estilo'
+              ..valor = 'Vintage',
+          ];
     await isar.productos.putAll([
       producto1,
       producto2,
       producto3,
       producto4,
       producto5,
+      producto6,
+      producto7,
     ]);
 
     // 7. Crear compras
@@ -509,7 +594,23 @@ Future<void> seedIsar(Isar isar) async {
       estado: 'Pendiente',
     );
 
-    await isar.compras.putAll([compra1, compra2]);
+    final compra3 = Compra(
+      numeroFactura: 'FAC-003-2024',
+      fecha: DateTime.now().subtract(const Duration(days: 2)),
+      total: 3000.0,
+      proveedorId: proveedor3.id,
+      observaciones: 'Compra de zapatillas',
+      estado: 'Pagado',
+    );
+    final compra4 = Compra(
+      numeroFactura: 'FAC-004-2024',
+      fecha: DateTime.now().subtract(const Duration(days: 1)),
+      total: 1200.0,
+      proveedorId: proveedor4.id,
+      observaciones: 'Accesorios varios',
+      estado: 'Pendiente',
+    );
+    await isar.compras.putAll([compra1, compra2, compra3, compra4]);
 
     // 8. Crear pedidos
     final pedido1 =
@@ -533,7 +634,50 @@ Future<void> seedIsar(Isar isar) async {
           ..fecha = DateTime.now()
           ..estado = 'Nuevo';
 
-    await isar.pedidos.putAll([pedido1, pedido2, pedido3]);
+    final pedido4 =
+        Pedido()
+          ..clienteId = cliente4.id
+          ..productos = [producto6.id, producto7.id]
+          ..fecha = DateTime.now().subtract(const Duration(hours: 12))
+          ..estado = 'Entregado';
+    final pedido5 =
+        Pedido()
+          ..clienteId = cliente5.id
+          ..productos = [producto1.id, producto2.id, producto6.id]
+          ..fecha = DateTime.now().subtract(const Duration(hours: 6))
+          ..estado = 'En preparación';
+
+    await isar.pedidos.putAll([pedido1, pedido2, pedido3, pedido4, pedido5]);
+
+    // 9. Crear ventas
+    final venta1 = Venta(
+      clienteId: cliente1.id,
+      fecha: DateTime.now().subtract(const Duration(days: 1)),
+      total: 2500.0,
+      metodoPago: 'Efectivo',
+      estado: 'Pagado',
+      usuarioId: adminUser.id,
+      // productosVendidos: [producto1.id], // Si tienes este campo en el modelo
+    );
+    final venta2 = Venta(
+      clienteId: cliente2.id,
+      fecha: DateTime.now().subtract(const Duration(hours: 20)),
+      total: 8500.0,
+      metodoPago: 'Tarjeta',
+      estado: 'Pagado',
+      usuarioId: vendedorUser.id,
+      // productosVendidos: [producto3.id],
+    );
+    final venta3 = Venta(
+      clienteId: cliente4.id,
+      fecha: DateTime.now().subtract(const Duration(hours: 5)),
+      total: 1200.0,
+      metodoPago: 'Efectivo',
+      estado: 'Pendiente',
+      usuarioId: almacenUser.id,
+      // productosVendidos: [producto6.id],
+    );
+    await isar.ventas.putAll([venta1, venta2, venta3]);
   });
 }
 

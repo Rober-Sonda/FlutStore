@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../models/registrofinanciero.dart';
 import '../../services/isar_service.dart';
 import '../../widgets/permission_widget.dart';
@@ -273,7 +272,7 @@ class _CashRegisterViewState extends ConsumerState<CashRegisterView> {
                                   title: Text('Registro #${registro.id}'),
                                   subtitle: registro.fecha != null
                                       ? Text(
-                                          '${registro.fecha!.day}/${registro.fecha!.month}/${registro.fecha!.year}',
+                                          '${registro.fecha.day}/${registro.fecha.month}/${registro.fecha.year}',
                                         )
                                       : const Text('Sin fecha'),
                                   trailing: Text(

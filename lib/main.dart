@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'services/app_config_service.dart';
 import 'services/auth_service.dart';
 import 'services/isar_service.dart';
+import 'utils/logger.dart';
 
 void main() {
   runApp(
@@ -27,6 +28,8 @@ void main() {
     appWindow.title = "NAJAM";
     appWindow.show();
   });
+
+  logDev('App iniciada');
 }
 
 class MyApp extends ConsumerStatefulWidget {

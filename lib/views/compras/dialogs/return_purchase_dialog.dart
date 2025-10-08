@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
 import '../../../models/compra.dart';
 import '../../../services/isar_service.dart';
-import '../../../widgets/permission_widget.dart';
 
 class ReturnPurchaseDialog extends ConsumerStatefulWidget {
   final Compra compra;

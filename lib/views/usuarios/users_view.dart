@@ -235,197 +235,218 @@ class _UsersViewState extends ConsumerState<UsersView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
-      backgroundColor: Colors.black,
-      body:
-          _errorMessage != null
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: Colors.red,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(_errorMessage!),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _loadData,
-                      child: const Text('Reintentar'),
-                    ),
-                  ],
+      appBar: AppBar(title: const Text('Usuarios')),
+      body: Column(
+        children: [
+          // NUEVO: Descripción de la sección de usuarios
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Administra los usuarios que pueden acceder al sistema. Agrega, edita o elimina usuarios y asigna roles según sus tareas.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
-              )
-              : _usuarios.isEmpty
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.people_outline,
-                      size: 64,
-                      color: Colors.grey[600],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No hay usuarios',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[300],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Los usuarios aparecerán aquí cuando se creen',
-                      style: TextStyle(color: Colors.grey[400]),
-                    ),
-                  ],
-                ),
-              )
-              : ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: _usuarios.length,
-                itemBuilder: (context, index) {
-                  final usuario = _usuarios[index];
-                  final authService = ref.read(authServiceProvider);
-
-                  return FutureBuilder<bool>(
-                    future: authService.isAdmin(usuario),
-                    builder: (context, snapshot) {
-                      final esAdmin = snapshot.data ?? false;
-
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 25,
-                            backgroundColor:
-                                esAdmin ? Colors.blue : Colors.grey,
-                            child: ClipOval(
-                              child:
-                                  usuario.avatarUrl != null &&
-                                          usuario.avatarUrl!.isNotEmpty
-                                      ? Image.network(
-                                        usuario.avatarUrl!,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (
-                                          context,
-                                          child,
-                                          loadingProgress,
-                                        ) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Container(
-                                            width: 50,
-                                            height: 50,
-                                            color: Colors.grey[200],
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                value:
-                                                    loadingProgress
-                                                                .expectedTotalBytes !=
-                                                            null
-                                                        ? loadingProgress
-                                                                .cumulativeBytesLoaded /
-                                                            loadingProgress
-                                                                .expectedTotalBytes!
-                                                        : null,
-                                                color: Colors.blue[600],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        errorBuilder: (
-                                          context,
-                                          error,
-                                          stackTrace,
-                                        ) {
-                                          return Container(
-                                            width: 50,
-                                            height: 50,
-                                            color: Colors.grey[200],
-                                            child: Icon(
-                                              esAdmin
-                                                  ? Icons.admin_panel_settings
-                                                  : Icons.person,
-                                              color: Colors.white,
-                                            ),
-                                          );
-                                        },
-                                      )
-                                      : Container(
-                                        width: 50,
-                                        height: 50,
-                                        color:
-                                            esAdmin ? Colors.blue : Colors.grey,
-                                        child: Icon(
-                                          esAdmin
-                                              ? Icons.admin_panel_settings
-                                              : Icons.person,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+              ),
+            ),
+          ),
+          Expanded(
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _errorMessage != null
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.red,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Error',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          title: Text(
-                            usuario.nombre,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          const SizedBox(height: 8),
+                          Text(_errorMessage!),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _loadData,
+                            child: const Text('Reintentar'),
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Usuario: ${usuario.username}'),
-                              Text('Rol: ${_getRoleName(usuario.rolId)}'),
-                              if (usuario.email != null)
-                                Text('Email: ${usuario.email}'),
-                            ],
+                        ],
+                      ),
+                    )
+                    : _usuarios.isEmpty
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.people_outline,
+                            size: 64,
+                            color: Colors.grey[600],
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.lock_reset),
-                                onPressed: () => _resetPassword(usuario),
-                                tooltip: 'Restablecer contraseña',
-                              ),
-                              if (usuario.id != _currentUser?.id)
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                          const SizedBox(height: 16),
+                          Text(
+                            'No hay usuarios',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Los usuarios aparecerán aquí cuando se creen',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _usuarios.length,
+                      itemBuilder: (context, index) {
+                        final usuario = _usuarios[index];
+                        final authService = ref.read(authServiceProvider);
+
+                        return FutureBuilder<bool>(
+                          future: authService.isAdmin(usuario),
+                          builder: (context, snapshot) {
+                            final esAdmin = snapshot.data ?? false;
+
+                            return Card(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor:
+                                      esAdmin ? Colors.blue : Colors.grey,
+                                  child: ClipOval(
+                                    child:
+                                        usuario.avatarUrl != null &&
+                                                usuario.avatarUrl!.isNotEmpty
+                                            ? Image.network(
+                                              usuario.avatarUrl!,
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder: (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  color: Colors.grey[200],
+                                                  child: Center(
+                                                    child: CircularProgressIndicator(
+                                                      value:
+                                                          loadingProgress
+                                                                      .expectedTotalBytes !=
+                                                                  null
+                                                              ? loadingProgress
+                                                                      .cumulativeBytesLoaded /
+                                                                  loadingProgress
+                                                                      .expectedTotalBytes!
+                                                              : null,
+                                                      color: Colors.blue[600],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              errorBuilder: (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) {
+                                                return Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  color: Colors.grey[200],
+                                                  child: Icon(
+                                                    esAdmin
+                                                        ? Icons
+                                                            .admin_panel_settings
+                                                        : Icons.person,
+                                                    color: Colors.white,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            : Container(
+                                              width: 50,
+                                              height: 50,
+                                              color:
+                                                  esAdmin
+                                                      ? Colors.blue
+                                                      : Colors.grey,
+                                              child: Icon(
+                                                esAdmin
+                                                    ? Icons.admin_panel_settings
+                                                    : Icons.person,
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                   ),
-                                  onPressed: () => _deleteUser(usuario),
-                                  tooltip: 'Eliminar usuario',
                                 ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+                                title: Text(
+                                  usuario.nombre,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Usuario: ${usuario.username}'),
+                                    Text('Rol: ${_getRoleName(usuario.rolId)}'),
+                                    if (usuario.email != null)
+                                      Text('Email: ${usuario.email}'),
+                                  ],
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.lock_reset),
+                                      onPressed: () => _resetPassword(usuario),
+                                      tooltip: 'Restablecer contraseña',
+                                    ),
+                                    if (usuario.id != _currentUser?.id)
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () => _deleteUser(usuario),
+                                        tooltip: 'Eliminar usuario',
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+          ),
+        ],
+      ),
       floatingActionButton:
           _canAddUser
               ? FloatingActionButton(

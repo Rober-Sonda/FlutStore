@@ -15,17 +15,35 @@ class _PropertiesViewState extends ConsumerState<PropertiesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Propiedades', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Propiedades'),
       ),
-      body: const Center(
-        child: Text(
-          'Aquí irá la lista de propiedades.',
-          style: TextStyle(color: Colors.white),
-        ),
+      body: Column(
+        children: [
+          // NUEVO: Descripción de la sección de propiedades
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Define y gestiona las propiedades que pueden tener los productos y categorías. Personaliza los campos según las necesidades de tu negocio.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          const Expanded(
+            child: Center(
+              child: Text(
+                'Aquí irá la lista de propiedades.',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: PermissionFAB(
         onPressed: () {

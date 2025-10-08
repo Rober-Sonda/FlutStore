@@ -7,6 +7,7 @@ import 'package:tienda_app/models/app_theme.dart';
 import 'package:tienda_app/models/font_config.dart';
 import 'package:tienda_app/services/permission_service.dart';
 import 'package:tienda_app/services/auth_service.dart';
+import '../../providers/carrito_provider.dart';
 
 class AppNavigationRail extends ConsumerStatefulWidget {
   const AppNavigationRail({super.key});
@@ -170,35 +171,11 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       action: 'read',
     ),
     _NavItemData(
-      icon: Icons.account_balance_rounded,
-      label: 'Flujo de Caja',
-      route: AppRoutes.cashFlow,
-      color: Color(0xFF34D399), // Emerald-400 moderno
-      resource: 'finanzas',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.point_of_sale_rounded,
-      label: 'Cierre de Caja',
-      route: AppRoutes.cashRegister,
-      color: Color(0xFF60A5FA), // Blue-400 moderno
-      resource: 'finanzas',
-      action: 'read',
-    ),
-    _NavItemData(
       icon: Icons.card_giftcard_rounded,
       label: 'Sorteos',
       route: AppRoutes.sweepstakes,
       color: Color(0xFFA78BFA), // Violet-400 moderno
       resource: 'sorteos',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.schedule_rounded,
-      label: 'Gastos Fijos',
-      route: AppRoutes.fixedExpenses,
-      color: Color(0xFF5EEAD4), // Teal-300 moderno
-      resource: 'finanzas',
       action: 'read',
     ),
   ];
@@ -210,16 +187,10 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     _filterItemsByPermissions();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> _loadTheme() async {
     final configService = ref.read(appConfigServiceProvider);
     final theme = await configService.getSelectedTheme();
     final fontConfig = await configService.getSelectedFontConfig();
-
     setState(() {
       _currentTheme = theme;
       _currentFontConfig = fontConfig;
@@ -243,14 +214,12 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     }
 
     final filteredItems = <_NavItemData>[];
-
     for (final item in _allItems) {
       final hasPermission = await permissionService.canPerformAction(
         currentUser,
         item.action,
         item.resource,
       );
-
       if (hasPermission) {
         filteredItems.add(item);
       }
@@ -286,7 +255,8 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     final isCompact = screenWidth < 1200;
     final railWidth = isCompact ? 80.0 : 240.0;
 
-    // Actualizar permisos cuando cambie el usuario
+    final carrito = ref.watch(carritoProvider);
+
     if (currentUser != null &&
         _filteredItems.isEmpty &&
         !_isLoadingPermissions) {
@@ -295,7 +265,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       });
     }
 
-    // Mostrar loading mientras se cargan los permisos
     if (_isLoadingPermissions) {
       return Container(
         width: railWidth,
@@ -348,7 +317,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       ),
       child: Column(
         children: [
-          // Modern Header with Animated Logo
+          // Header
           Container(
             padding: EdgeInsets.symmetric(vertical: isCompact ? 20 : 24),
             decoration: BoxDecoration(
@@ -362,7 +331,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
             ),
             child: Column(
               children: [
-                // Static Logo Container (sin animaciones)
                 Container(
                   width: isCompact ? 48 : 64,
                   height: isCompact ? 48 : 64,
@@ -381,13 +349,11 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Main icon
                       Icon(
                         Icons.storefront_rounded,
                         size: isCompact ? 24 : 32,
                         color: Colors.black,
                       ),
-                      // Shine effect
                       Positioned(
                         top: 4,
                         left: 4,
@@ -405,7 +371,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                 ),
                 if (!isCompact) ...[
                   const SizedBox(height: 16),
-                  // Static Typography (sin gradientes)
                   Text(
                     'NAJAM',
                     style: TextStyle(
@@ -445,8 +410,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
               ],
             ),
           ),
-
-          // Modern Navigation Items
+          // Navigation Items (íconos y textos SIEMPRE blancos)
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -496,6 +460,9 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                     final selected = _selectedIndex == index;
                     final isHovered = _hoveredIndex == index;
 
+                    // Detecta si es el ítem del carrito
+                    final isCarrito = item.label == 'Carrito Compra';
+
                     return MouseRegion(
                       cursor: SystemMouseCursors.click,
                       onEnter: (_) => setState(() => _hoveredIndex = index),
@@ -514,33 +481,54 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
+                            color: Colors.blue.withOpacity(
+                              selected || isHovered ? 0.1 : 0.05,
+                            ),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
                             children: [
                               SizedBox(width: isCompact ? 12 : 20),
-                              // Icon with modern styling
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  item.icon,
-                                  color:
-                                      selected
-                                          ? item.color
-                                          : isHovered
-                                          ? item.color.withOpacity(0.8)
-                                          : item.color.withOpacity(0.6),
-                                  size:
-                                      selected
-                                          ? (isCompact ? 24 : 28)
-                                          : (isCompact ? 20 : 24),
-                                ),
+                              Stack(
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      isCarrito
+                                          ? Icons
+                                              .shopping_cart // Solo el carrito usa este icono
+                                          : item
+                                              .icon, // Los demás usan su icono original
+                                      color: Colors.white,
+                                      size:
+                                          selected
+                                              ? (isCompact ? 24 : 28)
+                                              : (isCompact ? 20 : 24),
+                                    ),
+                                  ),
+                                  if (isCarrito && carrito.isNotEmpty)
+                                    Positioned(
+                                      right: 2,
+                                      top: 2,
+                                      child: Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                               if (!isCompact) ...[
                                 const SizedBox(width: 16),
@@ -553,12 +541,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                                       Text(
                                         item.label,
                                         style: TextStyle(
-                                          color:
-                                              selected
-                                                  ? item.color
-                                                  : isHovered
-                                                  ? item.color.withOpacity(0.8)
-                                                  : item.color.withOpacity(0.6),
+                                          color: Colors.white,
                                           fontWeight:
                                               selected
                                                   ? FontWeight.w700
@@ -571,7 +554,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                                   ),
                                 ),
                               ],
-                              // Selection indicator or hover indicator
                               if (selected || isHovered)
                                 Container(
                                   width: 4,
@@ -580,13 +562,13 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                                     right: isCompact ? 8 : 16,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: item.color,
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(2),
                                     boxShadow:
                                         selected
                                             ? [
                                               BoxShadow(
-                                                color: item.color.withOpacity(
+                                                color: Colors.white.withOpacity(
                                                   0.5,
                                                 ),
                                                 blurRadius: 4,
@@ -606,8 +588,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
               },
             ),
           ),
-
-          // Modern Bottom Actions
+          // Bottom Actions (logout y perfil, íconos/textos blancos)
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: isCompact ? 8 : 16,
@@ -615,7 +596,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
             ),
             child: Column(
               children: [
-                // Logout button
                 Container(
                   width: double.infinity,
                   height: isCompact ? 40 : 48,
@@ -639,16 +619,11 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () async {
-                        // Lógica de logout
                         final authService = ref.read(authServiceProvider);
                         await authService.logout();
-
-                        // Limpiar el usuario actual
                         ref.read(currentUserProvider.notifier).state = null;
                         ref.read(isAuthenticatedProvider.notifier).state =
                             false;
-
-                        // Navegar a la pantalla de login
                         if (context.mounted) {
                           context.go('/');
                         }
@@ -659,14 +634,14 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                           Icon(
                             Icons.logout_rounded,
                             size: isCompact ? 18 : 22,
-                            color: theme.errorColor,
+                            color: Colors.white,
                           ),
                           if (!isCompact) ...[
                             const SizedBox(width: 8),
                             Text(
                               'Cerrar Sesión',
                               style: TextStyle(
-                                color: theme.errorColor,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 fontFamily: fontConfig.bodyFont,
@@ -680,7 +655,6 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                 ),
                 if (!isCompact) ...[
                   const SizedBox(height: 8),
-                  // Profile button
                   Container(
                     width: double.infinity,
                     height: 48,
@@ -712,13 +686,13 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                             Icon(
                               Icons.account_circle_rounded,
                               size: 22,
-                              color: theme.primaryColor,
+                              color: Colors.white,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'Mi Perfil',
                               style: TextStyle(
-                                color: theme.primaryColor,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 fontFamily: fontConfig.bodyFont,

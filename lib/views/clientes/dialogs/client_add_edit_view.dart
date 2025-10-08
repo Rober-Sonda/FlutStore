@@ -69,12 +69,19 @@ class _ClientAddEditViewState extends ConsumerState<ClientAddEditView> {
     try {
       final isar = await ref.read(isarServiceProvider).db;
 
-      final cliente = _isEditing ? widget.cliente! : Cliente();
+      final cliente =
+          _isEditing
+              ? widget.cliente!
+              : Cliente(
+                id: 0, // Isar asigna el id automáticamente
+                nombre: _nombreController.text.trim(),
+              );
+      // Si es edición, actualiza el nombre también
       cliente.nombre = _nombreController.text.trim();
       cliente.apellido = _apellidoController.text.trim();
       cliente.email = _emailController.text.trim();
-      cliente.whatsapp = _whatsappController.text.trim(); // Cambiado
-      cliente.instagram = _instagramController.text.trim(); // Nuevo
+      cliente.whatsapp = _whatsappController.text.trim();
+      cliente.instagram = _instagramController.text.trim();
       cliente.direccion = _direccionController.text.trim();
       cliente.dni = _dniController.text.trim();
       cliente.cuil = _cuilController.text.trim();

@@ -6,28 +6,24 @@ class StockMovementsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Movimientos de Stock'),
+      ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey[900],
-              border: Border(bottom: BorderSide(color: Colors.grey[700]!)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Movimientos de Stock',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange[700],
-                    ),
-                  ),
+          // NUEVO: Descripción de la sección de movimientos de stock
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Consulta y registra los movimientos de stock de tus productos. Controla entradas, salidas y ajustes para mantener tu inventario actualizado.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
-              ],
+              ),
             ),
           ),
           Expanded(

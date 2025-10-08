@@ -53,12 +53,12 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
   // Productos
   List<Producto> _productos = [];
   List<Proveedor> _proveedores = [];
-  List<ItemCarritoCompra> _carrito = [];
+  final List<ItemCarritoCompra> _carrito = [];
 
   // Estados
   bool _isLoading = true;
   bool _isSaving = false;
-  bool _generarNumerosAutomaticos = true;
+  final bool _generarNumerosAutomaticos = true;
   Compra? _compra;
 
   final List<String> _metodosPago = [

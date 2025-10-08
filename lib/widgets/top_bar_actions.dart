@@ -58,7 +58,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
     return Row(
       children: [
         // Modern Carrito de compras
-        _buildModernActionButton(
+        /*_buildModernActionButton(
           icon: Icons.shopping_cart_rounded,
           tooltip: 'Carrito de compras',
           badge: _carritoCount > 0 ? _carritoCount.toString() : null,
@@ -81,7 +81,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
           },
           currentTheme: currentTheme,
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 12),*/
 
         // Modern Perfil de usuario
         _buildModernActionButton(

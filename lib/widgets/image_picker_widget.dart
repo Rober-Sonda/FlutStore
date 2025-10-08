@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final List<String> imagenesExistentes;
@@ -147,7 +148,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             margin: const EdgeInsets.only(right: 12),
             child: Stack(
               children: [
-                // Imagen
+                // Imagen cuadrada
                 Container(
                   width: widget.anchoPreview,
                   height: widget.alturaPreview,
@@ -163,33 +164,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      imagen,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          color: Colors.grey[200],
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              value:
-                                  loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                              color: Colors.blue[600],
-                            ),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(Icons.broken_image, color: Colors.grey),
-                          ),
-                        );
-                      },
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: _buildImageWidget(imagen),
+                      ),
                     ),
                   ),
                 ),
@@ -243,7 +222,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             margin: const EdgeInsets.only(right: 12),
             child: Stack(
               children: [
-                // Imagen
+                // Imagen cuadrada
                 Container(
                   width: widget.anchoPreview,
                   height: widget.alturaPreview,
@@ -259,7 +238,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.file(imagen, fit: BoxFit.cover),
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: Image.file(imagen, fit: BoxFit.cover),
+                      ),
+                    ),
                   ),
                 ),
 
@@ -315,18 +299,31 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       if (imagen != null) {
         final file = File(imagen.path);
 
-        // Simular subida de imagen (aquí iría la lógica real de subida)
-        await Future.delayed(const Duration(seconds: 1));
+        // Crear directorio para imágenes si no existe
+        final appDir = await _getApplicationDocumentsDirectory();
+        final imagesDir = Directory('${appDir.path}/product_images');
+        if (!await imagesDir.exists()) {
+          await imagesDir.create(recursive: true);
+        }
 
-        // Generar URL simulada (en producción, esto sería la URL real del servidor)
-        final urlImagen =
-            'https://ejemplo.com/imagenes/${DateTime.now().millisecondsSinceEpoch}.jpg';
+        // Generar nombre único para la imagen
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final extension = imagen.path.split('.').last;
+        final fileName = 'product_$timestamp.$extension';
+        final targetPath = '${imagesDir.path}/$fileName';
+
+        // Copiar la imagen al directorio de la aplicación
+        await file.copy(targetPath);
+
+        // Generar URL local real
+        final urlImagen = 'file://$targetPath';
 
         setState(() {
           _imagenesSeleccionadas.add(file);
         });
 
         // Notificar al padre sobre la nueva imagen
+        print('ImagePickerWidget: Notificando imagen agregada: $urlImagen');
         widget.onImagenAgregada(urlImagen);
       }
     } catch (e) {
@@ -347,6 +344,55 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     setState(() {
       _imagenesSeleccionadas.removeAt(index);
     });
+  }
+
+  Widget _buildImageWidget(String imagen) {
+    // Verificar si es un archivo local (comienza con 'file://')
+    if (imagen.startsWith('file://')) {
+      final filePath = imagen.substring(7); // Remover 'file://'
+      return Image.file(
+        File(filePath),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: const Center(
+              child: Icon(Icons.broken_image, color: Colors.grey),
+            ),
+          );
+        },
+      );
+    } else {
+      // Es una URL de red
+      return Image.network(
+        imagen,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            color: Colors.grey[200],
+            child: Center(
+              child: CircularProgressIndicator(
+                value:
+                    loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                color: Colors.blue[600],
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: const Center(
+              child: Icon(Icons.broken_image, color: Colors.grey),
+            ),
+          );
+        },
+      );
+    }
   }
 
   void _mostrarDialogoEliminar(String imagen) {
@@ -380,5 +426,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ],
           ),
     );
+  }
+
+  Future<Directory> _getApplicationDocumentsDirectory() async {
+    // Obtener el directorio de documentos de la aplicación
+    final appDocDir = await getApplicationDocumentsDirectory();
+    return appDocDir;
   }
 }

@@ -75,11 +75,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
   String _obtenerNombreCliente(int clienteId) {
     final cliente = _clientes.firstWhere(
       (c) => c.id == clienteId,
-      orElse: () {
-        final clienteDefault = Cliente();
-        clienteDefault.nombre = 'Cliente no encontrado';
-        return clienteDefault;
-      },
+      orElse: () => Cliente(id: 0, nombre: 'Cliente no encontrado'),
     );
     return cliente.nombre;
   }
@@ -94,9 +90,24 @@ class _SalesViewState extends ConsumerState<SalesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(title: const Text('Ventas')),
       body: Column(
         children: [
+          // NUEVO: Descripción de la sección de ventas
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Consulta todas las ventas realizadas en tu negocio. Filtra por fechas y clientes para analizar el rendimiento de tus productos y tu equipo de ventas.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
           // Header con filtros
           Container(
             padding: const EdgeInsets.all(16),

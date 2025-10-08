@@ -1,7 +1,6 @@
 import 'package:isar/isar.dart';
 import '../models/venta.dart';
 import '../models/compra.dart';
-import 'isar_service.dart';
 
 class NumeracionService {
   static final NumeracionService _instance = NumeracionService._internal();
@@ -87,7 +86,7 @@ class NumeracionService {
     }
 
     final numeroActual =
-        int.tryParse(ultimaCompra.numeroFactura!.split('-').last) ?? 0;
+        int.tryParse(ultimaCompra.numeroFactura.split('-').last) ?? 0;
     final siguienteNumero = numeroActual + 1;
     return 'FAC-COMP-${DateTime.now().year}-${siguienteNumero.toString().padLeft(6, '0')}';
   }

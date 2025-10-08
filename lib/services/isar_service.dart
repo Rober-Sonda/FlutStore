@@ -21,7 +21,6 @@ import '../models/oferta.dart';
 import '../models/flujo_caja.dart';
 import '../models/cierre_caja.dart';
 import '../models/sorteo.dart';
-import '../models/premio_sorteo.dart';
 import '../models/gasto_fijo.dart';
 import '../models/movimiento_financiero.dart';
 import '../models/cuenta_corriente.dart';
@@ -150,5 +149,25 @@ class IsarService {
   Future<void> seedDatabase() async {
     final isar = await _isar;
     await seedIsar(isar);
+  }
+
+  Future<void> initializeSeeds() async {
+    final isar = await db;
+    if (await isar.productos.count() == 0) {
+      await isar.writeTxn(() async {
+        await isar.productos.putAll([
+          Producto()
+            ..nombre = 'Remera básica'
+            ..precio = 3500
+            ..stock = 20,
+          Producto()
+            ..nombre = 'Pantalón jeans'
+            ..precio = 6500
+            ..stock = 15,
+          // ...agrega más productos seed aquí...
+        ]);
+        // ...agrega seeds para usuarios, categorías, etc...
+      });
+    }
   }
 }

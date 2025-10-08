@@ -7,28 +7,32 @@ import '../../models/rol.dart';
 import '../../services/isar_service.dart';
 import '../../services/id_validator.dart';
 
-class RolesView extends ConsumerStatefulWidget {
+class RolesView extends StatefulWidget {
   const RolesView({super.key});
 
   @override
-  ConsumerState<RolesView> createState() => _RolesViewState();
+  State<RolesView> createState() => _RolesViewState();
 }
 
-class _RolesViewState extends ConsumerState<RolesView> {
+class _RolesViewState extends State<RolesView> {
   List<Rol> _roles = [];
   bool _isLoading = true;
   String? _error;
 
+  // Agrega una referencia global para el contexto de Riverpod
+  late ProviderContainer _container;
+
   @override
   void initState() {
     super.initState();
+    _container = ProviderScope.containerOf(context, listen: false);
     _loadRoles();
   }
 
   Future<void> _loadRoles() async {
     try {
       setState(() => _isLoading = true);
-      final isar = await ref.read(isarServiceProvider).db;
+      final isar = await _container.read(isarServiceProvider).db;
       final roles = await isar.rols.where().findAll();
 
       setState(() {
@@ -68,7 +72,7 @@ class _RolesViewState extends ConsumerState<RolesView> {
 
     if (confirmed == true) {
       try {
-        final isar = await ref.read(isarServiceProvider).db;
+        final isar = await _container.read(isarServiceProvider).db;
         await isar.writeTxn(() async {
           await isar.rols.delete(rol.id);
         });
@@ -336,40 +340,59 @@ class _RolesViewState extends ConsumerState<RolesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.go(AppRoutes.roleAdd);
-        },
-        backgroundColor: Colors.indigo[700],
-        child: const Icon(Icons.add, color: Colors.white),
-        tooltip: 'Nuevo Rol',
+      appBar: AppBar(
+        title: const Text('Roles'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => context.push(AppRoutes.roleAdd),
+            tooltip: 'Agregar nuevo rol',
+          ),
+        ],
       ),
-      body:
-          _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : _error != null
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, size: 64, color: Colors.red[300]),
-                    const SizedBox(height: 16),
-                    Text(
-                      _error!,
-                      style: TextStyle(color: Colors.red[700]),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _loadRoles,
-                      child: const Text('Reintentar'),
-                    ),
-                  ],
+      body: Column(
+        children: [
+          // Descripción de la sección de roles
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'En esta sección puedes crear, editar y eliminar roles de usuario. Los roles te permiten definir los permisos y accesos de cada usuario en el sistema, asegurando una gestión segura y personalizada de tu negocio.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
-              )
-              : _roles.isEmpty
-                  ? Center(
+              ),
+            ),
+          ),
+          Expanded(
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _error != null
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error, size: 64, color: Colors.red[300]),
+                          const SizedBox(height: 16),
+                          Text(
+                            _error!,
+                            style: TextStyle(color: Colors.red[700]),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _loadRoles,
+                            child: const Text('Reintentar'),
+                          ),
+                        ],
+                      ),
+                    )
+                    : _roles.isEmpty
+                    ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -402,7 +425,7 @@ class _RolesViewState extends ConsumerState<RolesView> {
                         ],
                       ),
                     )
-                  : LayoutBuilder(
+                    : LayoutBuilder(
                       builder: (context, constraints) {
                         final crossAxisCount =
                             (constraints.maxWidth / 320).floor();
@@ -420,11 +443,22 @@ class _RolesViewState extends ConsumerState<RolesView> {
                               ),
                           itemCount: _roles.length,
                           itemBuilder: (context, index) {
-                            return _buildRoleCard(_roles[index]);
+                            final rol = _roles[index];
+                            // Al hacer click en la card, navega a la pantalla de edición de roles (misma que agregar)
+                            return GestureDetector(
+                              onTap: () {
+                                // Navega a la pantalla de agregar/editar rol, pasando el id como parámetro
+                                context.go('${AppRoutes.roleAdd}?id=${rol.id}');
+                              },
+                              child: _buildRoleCard(rol),
+                            );
                           },
                         );
                       },
                     ),
+          ),
+        ],
+      ),
     );
   }
 }

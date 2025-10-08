@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import '../models/usuario.dart';
 import '../models/rol.dart';
-import 'auth_service.dart';
 
 final permissionServiceProvider = Provider<PermissionService>(
   (ref) => PermissionService(),

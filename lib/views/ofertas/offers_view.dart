@@ -508,113 +508,97 @@ class _OffersViewState extends ConsumerState<OffersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Ofertas', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.filter_list, color: Colors.white),
-            onSelected: (value) {
-              setState(() => _filtroSeleccionado = value);
-            },
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(value: 'Todas', child: Text('Todas')),
-                  const PopupMenuItem(value: 'Activas', child: Text('Activas')),
-                  const PopupMenuItem(
-                    value: 'Próximamente',
-                    child: Text('Próximamente'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'Expiradas',
-                    child: Text('Expiradas'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'Agotadas',
-                    child: Text('Agotadas'),
-                  ),
-                ],
-          ),
-        ],
+        title: const Text('Ofertas'),
       ),
-      body:
-          _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
+      body: Column(
+        children: [
+          // NUEVO: Descripción de la sección de ofertas
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              color: Colors.blueGrey[900],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'Gestiona las ofertas y promociones de tus productos. Aumenta tus ventas y atrae más clientes con descuentos y campañas especiales.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          // Resumen de ofertas
+          Card(
+            margin: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 children: [
-                  // Resumen de ofertas
-                  Card(
-                    margin: const EdgeInsets.all(16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Resumen de Ofertas',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildStatCard(
-                                  'Total',
-                                  _totalOfertas.toDouble(),
-                                  Colors.blue,
-                                  Icons.list,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _buildStatCard(
-                                  'Activas',
-                                  _ofertasActivas.toDouble(),
-                                  Colors.green,
-                                  Icons.local_offer,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _buildStatCard(
-                                  'Pérdidas',
-                                  _totalPerdidasOfertas,
-                                  Colors.red,
-                                  Icons.trending_down,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                  const Text(
+                    'Resumen de Ofertas',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // Lista de ofertas
-                  Expanded(
-                    child:
-                        _ofertasFiltradas.isEmpty
-                            ? const Center(
-                              child: Text(
-                                'No hay ofertas registradas',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            )
-                            : ListView.builder(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              itemCount: _ofertasFiltradas.length,
-                              itemBuilder: (context, index) {
-                                return _buildOfertaCard(
-                                  _ofertasFiltradas[index],
-                                );
-                              },
-                            ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildStatCard(
+                          'Total',
+                          _totalOfertas.toDouble(),
+                          Colors.blue,
+                          Icons.list,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildStatCard(
+                          'Activas',
+                          _ofertasActivas.toDouble(),
+                          Colors.green,
+                          Icons.local_offer,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildStatCard(
+                          'Pérdidas',
+                          _totalPerdidasOfertas,
+                          Colors.red,
+                          Icons.trending_down,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+            ),
+          ),
+          // Lista de ofertas
+          Expanded(
+            child:
+                _ofertasFiltradas.isEmpty
+                    ? const Center(
+                      child: Text(
+                        'No hay ofertas registradas',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      itemCount: _ofertasFiltradas.length,
+                      itemBuilder: (context, index) {
+                        return _buildOfertaCard(
+                          _ofertasFiltradas[index],
+                        );
+                      },
+                    ),
+          ),
+        ],
+      ),
       floatingActionButton: PermissionFAB(
         onPressed: () {
           context.push('/offers/add');

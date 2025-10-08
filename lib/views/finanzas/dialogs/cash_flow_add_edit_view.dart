@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
 import 'package:tienda_app/models/flujo_caja.dart';
-import 'package:tienda_app/src/app_routes.dart';
 import 'package:tienda_app/widgets/permission_widget.dart';
 
 class CashFlowAddEditView extends ConsumerStatefulWidget {

@@ -659,12 +659,17 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                   ImagePickerWidget(
                     imagenesExistentes: _imagenesProducto,
                     onImagenAgregada: (urlImagen) {
+                      print('Imagen agregada: $urlImagen');
+                      print('Lista antes: ${_imagenesProducto.length}');
                       setState(() {
                         _imagenesProducto.add(urlImagen);
                         _imagenPrincipal ??= urlImagen;
                       });
+                      print('Lista después: ${_imagenesProducto.length}');
+                      print('Imágenes: $_imagenesProducto');
                     },
                     onImagenEliminada: (urlImagen) {
+                      print('Imagen eliminada: $urlImagen');
                       setState(() {
                         _imagenesProducto.remove(urlImagen);
                         if (_imagenPrincipal == urlImagen) {

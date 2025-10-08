@@ -4,7 +4,6 @@ import 'package:isar/isar.dart';
 import 'package:tienda_app/models/compra.dart';
 import 'package:tienda_app/models/producto.dart';
 import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/services/isar_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_app/widgets/permission_widget.dart';
 
@@ -612,7 +611,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                                       ),
                                     ),
                                   );
-                                }).toList(),
+                                }),
                               ],
                             ),
                           ),

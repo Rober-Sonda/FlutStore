@@ -218,7 +218,7 @@ class Compra {
   // Método para obtener el número de documento
   String get numeroDocumento {
     if (esDevolucion) return 'DEV-${id.toString().padLeft(6, '0')}';
-    if (numeroFactura != null) return numeroFactura!;
+    return numeroFactura;
     if (numeroOrden != null) return numeroOrden!;
     if (numeroRemito != null) return numeroRemito!;
     return 'C-${id.toString().padLeft(6, '0')}';

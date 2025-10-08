@@ -50,12 +50,12 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
   // Productos
   List<Producto> _productos = [];
   List<Cliente> _clientes = [];
-  List<ItemCarritoVenta> _carrito = [];
+  final List<ItemCarritoVenta> _carrito = [];
 
   // Estados
   bool _isLoading = true;
   bool _isSaving = false;
-  bool _generarNumerosAutomaticos = true;
+  final bool _generarNumerosAutomaticos = true;
   Venta? _venta;
 
   final List<String> _metodosPago = [
