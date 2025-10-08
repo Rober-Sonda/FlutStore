@@ -1,4 +1,4 @@
-# tienda_app
+# FlutStore
 
 A new Flutter project.
 
