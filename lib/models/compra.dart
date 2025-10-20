@@ -185,10 +185,7 @@ class Compra {
     String? observaciones,
   }) {
     return Compra(
-      numeroFactura:
-          numeroFactura != null
-              ? 'DEV-$numeroFactura'
-              : 'DEV-${id.toString().padLeft(6, '0')}',
+      numeroFactura: 'DEV-$numeroFactura',
       fecha: DateTime.now(),
       total: -total, // Total negativo para indicar devolución
       observaciones: observaciones ?? 'Devolución de compra #$id',
@@ -218,7 +215,7 @@ class Compra {
   // Método para obtener el número de documento
   String get numeroDocumento {
     if (esDevolucion) return 'DEV-${id.toString().padLeft(6, '0')}';
-    return numeroFactura;
+    if (numeroFactura.isNotEmpty) return numeroFactura;
     if (numeroOrden != null) return numeroOrden!;
     if (numeroRemito != null) return numeroRemito!;
     return 'C-${id.toString().padLeft(6, '0')}';
