@@ -187,7 +187,14 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
           (p.codigoBarras?.toLowerCase() == codigo.toLowerCase()) ||
           (p.sku?.toLowerCase() == codigo.toLowerCase()) ||
           (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false),
-      orElse: () => Producto(),
+      orElse: () => Producto(
+        id: 0,
+        nombre: '',
+        descripcion: '',
+        precio: 0.0,
+        stock: 0,
+        categoria: '',
+      ),
     );
 
     if (producto.id != 0) {
@@ -633,7 +640,7 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
           _carrito
               .map(
                 (item) => CompraProducto(
-                  productoId: item.producto.id,
+                  productoId: int.tryParse(item.producto.id.toString()) ?? 0,
                   nombreProducto: item.producto.nombre ?? 'Producto sin nombre',
                   cantidad: item.cantidad,
                   precioUnitario: item.precioUnitario,

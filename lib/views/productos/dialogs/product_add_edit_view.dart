@@ -355,8 +355,9 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
       producto.categoriaId = _categoriaSeleccionada!.id;
 
       // Guardar imágenes del producto
-      producto.imagenes = List.from(_imagenesProducto);
-      producto.imagenPrincipal = _imagenPrincipal;
+      producto.imagenes.clear();
+      producto.imagenes.addAll(_imagenesProducto);
+      // La imagen principal ahora se determina automáticamente (primera imagen o la del campo imagen)
 
       // Agregar valores de propiedades
       producto.valoresPropiedades.clear();
