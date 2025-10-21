@@ -263,3 +263,39 @@ class Venta {
     return '\$${total.toStringAsFixed(2)}';
   }
 }
+
+class ProductoVenta {
+  final String productoId;
+  final String nombre;
+  final double precio;
+  final int cantidad;
+  final double subtotal;
+
+  ProductoVenta({
+    required this.productoId,
+    required this.nombre,
+    required this.precio,
+    required this.cantidad,
+    required this.subtotal,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'productoId': productoId,
+      'nombre': nombre,
+      'precio': precio,
+      'cantidad': cantidad,
+      'subtotal': subtotal,
+    };
+  }
+
+  factory ProductoVenta.fromJson(Map<String, dynamic> json) {
+    return ProductoVenta(
+      productoId: json['productoId'] ?? '',
+      nombre: json['nombre'] ?? '',
+      precio: (json['precio'] ?? 0).toDouble(),
+      cantidad: json['cantidad'] ?? 0,
+      subtotal: (json['subtotal'] ?? 0).toDouble(),
+    );
+  }
+}
