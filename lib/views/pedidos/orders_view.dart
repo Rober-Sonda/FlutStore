@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
 import '../../src/app_routes.dart';
 import '../../models/pedido.dart';
-import '../../models/cliente.dart';
 
 class OrdersView extends ConsumerStatefulWidget {
   const OrdersView({super.key});

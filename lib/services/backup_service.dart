@@ -11,10 +11,6 @@ import '../models/categoria.dart';
 import '../models/usuario.dart';
 import '../models/cuenta_corriente.dart';
 import '../models/carrito_compra.dart';
-import '../models/movimiento_financiero.dart';
-import '../models/flujo_caja.dart';
-import '../models/business_config.dart';
-import '../models/custom_theme.dart';
 import 'isar_service.dart';
 
 /// Servicio completo de respaldo y restauración de la base de datos

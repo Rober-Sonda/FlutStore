@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tienda_app/services/database_service.dart';
 import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/venta.dart';
 
 // MockDatabaseService removed because the tests below use the real DatabaseService.
 // If you need a mock, generate it using mockito's @GenerateMocks and import the

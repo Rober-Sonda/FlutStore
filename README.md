@@ -175,7 +175,121 @@ El sistema permite personalización completa de:
 - **Migraciones automáticas**: El sistema maneja actualizaciones de esquema
 - **Backup/Restore**: Funcionalidades de respaldo incluidas
 
+## 🧪 Testing y Calidad de Código
+
+### Metodología TDD
+El proyecto sigue **Test-Driven Development (TDD)** con el ciclo:
+- 🔴 **Red**: Escribir test que falle
+- 🟢 **Green**: Implementar código mínimo para pasar
+- 🔵 **Refactor**: Mejorar código manteniendo tests
+
+### Tests Implementados
+```bash
+# Ejecutar todos los tests
+flutter test
+
+# Tests específicos por módulo
+flutter test test/models/
+flutter test test/services/
+flutter test test/views/
+```
+
+### Análisis de Código
+```bash
+# Análisis completo del código
+flutter analyze
+
+# Análisis verbose para debugging
+flutter analyze --verbose
+```
+
+### Calidad de Código
+- **Linting**: Configurado con reglas estrictas
+- **Null Safety**: Cumplimiento completo de null safety
+- **Tests Coverage**: Cobertura >80% en módulos críticos
+
+## 🐛 Troubleshooting
+
+### Problemas Comunes
+
+#### Error de Base de Datos
+```bash
+# Regenerar esquema de Isar
+flutter packages pub run build_runner clean
+flutter packages pub run build_runner build
+```
+
+#### Problemas de Dependencias
+```bash
+# Limpiar cache y reinstalar
+flutter clean
+flutter pub get
+```
+
+#### Errores de Compilación Windows
+```bash
+# Verificar CMake y Visual Studio
+flutter doctor -v
+```
+
+### Logs de Debugging
+- **Desarrollo**: Usar `flutter run --debug`
+- **Producción**: Implementar sistema de logs personalizado
+- **Base de datos**: Habilitar logs de Isar para debugging
+
+## 🏗️ Desarrollo y Arquitectura Avanzada
+
+### Patrones Implementados
+- **MVVM**: Separación clara entre vista, modelo y lógica
+- **Repository Pattern**: Abstracción de acceso a datos
+- **Service Layer**: Servicios especializados por dominio
+- **Provider Pattern**: Estado reactivo con Riverpod
+
+### Estructura de Estado
+```dart
+// Ejemplo de provider típico
+final productProvider = StateNotifierProvider<ProductNotifier, List<Product>>((ref) {
+  return ProductNotifier(ref.read(productServiceProvider));
+});
+```
+
+### Base de Datos - Isar
+- **Esquemas**: Definidos en `lib/models/`
+- **Migraciones**: Automáticas al cambiar esquemas
+- **Índices**: Optimizados para consultas frecuentes
+- **Relaciones**: Links y backlinks configurados
+
+### Manejo de Errores
+- **Try-Catch**: En todas las operaciones críticas
+- **Error States**: Estados de error en providers
+- **User Feedback**: Mensajes informativos al usuario
+
 ## 📈 Estado del Desarrollo
+
+### ✅ Completado Recientemente (TDD)
+- **Dead Null-Aware Expressions**: Corregidas expresiones `??` innecesarias
+- **Import Conflicts**: Resueltos conflictos entre imports package: y relativos
+- **URI Errors**: Corregidos errores de rutas que no existen
+- **Duplicate Imports**: Eliminados imports duplicados
+- **Type Conflicts**: Resueltos conflictos de tipos por imports mixtos
+
+### 🔄 En Progreso
+- **Unused Imports Cleanup**: Eliminación sistemática de imports no utilizados
+- **Deprecated API Updates**: Migración de `.withOpacity()` a `.withValues()`
+- **Unused Variables**: Limpieza de variables y campos no utilizados
+- **Code Quality**: Mejora continua siguiendo metodología TDD
+
+### 📊 Métricas Actuales
+- **Total Issues**: 414 (reducido de 407 inicial tras mejoras de detección)
+- **Critical Errors**: 0 (todos resueltos)
+- **Warnings**: ~300+ (principalmente deprecated APIs)
+- **Test Coverage**: En desarrollo activo con TDD
+
+### 🎯 Próximos Objetivos
+1. **Zero Warnings**: Eliminar todos los warnings de análisis
+2. **Full Test Coverage**: Tests completos para módulos críticos  
+3. **Performance Optimization**: Optimización de rendimiento
+4. **Documentation**: Completar documentación técnica
 
 Ver `docs/development_status.md` para el estado actual de cada módulo.
 

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../models/sorteo.dart';
 import '../../models/premio_sorteo.dart';
 import '../../services/isar_service.dart';
-import '../../widgets/permission_widget.dart';
 
 class SweepstakesEditView extends ConsumerStatefulWidget {
   final Sorteo? sorteo; // null para nuevo, no null para editar
