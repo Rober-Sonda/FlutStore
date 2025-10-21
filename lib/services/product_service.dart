@@ -1,11 +1,11 @@
-import 'dart:math';
+﻿import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/product.dart';
-import 'package:tienda_app/models/product_attribute.dart';
-import 'package:tienda_app/services/isar_service.dart';
-import 'package:tienda_app/services/id_validator.dart';
+import '../models/product.dart';
+import '../models/product_attribute.dart';
+import '../services/isar_service.dart';
+import '../services/id_validator.dart';
 
 final productServiceProvider = Provider<ProductService>(
   (ref) => ProductService(),
@@ -33,7 +33,7 @@ class ProductService {
   ) async {
     if (attribute == null) return -1;
 
-    print('🟡 Verificando atributo: ${attribute.name}');
+    print('ðŸŸ¡ Verificando atributo: ${attribute.name}');
 
     // Buscar si ya existe por name + type
     final existing =
@@ -45,13 +45,13 @@ class ProductService {
 
     if (existing != null) {
       print(
-        '🔁 Atributo ya existente encontrado: ${existing.name} (ID: ${existing.id})',
+        'ðŸ” Atributo ya existente encontrado: ${existing.name} (ID: ${existing.id})',
       );
       attribute.id = existing.id;
       return existing.id;
     }
 
-    // 🆕 Generar slug único (esto debe coincidir con el índice @Index(unique: true))
+    // ðŸ†• Generar slug Ãºnico (esto debe coincidir con el Ã­ndice @Index(unique: true))
     attribute.slug = _generateSlug(attribute.type, attribute.name);
 
     // Asignar ID como autoincrement
@@ -77,12 +77,12 @@ class ProductService {
 
     final isNew = product.id <= 0;
 
-    print('👉 Iniciando guardado de producto: ${product.name}');
-    print('¿Es nuevo? $isNew');
+    print('ðŸ‘‰ Iniciando guardado de producto: ${product.name}');
+    print('Â¿Es nuevo? $isNew');
 
     final random = Random();
 
-    // Asignar SKU y barcode temporales si están vacíos, ANTES de buscar duplicados
+    // Asignar SKU y barcode temporales si estÃ¡n vacÃ­os, ANTES de buscar duplicados
     if (product.sku.isEmpty) {
       product.sku =
           'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
@@ -105,7 +105,7 @@ class ProductService {
 
       if (skuExists != null && (isNew || skuExists.id != product.id)) {
         print(
-          '❌ SKU duplicado detectado: ${product.sku} con ID: ${skuExists.id}',
+          'âŒ SKU duplicado detectado: ${product.sku} con ID: ${skuExists.id}',
         );
         throw Exception('SKU ya existe en otro producto.');
       }
@@ -118,16 +118,16 @@ class ProductService {
 
       if (barcodeExists != null && (isNew || barcodeExists.id != product.id)) {
         print(
-          '❌ Barcode duplicado detectado: ${product.barcode} con ID: ${barcodeExists.id}',
+          'âŒ Barcode duplicado detectado: ${product.barcode} con ID: ${barcodeExists.id}',
         );
         throw Exception('Barcode ya existe en otro producto.');
       }
 
       try {
-        print('💾 Guardando atributos si no existen...');
+        print('ðŸ’¾ Guardando atributos si no existen...');
 
         if (product.category.value != null) {
-          print('🟡 Guardando category: ${product.category.value!.name}');
+          print('ðŸŸ¡ Guardando category: ${product.category.value!.name}');
           product.category.value!.id = await _putAttributeIfNotExists(
             isar,
             product.category.value,
@@ -135,13 +135,13 @@ class ProductService {
         }
 
         if (product.size.value != null) {
-          print('🟡 Guardando size: ${product.size.value!.name}');
+          print('ðŸŸ¡ Guardando size: ${product.size.value!.name}');
           final id = await _putAttributeIfNotExists(isar, product.size.value);
           product.size.value!.id = id;
         }
 
         if (product.color.value != null) {
-          print('🟡 Guardando color: ${product.color.value!.name}');
+          print('ðŸŸ¡ Guardando color: ${product.color.value!.name}');
           product.color.value!.id = await _putAttributeIfNotExists(
             isar,
             product.color.value,
@@ -149,7 +149,7 @@ class ProductService {
         }
 
         if (product.season.value != null) {
-          print('🟡 Guardando season: ${product.season.value!.name}');
+          print('ðŸŸ¡ Guardando season: ${product.season.value!.name}');
           product.season.value!.id = await _putAttributeIfNotExists(
             isar,
             product.season.value,
@@ -157,7 +157,7 @@ class ProductService {
         }
 
         if (product.brand.value != null) {
-          print('🟡 Guardando brand: ${product.brand.value!.name}');
+          print('ðŸŸ¡ Guardando brand: ${product.brand.value!.name}');
           product.brand.value!.id = await _putAttributeIfNotExists(
             isar,
             product.brand.value,
@@ -165,7 +165,7 @@ class ProductService {
         }
 
         if (product.gender.value != null) {
-          print('🟡 Guardando gender: ${product.gender.value!.name}');
+          print('ðŸŸ¡ Guardando gender: ${product.gender.value!.name}');
           product.gender.value!.id = await _putAttributeIfNotExists(
             isar,
             product.gender.value,
@@ -174,7 +174,7 @@ class ProductService {
 
         final productId = await isar.products.put(product);
 
-        // **IMPORTANTE**: Actualiza el ID del producto después de guardarlo
+        // **IMPORTANTE**: Actualiza el ID del producto despuÃ©s de guardarlo
         product.id = productId;
 
         // Validar y registrar el ID del producto
@@ -185,9 +185,9 @@ class ProductService {
           'Producto guardado',
         );
 
-        print('✅ Producto guardado con ID: $productId');
+        print('âœ… Producto guardado con ID: $productId');
 
-        // Vincular atributos con el producto recién guardado
+        // Vincular atributos con el producto reciÃ©n guardado
         if (product.category.value != null) {
           product.category.attach(
             isar.products,
@@ -243,10 +243,10 @@ class ProductService {
           await product.gender.save();
         }
 
-        print('✅ Producto y atributos guardados correctamente');
+        print('âœ… Producto y atributos guardados correctamente');
       } catch (e, stack) {
-        print('❌ ERROR al guardar producto: $e');
-        print('📍 Stack: $stack');
+        print('âŒ ERROR al guardar producto: $e');
+        print('ðŸ“ Stack: $stack');
         rethrow;
       }
     });
@@ -276,3 +276,4 @@ class ProductService {
     return await isar.products.get(id);
   }
 }
+

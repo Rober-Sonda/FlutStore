@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/src/app_routes.dart';
+import '../src/app_routes.dart';
 
 class NotFoundPage extends StatelessWidget {
   const NotFoundPage({super.key});
@@ -20,7 +20,7 @@ class NotFoundPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const Text(
-              '¡Oops! Página no encontrada',
+              'Â¡Oops! PÃ¡gina no encontrada',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -30,7 +30,7 @@ class NotFoundPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'La página que estás buscando no existe o fue movida.',
+              'La pÃ¡gina que estÃ¡s buscando no existe o fue movida.',
               style: TextStyle(fontSize: 16, color: Colors.black54),
               textAlign: TextAlign.center,
             ),
@@ -61,3 +61,4 @@ class NotFoundPage extends StatelessWidget {
     );
   }
 }
+

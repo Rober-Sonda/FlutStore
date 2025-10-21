@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/services/theme_service.dart';
+import '../models/app_theme.dart';
+import '../services/theme_service.dart';
 
 class ColorPickerWidget extends ConsumerStatefulWidget {
   final Color initialColor;
@@ -92,7 +92,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
 
           const SizedBox(height: 12),
 
-          // Botón para cerrar paleta
+          // BotÃ³n para cerrar paleta
           TextButton(
             onPressed: () => setState(() => _showPalette = false),
             child: Text(
@@ -101,7 +101,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
             ),
           ),
         ] else ...[
-          // Botón para mostrar paleta
+          // BotÃ³n para mostrar paleta
           TextButton(
             onPressed: () => setState(() => _showPalette = true),
             child: Text(
@@ -153,9 +153,9 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
 
     return Column(
       children: [
-        // Paleta monocromática
+        // Paleta monocromÃ¡tica
         _buildPaletteSection(
-          'Monocromática',
+          'MonocromÃ¡tica',
           'Variaciones del mismo color',
           _generateMonochromaticPalette(_selectedColor),
           currentTheme,
@@ -163,10 +163,10 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
 
         const SizedBox(height: 12),
 
-        // Paleta análoga
+        // Paleta anÃ¡loga
         _buildPaletteSection(
-          'Análoga',
-          'Colores adyacentes en el círculo cromático',
+          'AnÃ¡loga',
+          'Colores adyacentes en el cÃ­rculo cromÃ¡tico',
           _generateAnalogousPalette(_selectedColor),
           currentTheme,
         ),
@@ -176,16 +176,16 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
         // Paleta complementaria
         _buildPaletteSection(
           'Complementaria',
-          'Colores opuestos en el círculo cromático',
+          'Colores opuestos en el cÃ­rculo cromÃ¡tico',
           _generateComplementaryPalette(_selectedColor),
           currentTheme,
         ),
 
         const SizedBox(height: 12),
 
-        // Paleta triádica
+        // Paleta triÃ¡dica
         _buildPaletteSection(
-          'Triádica',
+          'TriÃ¡dica',
           'Tres colores equidistantes',
           _generateTriadicPalette(_selectedColor),
           currentTheme,
@@ -249,7 +249,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
     );
   }
 
-  // Generar paleta monocromática
+  // Generar paleta monocromÃ¡tica
   List<Color> _generateMonochromaticPalette(Color baseColor) {
     final hsl = HSLColor.fromColor(baseColor);
     return [
@@ -261,7 +261,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
     ];
   }
 
-  // Generar paleta análoga
+  // Generar paleta anÃ¡loga
   List<Color> _generateAnalogousPalette(Color baseColor) {
     final hsl = HSLColor.fromColor(baseColor);
     return [
@@ -289,7 +289,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
     ];
   }
 
-  // Generar paleta triádica
+  // Generar paleta triÃ¡dica
   List<Color> _generateTriadicPalette(Color baseColor) {
     final hsl = HSLColor.fromColor(baseColor);
     return [
@@ -316,7 +316,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
               height: 400,
               child: Column(
                 children: [
-                  // Color picker básico
+                  // Color picker bÃ¡sico
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -326,7 +326,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
 
                           const SizedBox(height: 16),
 
-                          // Información del color
+                          // InformaciÃ³n del color
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
@@ -411,7 +411,7 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
       Colors.green[500]!,
       Colors.green[300]!,
       Colors.green[100]!,
-      // Púrpuras
+      // PÃºrpuras
       Colors.purple[900]!,
       Colors.purple[700]!,
       Colors.purple[500]!,
@@ -483,3 +483,4 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
     );
   }
 }
+

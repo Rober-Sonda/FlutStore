@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/sales_chart.dart';
 import '../widgets/top_products_list.dart';
@@ -28,7 +28,7 @@ class SalesAnalysisSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardSection(
-      title: '📊 Análisis de Ventas',
+      title: 'ðŸ“Š AnÃ¡lisis de Ventas',
       subtitle: 'Tendencias y patrones de venta',
       theme: theme,
       fontConfig: fontConfig,
@@ -73,3 +73,4 @@ class SalesAnalysisSection extends StatelessWidget {
     );
   }
 }
+

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/src/app_routes.dart';
+import '../../src/app_routes.dart';
 import '../../models/venta.dart';
 import '../../models/cliente.dart';
 import '../../services/isar_service.dart';
@@ -93,7 +93,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
       appBar: AppBar(title: const Text('Ventas')),
       body: Column(
         children: [
-          // NUEVO: Descripción de la sección de ventas
+          // NUEVO: DescripciÃ³n de la secciÃ³n de ventas
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -121,7 +121,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Gestión de Ventas',
+                        'GestiÃ³n de Ventas',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                 ),
                 const SizedBox(height: 16),
 
-                // Estadísticas rápidas
+                // EstadÃ­sticas rÃ¡pidas
                 Row(
                   children: [
                     Expanded(
@@ -231,7 +231,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                     : _ventasFiltradas.isEmpty
                     ? EmptyState(
                       title: 'No hay ventas registradas',
-                      subtitle: 'Crea tu primera venta desde el botón +',
+                      subtitle: 'Crea tu primera venta desde el botÃ³n +',
                       actionText: 'Nueva Venta',
                       icon: Icons.point_of_sale_outlined,
                       color: Colors.blue[700]!,
@@ -277,7 +277,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                                 ),
                                 if (venta.esDevolucion)
                                   Text(
-                                    'DEVOLUCIÓN',
+                                    'DEVOLUCIÃ“N',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
@@ -312,7 +312,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                                     if (!venta.esDevolucion)
                                       const PopupMenuItem(
                                         value: 'devolucion',
-                                        child: Text('Procesar devolución'),
+                                        child: Text('Procesar devoluciÃ³n'),
                                       ),
                                     const PopupMenuItem(
                                       value: 'eliminar',
@@ -365,9 +365,9 @@ class _SalesViewState extends ConsumerState<SalesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirmar eliminación'),
+            title: const Text('Confirmar eliminaciÃ³n'),
             content: Text(
-              '¿Está seguro de eliminar la venta #${venta.numeroFactura ?? venta.id}?',
+              'Â¿EstÃ¡ seguro de eliminar la venta #${venta.numeroFactura ?? venta.id}?',
             ),
             actions: [
               TextButton(
@@ -402,3 +402,4 @@ class _SalesViewState extends ConsumerState<SalesView> {
     );
   }
 }
+

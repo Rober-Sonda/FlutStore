@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/compra.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/proveedor.dart';
+import '../../../models/compra.dart';
+import '../../../models/producto.dart';
+import '../../../models/proveedor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/widgets/permission_widget.dart';
+import '../../../widgets/permission_widget.dart';
 
 class PurchaseAddView extends ConsumerStatefulWidget {
   const PurchaseAddView({super.key});
@@ -66,16 +66,16 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
   }
 
   void _agregarAlCarrito(Producto producto) {
-    // Verificar si el producto ya está en el carrito
+    // Verificar si el producto ya estÃ¡ en el carrito
     final existingIndex = _carrito.indexWhere(
       (item) => item.producto.id == producto.id,
     );
 
     if (existingIndex != -1) {
-      // Si ya existe, mostrar diálogo para actualizar cantidad
+      // Si ya existe, mostrar diÃ¡logo para actualizar cantidad
       _mostrarDialogoCantidad(producto, existingIndex);
     } else {
-      // Si es nuevo, mostrar diálogo para especificar cantidad
+      // Si es nuevo, mostrar diÃ¡logo para especificar cantidad
       _mostrarDialogoCantidad(producto, null);
     }
   }
@@ -139,7 +139,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Ingrese valores válidos'),
+                        content: Text('Ingrese valores vÃ¡lidos'),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -177,9 +177,9 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     });
   }
 
-  // Método para agregar producto por código de barras/SKU (preparado para futuro)
+  // MÃ©todo para agregar producto por cÃ³digo de barras/SKU (preparado para futuro)
   void _agregarPorCodigo(String codigo) {
-    // Buscar producto por código (cuando se agreguen los campos)
+    // Buscar producto por cÃ³digo (cuando se agreguen los campos)
     // Por ahora, buscar por nombre como fallback
     final producto = _productos.firstWhere(
       (p) => (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false),
@@ -245,7 +245,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     if (_numeroFacturaController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Debe ingresar un número de factura'),
+          content: Text('Debe ingresar un nÃºmero de factura'),
           backgroundColor: Colors.red,
         ),
       );
@@ -328,7 +328,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Información básica de la compra
+                      // InformaciÃ³n bÃ¡sica de la compra
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(16),
@@ -336,7 +336,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Información de la Compra',
+                                'InformaciÃ³n de la Compra',
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(height: 16),
@@ -370,14 +370,14 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                               ),
                               const SizedBox(height: 16),
 
-                              // Número de Factura y Observaciones
+                              // NÃºmero de Factura y Observaciones
                               Row(
                                 children: [
                                   Expanded(
                                     child: TextFormField(
                                       controller: _numeroFacturaController,
                                       decoration: const InputDecoration(
-                                        labelText: 'Número de Factura *',
+                                        labelText: 'NÃºmero de Factura *',
                                         prefixIcon: Icon(Icons.receipt),
                                         border: OutlineInputBorder(),
                                       ),
@@ -403,7 +403,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
 
                       const SizedBox(height: 16),
 
-                      // Sección de productos
+                      // SecciÃ³n de productos
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(16),
@@ -432,7 +432,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                               ),
                               const SizedBox(height: 16),
 
-                              // Campo de búsqueda rápida
+                              // Campo de bÃºsqueda rÃ¡pida
                               TextField(
                                 decoration: InputDecoration(
                                   labelText: 'Buscar producto por nombre',
@@ -619,7 +619,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
 
                       const SizedBox(height: 32),
 
-                      // Botón Guardar
+                      // BotÃ³n Guardar
                       PermissionWidget(
                         action: 'create',
                         resource: 'compras',
@@ -714,3 +714,4 @@ class ItemCarritoCompra {
     required this.precioUnitario,
   });
 }
+

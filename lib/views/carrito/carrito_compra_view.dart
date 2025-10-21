@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/carrito_provider.dart';
-// NUEVO: Importa provider para notificaciones de pedidos
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // NUEVO: Provider para notificaciones de pedidos pendientes
 final pedidosNotificacionProvider = StateProvider<bool>((ref) => false);

@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/categoria.dart';
-import 'package:tienda_app/services/product_service.dart';
-import 'package:tienda_app/src/app_routes.dart';
-import 'package:tienda_app/widgets/permission_widget.dart';
-import 'package:tienda_app/models/app_theme.dart';
+import '../../models/producto.dart';
+import '../../models/categoria.dart';
+import '../../services/product_service.dart';
+import '../../src/app_routes.dart';
+import '../../widgets/permission_widget.dart';
 import 'widgets/product_card.dart';
 import 'widgets/filters_widget.dart';
 import 'widgets/empty_state_widget.dart';
@@ -126,10 +125,10 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
   }
 
   String getCategoryName(int? categoryId) {
-    if (categorias == null || categoryId == null) return 'Sin categoría';
+    if (categorias == null || categoryId == null) return 'Sin categorÃ­a';
     final categoria = categorias!.firstWhere(
       (c) => c.id == categoryId,
-      orElse: () => Categoria()..nombre = 'Sin categoría',
+      orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
     );
     return categoria.nombre;
   }
@@ -139,9 +138,9 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirmar eliminación'),
+            title: const Text('Confirmar eliminaciÃ³n'),
             content: Text(
-              '¿Estás seguro de que quieres eliminar "${producto.nombre ?? 'Producto sin nombre'}"?',
+              'Â¿EstÃ¡s seguro de que quieres eliminar "${producto.nombre ?? 'Producto sin nombre'}"?',
             ),
             actions: [
               TextButton(
@@ -191,7 +190,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
       ),
       body: Column(
         children: [
-          // NUEVO: Descripción de la sección de productos
+          // NUEVO: DescripciÃ³n de la secciÃ³n de productos
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -199,7 +198,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  'Aquí puedes ver, agregar, editar y eliminar productos de tu tienda. Mantén actualizado tu inventario y consulta detalles de cada producto.',
+                  'AquÃ­ puedes ver, agregar, editar y eliminar productos de tu tienda. MantÃ©n actualizado tu inventario y consulta detalles de cada producto.',
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -238,14 +237,14 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
                       )
                     : LayoutBuilder(
                         builder: (context, constraints) {
-                          // Calcula el ancho ideal de la card (máximo 320, mínimo 200)
+                          // Calcula el ancho ideal de la card (mÃ¡ximo 320, mÃ­nimo 200)
                           const double minCardWidth = 200;
                           const double maxCardWidth = 320;
                           final double gridWidth = constraints.maxWidth;
-                          // Calcula cuántas cards entran por fila según el ancho disponible
+                          // Calcula cuÃ¡ntas cards entran por fila segÃºn el ancho disponible
                           int crossAxisCount = (gridWidth / maxCardWidth).floor();
                           if (crossAxisCount < 1) crossAxisCount = 1;
-                          // Si hay mucho espacio, reduce el ancho de la card para que entren más
+                          // Si hay mucho espacio, reduce el ancho de la card para que entren mÃ¡s
                           double cardWidth = (gridWidth / crossAxisCount).clamp(minCardWidth, maxCardWidth);
 
                           return GridView.builder(
@@ -261,7 +260,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
                               return ProductCard(
                                 producto: producto,
                                 categorias: categorias,
-                                inventoryStats: inventoryStats, // <-- corrige aquí, antes era 'stats'
+                                inventoryStats: inventoryStats, // <-- corrige aquÃ­, antes era 'stats'
                                 onEdit: () async {
                                   final result = await context.push(
                                     AppRoutes.productEdit.replaceAll(

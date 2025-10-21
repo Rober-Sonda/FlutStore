@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/services/backup_service.dart';
+﻿import 'package:flutter/material.dart';
+import '../services/backup_service.dart';
 import 'dart:io';
 
 class BackupView extends StatefulWidget {
@@ -77,19 +77,19 @@ class _BackupViewState extends State<BackupView> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar Restauración'),
+        title: const Text('Confirmar RestauraciÃ³n'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('¿Desea restaurar el backup "${backup.fileName}"?'),
+            Text('Â¿Desea restaurar el backup "${backup.fileName}"?'),
             const SizedBox(height: 16),
             Text('Registros: ${backup.totalRecords}'),
-            Text('Tamaño: ${backup.formattedSize}'),
+            Text('TamaÃ±o: ${backup.formattedSize}'),
             Text('Fecha: ${_formatDateTime(backup.createdAt)}'),
             const SizedBox(height: 16),
             const Text(
-              '⚠️ ADVERTENCIA: Esta acción sobrescribirá los datos actuales.',
+              'âš ï¸ ADVERTENCIA: Esta acciÃ³n sobrescribirÃ¡ los datos actuales.',
               style: TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
@@ -151,8 +151,8 @@ class _BackupViewState extends State<BackupView> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar Eliminación'),
-        content: Text('¿Desea eliminar el backup "${backup.fileName}"?'),
+        title: const Text('Confirmar EliminaciÃ³n'),
+        content: Text('Â¿Desea eliminar el backup "${backup.fileName}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -200,13 +200,13 @@ class _BackupViewState extends State<BackupView> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('¿Cuántos backups desea conservar?'),
+            const Text('Â¿CuÃ¡ntos backups desea conservar?'),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: '5',
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Número de backups a conservar',
+                labelText: 'NÃºmero de backups a conservar',
                 border: OutlineInputBorder(),
               ),
               onFieldSubmitted: (value) {
@@ -262,7 +262,7 @@ class _BackupViewState extends State<BackupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Backups'),
+        title: const Text('GestiÃ³n de Backups'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
@@ -290,7 +290,7 @@ class _BackupViewState extends State<BackupView> {
                   children: [
                     Icon(Icons.schedule),
                     SizedBox(width: 8),
-                    Text('Backup automático'),
+                    Text('Backup automÃ¡tico'),
                   ],
                 ),
               ),
@@ -429,7 +429,7 @@ class _BackupViewState extends State<BackupView> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Crea tu primer backup usando el botón superior',
+                              'Crea tu primer backup usando el botÃ³n superior',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
@@ -464,10 +464,10 @@ class _BackupViewState extends State<BackupView> {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('📅 ${_formatDateTime(backup.createdAt)}'),
-                                  Text('📊 ${backup.totalRecords} registros'),
-                                  Text('💾 ${backup.formattedSize}'),
-                                  Text('🏷️ ${backup.backupType} v${backup.version}'),
+                                  Text('ðŸ“… ${_formatDateTime(backup.createdAt)}'),
+                                  Text('ðŸ“Š ${backup.totalRecords} registros'),
+                                  Text('ðŸ’¾ ${backup.formattedSize}'),
+                                  Text('ðŸ·ï¸ ${backup.backupType} v${backup.version}'),
                                 ],
                               ),
                               isThreeLine: true,
@@ -499,7 +499,7 @@ class _BackupViewState extends State<BackupView> {
                                       children: [
                                         Icon(Icons.info, color: Colors.grey),
                                         SizedBox(width: 8),
-                                        Text('Información'),
+                                        Text('InformaciÃ³n'),
                                       ],
                                     ),
                                   ),
@@ -561,17 +561,17 @@ class _BackupViewState extends State<BackupView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Información del Backup'),
+        title: const Text('InformaciÃ³n del Backup'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildInfoRow('Archivo:', backup.fileName),
             _buildInfoRow('Ruta:', backup.filePath),
-            _buildInfoRow('Fecha creación:', _formatDateTime(backup.createdAt)),
+            _buildInfoRow('Fecha creaciÃ³n:', _formatDateTime(backup.createdAt)),
             _buildInfoRow('Total registros:', backup.totalRecords.toString()),
-            _buildInfoRow('Tamaño:', backup.formattedSize),
-            _buildInfoRow('Versión:', backup.version),
+            _buildInfoRow('TamaÃ±o:', backup.formattedSize),
+            _buildInfoRow('VersiÃ³n:', backup.version),
             _buildInfoRow('Tipo:', backup.backupType),
           ],
         ),

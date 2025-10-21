@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/services/carrito_compra_service.dart';
-import 'package:tienda_app/services/auth_service.dart';
-import 'package:tienda_app/src/app_routes.dart';
-import 'package:tienda_app/services/theme_service.dart';
-import 'package:tienda_app/models/app_theme.dart';
+import '../services/carrito_compra_service.dart';
+import '../services/auth_service.dart';
+import '../src/app_routes.dart';
+import '../services/theme_service.dart';
+import '../models/app_theme.dart';
 
 class TopBarActions extends ConsumerStatefulWidget {
   const TopBarActions({super.key});
@@ -74,7 +74,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
           },
           onPressed: () {
             context.push(AppRoutes.carritoCompra);
-            // Recargar el contador después de navegar
+            // Recargar el contador despuÃ©s de navegar
             Future.delayed(const Duration(milliseconds: 500), () {
               _loadCarritoCount();
             });
@@ -294,7 +294,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Configuración',
+                  'ConfiguraciÃ³n',
                   style: TextStyle(
                     color: currentTheme.textColor,
                     fontWeight: FontWeight.w500,
@@ -328,7 +328,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Cerrar Sesión',
+                  'Cerrar SesiÃ³n',
                   style: TextStyle(
                     color: currentTheme.errorColor,
                     fontWeight: FontWeight.w500,
@@ -381,7 +381,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Cerrar Sesión',
+                  'Cerrar SesiÃ³n',
                   style: TextStyle(
                     color: currentTheme.textColor,
                     fontWeight: FontWeight.bold,
@@ -390,7 +390,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
               ],
             ),
             content: Text(
-              '¿Estás seguro de que quieres cerrar sesión?',
+              'Â¿EstÃ¡s seguro de que quieres cerrar sesiÃ³n?',
               style: TextStyle(color: currentTheme.textSecondaryColor),
             ),
             actions: [
@@ -405,7 +405,7 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
                 onPressed: () async {
                   Navigator.pop(context);
 
-                  // Limpiar estado de autenticación
+                  // Limpiar estado de autenticaciÃ³n
                   ref.read(currentUserProvider.notifier).state = null;
                   ref.read(isAuthenticatedProvider.notifier).state = false;
 
@@ -419,10 +419,11 @@ class _TopBarActionsState extends ConsumerState<TopBarActions>
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text('Cerrar Sesión'),
+                child: const Text('Cerrar SesiÃ³n'),
               ),
             ],
           ),
     );
   }
 }
+

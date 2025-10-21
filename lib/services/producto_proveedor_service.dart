@@ -1,8 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/producto_proveedor.dart';
-import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/services/isar_service.dart';
+import '../models/producto_proveedor.dart';
+import '../models/proveedor.dart';
+import '../services/isar_service.dart';
 
 final productoProveedorServiceProvider = Provider<ProductoProveedorService>((
   ref,
@@ -39,7 +39,7 @@ class ProductoProveedorService {
         .findFirst();
   }
 
-  // Obtener información completa de proveedores para un producto
+  // Obtener informaciÃ³n completa de proveedores para un producto
   Future<List<Map<String, dynamic>>> obtenerProveedoresCompletos(
     int productoId,
   ) async {
@@ -80,7 +80,7 @@ class ProductoProveedorService {
     });
   }
 
-  // Actualizar información de un proveedor para un producto
+  // Actualizar informaciÃ³n de un proveedor para un producto
   Future<void> actualizarProductoProveedor(
     ProductoProveedor productoProveedor,
   ) async {
@@ -144,13 +144,13 @@ class ProductoProveedorService {
         .findAll();
   }
 
-  // Verificar si un producto tiene múltiples proveedores
+  // Verificar si un producto tiene mÃºltiples proveedores
   Future<bool> tieneMultiplesProveedores(int productoId) async {
     final proveedores = await obtenerProveedoresDeProducto(productoId);
     return proveedores.length > 1;
   }
 
-  // Obtener el mejor proveedor para un producto (precio más bajo con stock)
+  // Obtener el mejor proveedor para un producto (precio mÃ¡s bajo con stock)
   Future<ProductoProveedor?> obtenerMejorProveedor(int productoId) async {
     final proveedores = await obtenerProveedoresDeProducto(productoId);
 
@@ -165,7 +165,7 @@ class ProductoProveedorService {
       return proveedores.first;
     }
 
-    // Ordenar por precio (más bajo primero)
+    // Ordenar por precio (mÃ¡s bajo primero)
     proveedoresConStock.sort((a, b) {
       if (a.precioUnitario == null && b.precioUnitario == null) return 0;
       if (a.precioUnitario == null) return 1;
@@ -176,7 +176,7 @@ class ProductoProveedorService {
     return proveedoresConStock.first;
   }
 
-  // Obtener estadísticas de proveedores para un producto
+  // Obtener estadÃ­sticas de proveedores para un producto
   Future<Map<String, dynamic>> obtenerEstadisticasProveedores(
     int productoId,
   ) async {
@@ -218,3 +218,4 @@ class ProductoProveedorService {
     };
   }
 }
+

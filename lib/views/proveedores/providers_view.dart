@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/models/app_theme.dart';
+import '../../models/app_theme.dart';
 import '../../src/app_routes.dart';
 import '../../widgets/permission_widget.dart';
 
@@ -21,7 +21,7 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
       ),
       body: Column(
         children: [
-          // NUEVO: Descripción de la sección de proveedores
+          // NUEVO: DescripciÃ³n de la secciÃ³n de proveedores
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -29,7 +29,7 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  'Aquí puedes registrar y consultar los datos de tus proveedores. Mantén actualizada la información para gestionar tus compras y reposiciones de stock.',
+                  'AquÃ­ puedes registrar y consultar los datos de tus proveedores. MantÃ©n actualizada la informaciÃ³n para gestionar tus compras y reposiciones de stock.',
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -39,7 +39,7 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
           Expanded(
             child: Center(
               child: Text(
-                'Aquí irá la lista de proveedores.',
+                'AquÃ­ irÃ¡ la lista de proveedores.',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -60,3 +60,4 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
     );
   }
 }
+

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/product_attribute.dart';
+﻿import 'package:flutter/material.dart';
+import '../../models/product_attribute.dart';
 
 class EditableDropdown<T extends ProductAttribute> extends StatefulWidget {
   final List<T> items;
@@ -158,7 +158,7 @@ class _EditableDropdownState<T extends ProductAttribute> extends State<EditableD
   }
 }
 
-/// Clase usada para representar la opción "Agregar nuevo..."
+/// Clase usada para representar la opciÃ³n "Agregar nuevo..."
 class _FakeProductAttribute extends ProductAttribute {
   _FakeProductAttribute({required String name}) {
     this.name = name;
@@ -167,3 +167,4 @@ class _FakeProductAttribute extends ProductAttribute {
     createdAt = DateTime.now();
   }
 }
+

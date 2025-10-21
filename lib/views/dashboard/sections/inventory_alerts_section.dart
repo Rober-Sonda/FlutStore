@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/metric_card.dart';
 
@@ -25,10 +25,10 @@ class InventoryAlertsSection extends StatelessWidget {
   });
 
   List<Widget> _buildAlertCards() {
-    // Obtén los datos desde los seeds (ejemplo: stats generado por seeds)
+    // ObtÃ©n los datos desde los seeds (ejemplo: stats generado por seeds)
     return [
       MetricCard(
-        title: 'Productos críticos',
+        title: 'Productos crÃ­ticos',
         value: '${stats['productosCriticos'] ?? 0}', // valor de seed
         icon: Icons.warning,
         color: Colors.red,
@@ -167,7 +167,7 @@ class InventoryAlertsSection extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Categoría: ${alerta['categoria'] ?? 'Sin categoría'}',
+                                  'CategorÃ­a: ${alerta['categoria'] ?? 'Sin categorÃ­a'}',
                                   style: TextStyle(
                                     color: theme.textSecondaryColor,
                                     fontSize: 11,
@@ -249,7 +249,7 @@ class InventoryAlertsSection extends StatelessWidget {
     // final stats = ref.watch(statsProvider); // stats calculados desde seeds
     // final stockAlerts = ref.watch(stockAlertsProvider); // alertas generadas desde seeds
     return DashboardSection(
-      title: '🚨 Alertas de Inventario',
+      title: 'ðŸš¨ Alertas de Inventario',
       subtitle: 'Productos con problemas de stock',
       theme: theme,
       fontConfig: fontConfig,
@@ -262,3 +262,4 @@ class InventoryAlertsSection extends StatelessWidget {
     );
   }
 }
+

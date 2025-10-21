@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/models/producto_proveedor.dart';
-import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/services/producto_proveedor_service.dart';
+import '../models/producto_proveedor.dart';
+import '../models/proveedor.dart';
+import '../services/producto_proveedor_service.dart';
 
 class ProveedorSelectorDialog extends ConsumerStatefulWidget {
   final int productoId;
@@ -88,7 +88,7 @@ class _ProveedorSelectorDialogState
             ),
             const SizedBox(height: 8),
             Text(
-              'Este producto tiene múltiples proveedores. Selecciona el que prefieras:',
+              'Este producto tiene mÃºltiples proveedores. Selecciona el que prefieras:',
               style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
             const SizedBox(height: 16),
@@ -216,7 +216,7 @@ class _ProveedorSelectorDialogState
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    'Código: ${productoProveedor.codigoProveedor}',
+                                    'CÃ³digo: ${productoProveedor.codigoProveedor}',
                                     style: TextStyle(
                                       color: Colors.grey[600],
                                       fontSize: 12,
@@ -296,3 +296,4 @@ class _ProveedorSelectorDialogState
     );
   }
 }
+

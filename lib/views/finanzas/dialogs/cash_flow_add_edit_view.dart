@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/flujo_caja.dart';
-import 'package:tienda_app/widgets/permission_widget.dart';
+import '../../../models/flujo_caja.dart';
+import '../../../widgets/permission_widget.dart';
 
 class CashFlowAddEditView extends ConsumerStatefulWidget {
   final int? flujoId;
@@ -219,7 +219,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
 
                       const SizedBox(height: 16),
 
-                      // Descripción
+                      // DescripciÃ³n
                       PermissionWidget(
                         action: 'create',
                         resource: 'flujo_caja',
@@ -227,7 +227,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                           controller: _descripcionController,
                           maxLines: 2,
                           decoration: InputDecoration(
-                            labelText: 'Descripción',
+                            labelText: 'DescripciÃ³n',
                             labelStyle: TextStyle(color: Colors.grey[400]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -298,14 +298,14 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
 
                       const SizedBox(height: 16),
 
-                      // Categoría
+                      // CategorÃ­a
                       PermissionWidget(
                         action: 'create',
                         resource: 'flujo_caja',
                         child: DropdownButtonFormField<String>(
                           value: _categoriaSeleccionada,
                           decoration: InputDecoration(
-                            labelText: 'Categoría',
+                            labelText: 'CategorÃ­a',
                             labelStyle: TextStyle(color: Colors.grey[400]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -360,7 +360,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                             ),
                             DropdownMenuItem(
                               value: 'utilities',
-                              child: Text('Servicios Públicos'),
+                              child: Text('Servicios PÃºblicos'),
                             ),
                           ],
                           onChanged: (value) {
@@ -370,7 +370,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                           },
                           validator: (value) {
                             if (value == null) {
-                              return 'Seleccione una categoría';
+                              return 'Seleccione una categorÃ­a';
                             }
                             return null;
                           },
@@ -441,7 +441,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                               return 'Ingrese el monto';
                             }
                             if (double.tryParse(value) == null) {
-                              return 'Ingrese un monto válido';
+                              return 'Ingrese un monto vÃ¡lido';
                             }
                             return null;
                           },
@@ -450,14 +450,14 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
 
                       const SizedBox(height: 16),
 
-                      // Número de Comprobante
+                      // NÃºmero de Comprobante
                       PermissionWidget(
                         action: 'create',
                         resource: 'flujo_caja',
                         child: TextFormField(
                           controller: _numeroComprobanteController,
                           decoration: InputDecoration(
-                            labelText: 'Número de Comprobante',
+                            labelText: 'NÃºmero de Comprobante',
                             labelStyle: TextStyle(color: Colors.grey[400]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -479,14 +479,14 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
 
                       const SizedBox(height: 16),
 
-                      // Método de Pago
+                      // MÃ©todo de Pago
                       PermissionWidget(
                         action: 'create',
                         resource: 'flujo_caja',
                         child: DropdownButtonFormField<String>(
                           value: _metodoPagoSeleccionado,
                           decoration: InputDecoration(
-                            labelText: 'Método de Pago',
+                            labelText: 'MÃ©todo de Pago',
                             labelStyle: TextStyle(color: Colors.grey[400]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -521,7 +521,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                             ),
                             DropdownMenuItem(
                               value: 'pago_movil',
-                              child: Text('Pago Móvil'),
+                              child: Text('Pago MÃ³vil'),
                             ),
                           ],
                           onChanged: (value) {
@@ -531,7 +531,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
                           },
                           validator: (value) {
                             if (value == null) {
-                              return 'Seleccione un método de pago';
+                              return 'Seleccione un mÃ©todo de pago';
                             }
                             return null;
                           },
@@ -570,7 +570,7 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
 
                       const SizedBox(height: 32),
 
-                      // Botón Guardar
+                      // BotÃ³n Guardar
                       PermissionWidget(
                         action: 'create',
                         resource: 'flujo_caja',
@@ -613,3 +613,4 @@ class _CashFlowAddEditViewState extends ConsumerState<CashFlowAddEditView> {
     );
   }
 }
+

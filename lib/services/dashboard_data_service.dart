@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/pedido.dart';
-import 'package:tienda_app/models/compra.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/cliente.dart';
-import 'package:tienda_app/models/categoria.dart';
-import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/models/venta.dart';
+import '../models/pedido.dart';
+import '../models/compra.dart';
+import '../models/producto.dart';
+import '../models/cliente.dart';
+import '../models/categoria.dart';
+import '../models/proveedor.dart';
+import '../models/venta.dart';
 
 class DashboardDataService {
   static Future<Map<String, dynamic>> calculateStats(Isar isar) async {
@@ -65,14 +65,14 @@ class DashboardDataService {
             .fechaBetween(startOfMonth, endOfMonth)
             .findAll();
 
-    // Datos del mes anterior para comparación
+    // Datos del mes anterior para comparaciÃ³n
     final pedidosMesAnterior =
         await isar.pedidos
             .filter()
             .fechaBetween(startOfLastMonth, endOfLastMonth)
             .findAll();
 
-    // Cálculos financieros
+    // CÃ¡lculos financieros
     double totalVentasMes = pedidosMes.fold(
       0,
       (sum, p) => sum + (p.total ?? 0),
@@ -90,13 +90,13 @@ class DashboardDataService {
       (sum, p) => sum + (p.total ?? 0),
     );
 
-    // Cálculos de inventario
+    // CÃ¡lculos de inventario
     double valorInventario = productos.fold(
       0,
       (sum, p) => sum + ((p.precio ?? 0) * (p.stock ?? 0)),
     );
 
-    // Cálculos de rendimiento
+    // CÃ¡lculos de rendimiento
     double gananciaMes = totalVentasMes - totalComprasMes;
     double margenGanancia =
         totalVentasMes > 0 ? (gananciaMes / totalVentasMes) * 100 : 0;
@@ -107,7 +107,7 @@ class DashboardDataService {
                 100
             : 0;
 
-    // Cálculos de clientes
+    // CÃ¡lculos de clientes
     int clientesNuevosMes =
         clientes
             .where(
@@ -123,7 +123,7 @@ class DashboardDataService {
         clientes.isNotEmpty ? (pedidosMes.length / clientes.length) * 100 : 0;
 
     return {
-      // Métricas financieras
+      // MÃ©tricas financieras
       'totalVentasMes': totalVentasMes,
       'totalVentasSemana': totalVentasSemana,
       'totalComprasMes': totalComprasMes,
@@ -132,24 +132,24 @@ class DashboardDataService {
       'crecimientoVentas': crecimientoVentas,
       'valorInventario': valorInventario,
 
-      // Métricas de operaciones
+      // MÃ©tricas de operaciones
       'pedidosMes': pedidosMes.length,
       'pedidosSemana': pedidosSemana.length,
       'comprasMes': comprasMes.length,
       'promedioVenta': promedioVenta,
       'tasaConversion': tasaConversion,
 
-      // Métricas de inventario
+      // MÃ©tricas de inventario
       'productos': productos.length,
       'productosBajoStock': productosBajoStock,
       'productosSinStock': productosSinStock,
       'productosCriticos': productosCriticos,
 
-      // Métricas de clientes
+      // MÃ©tricas de clientes
       'clientes': clientes.length,
       'clientesNuevosMes': clientesNuevosMes,
 
-      // Métricas de categorías y proveedores
+      // MÃ©tricas de categorÃ­as y proveedores
       'categorias': categorias.length,
       'proveedores': proveedores.length,
     };
@@ -166,7 +166,7 @@ class DashboardDataService {
             .fechaBetween(startOfMonth, endOfMonth)
             .findAll();
 
-    // Datos de ventas por día
+    // Datos de ventas por dÃ­a
     Map<int, double> ventasPorDia = {};
     for (int i = 1; i <= endOfMonth.day; i++) {
       ventasPorDia[i] = 0;
@@ -280,7 +280,7 @@ class DashboardDataService {
     return performancePorCategoria.entries.map((entry) {
       final categoria = categorias.firstWhere(
         (c) => c.id == entry.key,
-        orElse: () => Categoria()..nombre = 'Sin categoría',
+        orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
       );
       return {
         'id': entry.key,
@@ -307,7 +307,7 @@ class DashboardDataService {
         nivel = 'Sin stock';
         color = Colors.red;
       } else if (stock < 5) {
-        nivel = 'Crítico';
+        nivel = 'CrÃ­tico';
         color = Colors.red;
       } else if (stock < 10) {
         nivel = 'Bajo';
@@ -317,7 +317,7 @@ class DashboardDataService {
       if (stock < 10) {
         final categoria = categorias.firstWhere(
           (c) => c.id == producto.categoriaId,
-          orElse: () => Categoria()..nombre = 'Sin categoría',
+          orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
         );
 
         alertas.add({
@@ -334,7 +334,7 @@ class DashboardDataService {
 
     // Ordenar por nivel de urgencia
     alertas.sort((a, b) {
-      final niveles = {'Sin stock': 3, 'Crítico': 2, 'Bajo': 1};
+      final niveles = {'Sin stock': 3, 'CrÃ­tico': 2, 'Bajo': 1};
       return (niveles[b['nivel']] ?? 0).compareTo(niveles[a['nivel']] ?? 0);
     });
 
@@ -400,7 +400,7 @@ class DashboardDataService {
           (a, b) => (b['total'] as double).compareTo(a['total'] as double),
         );
     } catch (e) {
-      // Si ocurre cualquier error, retorna una lista vacía
+      // Si ocurre cualquier error, retorna una lista vacÃ­a
       return [];
     }
   }
@@ -457,3 +457,4 @@ class DashboardDataService {
       ..sort((a, b) => (b['total'] as double).compareTo(a['total'] as double));
   }
 }
+

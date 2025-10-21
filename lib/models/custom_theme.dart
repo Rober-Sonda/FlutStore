@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/app_theme.dart';
+import '../models/app_theme.dart';
 
 part 'custom_theme.g.dart';
 
@@ -75,7 +75,7 @@ class CustomTheme {
   @ignore
   set infoColor(Color color) => infoColorValue = color.value;
 
-  // Método para crear un tema desde colores
+  // MÃ©todo para crear un tema desde colores
   static CustomTheme fromColors({
     required String userId,
     required String name,
@@ -114,7 +114,7 @@ class CustomTheme {
     return theme;
   }
 
-  // Método para convertir a AppTheme
+  // MÃ©todo para convertir a AppTheme
   @ignore
   AppTheme toAppTheme() {
     return AppTheme(
@@ -134,7 +134,7 @@ class CustomTheme {
     );
   }
 
-  // Método para actualizar el tema
+  // MÃ©todo para actualizar el tema
   @ignore
   void updateTheme({
     String? name,
@@ -171,7 +171,7 @@ class CustomTheme {
   }
 }
 
-// Extensión de AppTheme para incluir temas personalizados
+// ExtensiÃ³n de AppTheme para incluir temas personalizados
 extension AppThemeExtension on AppTheme {
   static AppTheme fromCustomTheme(CustomTheme customTheme) {
     return AppTheme(
@@ -191,3 +191,4 @@ extension AppThemeExtension on AppTheme {
     );
   }
 }
+

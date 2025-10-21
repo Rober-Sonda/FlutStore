@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/views/sorteos/sweepstakes_edit_loader.dart';
-import 'package:tienda_app/views/sorteos/sweepstakes_edit_view.dart';
+import '../iews/sorteos/sweepstakes_edit_loader.dart';
+import '../iews/sorteos/sweepstakes_edit_view.dart';
 import '../views/productos/dialogs/product_add_edit_view.dart';
 import '../views/main_view.dart';
 import '../views/dashboard/dashboard_view.dart';
@@ -308,13 +308,13 @@ final routerProvider = Provider<GoRouter>((ref) {
               final id = int.tryParse(state.pathParameters['id'] ?? '');
               if (id == null) {
                 return const Scaffold(
-                  body: Center(child: Text('ID de sorteo inválido')),
+                  body: Center(child: Text('ID de sorteo invÃ¡lido')),
                 );
               }
               return SweepstakesEditLoader(sorteoId: id);
             },
           ),
-          // Configuración del Negocio
+          // ConfiguraciÃ³n del Negocio
           GoRoute(
             path: '/business-config',
             builder: (context, state) => const BusinessConfigView(),
@@ -344,3 +344,4 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+

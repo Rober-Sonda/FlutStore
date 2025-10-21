@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:tienda_app/widgets/top_bar_actions.dart';
-import 'package:tienda_app/services/theme_service.dart';
-import 'package:tienda_app/models/app_theme.dart';
+import '../widgets/top_bar_actions.dart';
+import '../services/theme_service.dart';
+import '../models/app_theme.dart';
 import '../providers/carrito_provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -339,7 +339,7 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
                   ],
                 ),
                 // ...otros posibles botones de TopBarActions...
-                // Elimina cualquier otro IconButton de carrito aquí.
+                // Elimina cualquier otro IconButton de carrito aquÃ­.
                 const TopBarActions(),
               ],
             ),
@@ -531,3 +531,4 @@ class _ModernWindowButtonState extends State<ModernWindowButton>
     );
   }
 }
+

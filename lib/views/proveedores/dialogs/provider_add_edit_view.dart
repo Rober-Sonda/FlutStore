@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/services/isar_service.dart';
+import '../../../models/proveedor.dart';
+import '../../../services/isar_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProviderAddEditView extends ConsumerStatefulWidget {
@@ -157,7 +157,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Información de la Empresa',
+                      'InformaciÃ³n de la Empresa',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -178,7 +178,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                     TextFormField(
                       controller: _razonSocialController,
                       decoration: const InputDecoration(
-                        labelText: 'Razón Social',
+                        labelText: 'RazÃ³n Social',
                         prefixIcon: Icon(Icons.business_center),
                       ),
                     ),
@@ -219,7 +219,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Información de Contacto',
+                      'InformaciÃ³n de Contacto',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -235,7 +235,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                           if (!RegExp(
                             r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                           ).hasMatch(value)) {
-                            return 'Email inválido';
+                            return 'Email invÃ¡lido';
                           }
                         }
                         return null;
@@ -245,7 +245,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                     TextFormField(
                       controller: _telefonoController,
                       decoration: const InputDecoration(
-                        labelText: 'Teléfono',
+                        labelText: 'TelÃ©fono',
                         prefixIcon: Icon(Icons.phone),
                       ),
                       keyboardType: TextInputType.phone,
@@ -263,7 +263,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                     TextFormField(
                       controller: _direccionController,
                       decoration: const InputDecoration(
-                        labelText: 'Dirección',
+                        labelText: 'DirecciÃ³n',
                         prefixIcon: Icon(Icons.location_on),
                       ),
                       maxLines: 3,
@@ -280,7 +280,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Información Adicional',
+                      'InformaciÃ³n Adicional',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -326,7 +326,7 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
           (context) => AlertDialog(
             title: const Text('Eliminar Proveedor'),
             content: const Text(
-              '¿Estás seguro de que quieres eliminar este proveedor?',
+              'Â¿EstÃ¡s seguro de que quieres eliminar este proveedor?',
             ),
             actions: [
               TextButton(
@@ -371,3 +371,4 @@ class _ProviderAddEditViewState extends ConsumerState<ProviderAddEditView> {
     }
   }
 }
+

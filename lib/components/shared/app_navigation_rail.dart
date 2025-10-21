@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/src/app_routes.dart';
-import 'package:tienda_app/services/app_config_service.dart';
+import '../../src/app_routes.dart';
+import '../../services/app_config_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
-import 'package:tienda_app/services/permission_service.dart';
-import 'package:tienda_app/services/auth_service.dart';
+import '../../models/app_theme.dart';
+import '../../models/font_config.dart';
+import '../../services/permission_service.dart';
+import '../../services/auth_service.dart';
 import '../../providers/carrito_provider.dart';
 
 class AppNavigationRail extends ConsumerStatefulWidget {
@@ -43,7 +43,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     ),
     _NavItemData(
       icon: Icons.category_rounded,
-      label: 'Categorías',
+      label: 'CategorÃ­as',
       route: AppRoutes.categories,
       color: Color(0xFF8B5CF6), // Violet moderno
       resource: 'categorias',
@@ -155,7 +155,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     ),
     _NavItemData(
       icon: Icons.settings_rounded,
-      label: 'Configuración',
+      label: 'ConfiguraciÃ³n',
       route: AppRoutes.settings,
       color: Color(0xFF6B7280), // Gray-500 moderno
       resource: 'configuracion',
@@ -410,7 +410,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
               ],
             ),
           ),
-          // Navigation Items (íconos y textos SIEMPRE blancos)
+          // Navigation Items (Ã­conos y textos SIEMPRE blancos)
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -435,7 +435,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'No tienes acceso a ninguna sección',
+                          'No tienes acceso a ninguna secciÃ³n',
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.3),
                             fontSize: 12,
@@ -460,7 +460,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                     final selected = _selectedIndex == index;
                     final isHovered = _hoveredIndex == index;
 
-                    // Detecta si es el ítem del carrito
+                    // Detecta si es el Ã­tem del carrito
                     final isCarrito = item.label == 'Carrito Compra';
 
                     return MouseRegion(
@@ -503,7 +503,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                                           ? Icons
                                               .shopping_cart // Solo el carrito usa este icono
                                           : item
-                                              .icon, // Los demás usan su icono original
+                                              .icon, // Los demÃ¡s usan su icono original
                                       color: Colors.white,
                                       size:
                                           selected
@@ -588,7 +588,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
               },
             ),
           ),
-          // Bottom Actions (logout y perfil, íconos/textos blancos)
+          // Bottom Actions (logout y perfil, Ã­conos/textos blancos)
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: isCompact ? 8 : 16,
@@ -639,7 +639,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                           if (!isCompact) ...[
                             const SizedBox(width: 8),
                             Text(
-                              'Cerrar Sesión',
+                              'Cerrar SesiÃ³n',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -749,3 +749,4 @@ class _NavItemData {
     required this.action,
   });
 }
+

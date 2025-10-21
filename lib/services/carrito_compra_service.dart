@@ -1,8 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/carrito_compra.dart';
-import 'package:tienda_app/models/proveedor.dart';
-import 'package:tienda_app/services/isar_service.dart';
+import '../models/carrito_compra.dart';
+import '../models/proveedor.dart';
+import '../services/isar_service.dart';
 
 final carritoCompraServiceProvider = Provider<CarritoCompraService>(
   (ref) => CarritoCompraService(),
@@ -100,17 +100,17 @@ class CarritoCompraService {
   Future<List<Proveedor>> obtenerProveedoresParaProducto(int productoId) async {
     final isar = await db;
     // Por ahora retornamos todos los proveedores
-    // En el futuro esto podría filtrarse por proveedores que realmente venden este producto
+    // En el futuro esto podrÃ­a filtrarse por proveedores que realmente venden este producto
     return await isar.proveedors.where().findAll();
   }
 
-  // Obtener el proveedor más económico para un producto
+  // Obtener el proveedor mÃ¡s econÃ³mico para un producto
   Future<Proveedor?> obtenerProveedorMasEconomico(int productoId) async {
     final proveedores = await obtenerProveedoresParaProducto(productoId);
     if (proveedores.isEmpty) return null;
 
-    // Por ahora retornamos el primero, pero aquí se implementaría la lógica
-    // para determinar cuál es el más económico basado en precios históricos
+    // Por ahora retornamos el primero, pero aquÃ­ se implementarÃ­a la lÃ³gica
+    // para determinar cuÃ¡l es el mÃ¡s econÃ³mico basado en precios histÃ³ricos
     return proveedores.first;
   }
 
@@ -130,7 +130,7 @@ class CarritoCompraService {
     });
   }
 
-  // Obtener estadísticas del carrito
+  // Obtener estadÃ­sticas del carrito
   Future<Map<String, dynamic>> obtenerEstadisticasCarrito() async {
     final carrito = await obtenerCarrito();
 
@@ -148,3 +148,4 @@ class CarritoCompraService {
     };
   }
 }
+

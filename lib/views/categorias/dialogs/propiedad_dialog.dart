@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/propiedad_categoria.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/propiedad_categoria.dart';
 
 class PropiedadDialog extends StatefulWidget {
   final PropiedadCategoria? propiedad;
@@ -143,7 +143,7 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
                       child: TextField(
                         controller: _opcionController,
                         decoration: const InputDecoration(
-                          labelText: 'Nueva opción',
+                          labelText: 'Nueva opciÃ³n',
                         ),
                       ),
                     ),
@@ -183,9 +183,9 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
       case TipoPropiedad.texto:
         return 'Texto';
       case TipoPropiedad.numero:
-        return 'Número';
+        return 'NÃºmero';
       case TipoPropiedad.booleano:
-        return 'Sí/No';
+        return 'SÃ­/No';
       case TipoPropiedad.fecha:
         return 'Fecha';
       case TipoPropiedad.seleccion:
@@ -193,3 +193,4 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
     }
   }
 }
+

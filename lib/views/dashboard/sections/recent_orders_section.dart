@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/recent_orders_list.dart';
 
@@ -21,8 +21,8 @@ class RecentOrdersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardSection(
-      title: '🛒 Pedidos Recientes',
-      subtitle: 'Últimas transacciones del negocio',
+      title: 'ðŸ›’ Pedidos Recientes',
+      subtitle: 'Ãšltimas transacciones del negocio',
       theme: theme,
       fontConfig: fontConfig,
       onTap: onTap,
@@ -36,3 +36,4 @@ class RecentOrdersSection extends StatelessWidget {
     );
   }
 }
+

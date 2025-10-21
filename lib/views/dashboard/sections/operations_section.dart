@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/metric_card.dart';
 
@@ -25,8 +25,8 @@ class OperationsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardSection(
-      title: '⚡ Operaciones y Productividad',
-      subtitle: 'Métricas de eficiencia operativa',
+      title: 'âš¡ Operaciones y Productividad',
+      subtitle: 'MÃ©tricas de eficiencia operativa',
       theme: theme,
       fontConfig: fontConfig,
       onTap: onTap,
@@ -59,7 +59,7 @@ class OperationsSection extends StatelessWidget {
               fontConfig: fontConfig,
             ),
             MetricCard(
-              title: 'Tasa Conversión',
+              title: 'Tasa ConversiÃ³n',
               value: '${stats['tasaConversion']?.toStringAsFixed(1) ?? '0.0'}%',
               icon: Icons.people,
               color: Colors.cyan,
@@ -73,3 +73,4 @@ class OperationsSection extends StatelessWidget {
     );
   }
 }
+

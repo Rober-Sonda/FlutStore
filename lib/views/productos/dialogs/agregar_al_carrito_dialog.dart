@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/proveedor.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/producto.dart';
+import '../../../models/proveedor.dart';
 import 'package:isar/isar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,7 +165,7 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
                               border: OutlineInputBorder(),
                             ),
                             inputFormatters: [
-                              // Solo permite números positivos
+                              // Solo permite nÃºmeros positivos
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             onChanged: (val) {
@@ -173,7 +173,7 @@ class _AgregarAlCarritoDialogState extends ConsumerState<AgregarAlCarritoDialog>
                               if (n != null && n > 0) {
                                 setState(() => cantidad = n);
                               } else {
-                                // Si el valor es inválido, vuelve a poner el valor anterior
+                                // Si el valor es invÃ¡lido, vuelve a poner el valor anterior
                                 _cantidadController.text = cantidad.toString();
                               }
                             },

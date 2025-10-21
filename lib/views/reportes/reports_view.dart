@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/pedido.dart';
-import 'package:tienda_app/models/compra.dart';
-import 'package:tienda_app/models/producto.dart';
-import 'package:tienda_app/models/cliente.dart';
-import 'package:tienda_app/models/categoria.dart';
-import 'package:tienda_app/services/isar_service.dart';
+import '../../models/pedido.dart';
+import '../../models/compra.dart';
+import '../../models/producto.dart';
+import '../../models/cliente.dart';
+import '../../models/categoria.dart';
+import '../../services/isar_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
@@ -154,7 +154,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     final productos = await isar.productos.where().findAll();
     final categorias = await isar.categorias.where().findAll();
 
-    // Ventas por día
+    // Ventas por dÃ­a
     Map<int, double> ventasPorDia = {};
     for (int i = 1; i <= end.day; i++) {
       ventasPorDia[i] = 0;
@@ -166,7 +166,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
       }
     }
 
-    // Productos más vendidos
+    // Productos mÃ¡s vendidos
     Map<int, int> ventasPorProducto = {};
     for (final pedido in pedidos) {
       for (final productoId in pedido.productos) {
@@ -178,7 +178,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
         ventasPorProducto.entries.toList()
           ..sort((a, b) => b.value.compareTo(a.value));
 
-    // Categorías más populares
+    // CategorÃ­as mÃ¡s populares
     Map<String, int> ventasPorCategoria = {};
     for (final pedido in pedidos) {
       for (final productoId in pedido.productos) {
@@ -189,7 +189,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
         if (producto.categoriaId != null) {
           final categoria = categorias.firstWhere(
             (c) => c.id == producto.categoriaId,
-            orElse: () => Categoria()..nombre = 'Sin categoría',
+            orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
           );
           ventasPorCategoria[categoria.nombre] =
               (ventasPorCategoria[categoria.nombre] ?? 0) + 1;
@@ -246,13 +246,13 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Descripción de la sección de reportes
+              // DescripciÃ³n de la secciÃ³n de reportes
               Card(
                 color: Colors.blueGrey[900],
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Text(
-                    'Consulta y analiza los reportes de tu negocio. Aquí puedes ver el resumen de ventas, compras, utilidad, inventario y otros indicadores clave. Usa los filtros y exporta los datos para tomar mejores decisiones.',
+                    'Consulta y analiza los reportes de tu negocio. AquÃ­ puedes ver el resumen de ventas, compras, utilidad, inventario y otros indicadores clave. Usa los filtros y exporta los datos para tomar mejores decisiones.',
                     style: const TextStyle(color: Colors.white70, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
@@ -267,7 +267,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Período de Análisis',
+                        'PerÃ­odo de AnÃ¡lisis',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -280,7 +280,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                             child: DropdownButtonFormField<String>(
                               value: selectedPeriod,
                               decoration: const InputDecoration(
-                                labelText: 'Período',
+                                labelText: 'PerÃ­odo',
                                 border: OutlineInputBorder(),
                               ),
                               items:
@@ -361,7 +361,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Estadísticas principales
+              // EstadÃ­sticas principales
               GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -397,7 +397,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                 ],
               ),
               const SizedBox(height: 16),
-              // Gráficos
+              // GrÃ¡ficos
               _buildSalesChart(),
               const SizedBox(height: 16),
               Row(
@@ -465,7 +465,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Ventas por Día',
+              'Ventas por DÃ­a',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -552,7 +552,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Productos Más Vendidos',
+              'Productos MÃ¡s Vendidos',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -621,7 +621,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: Center(child: Text('No hay datos de categorías disponibles')),
+          child: Center(child: Text('No hay datos de categorÃ­as disponibles')),
         ),
       );
     }
@@ -633,7 +633,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Ventas por Categoría',
+              'Ventas por CategorÃ­a',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -703,3 +703,4 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     );
   }
 }
+

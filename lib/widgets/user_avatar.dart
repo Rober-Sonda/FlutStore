@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/usuario.dart';
+﻿import 'package:flutter/material.dart';
+import '../models/usuario.dart';
 
 class UserAvatar extends StatelessWidget {
   final Usuario? usuario;
@@ -77,3 +77,4 @@ class UserAvatar extends StatelessWidget {
     );
   }
 }
+

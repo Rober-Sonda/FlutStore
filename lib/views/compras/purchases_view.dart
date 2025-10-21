@@ -1,9 +1,9 @@
-// lib/views/purchases_view.dart (pantalla dummy para Compras)
+﻿// lib/views/purchases_view.dart (pantalla dummy para Compras)
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/src/app_routes.dart';
+import '../../src/app_routes.dart';
 import '../../models/compra.dart';
 import '../../models/proveedor.dart';
 import '../../services/isar_service.dart';
@@ -132,7 +132,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
       ),
       body: Column(
         children: [
-          // NUEVO: Descripción de la sección de compras
+          // NUEVO: DescripciÃ³n de la secciÃ³n de compras
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -140,7 +140,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  'Registra y consulta todas las compras realizadas a tus proveedores. Mantén el control de tus egresos y la reposición de productos en tu inventario.',
+                  'Registra y consulta todas las compras realizadas a tus proveedores. MantÃ©n el control de tus egresos y la reposiciÃ³n de productos en tu inventario.',
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -160,7 +160,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Gestión de Compras',
+                        'GestiÃ³n de Compras',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
                 ),
                 const SizedBox(height: 16),
 
-                // Estadísticas rápidas
+                // EstadÃ­sticas rÃ¡pidas
                 Row(
                   children: [
                     Expanded(
@@ -291,7 +291,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Crea tu primera compra desde el botón +',
+                            'Crea tu primera compra desde el botÃ³n +',
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                           const SizedBox(height: 16),
@@ -347,7 +347,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
                                 ),
                                 if (compra.esDevolucion)
                                   Text(
-                                    'DEVOLUCIÓN',
+                                    'DEVOLUCIÃ“N',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
@@ -382,7 +382,7 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
                                     if (!compra.esDevolucion)
                                       const PopupMenuItem(
                                         value: 'devolucion',
-                                        child: Text('Procesar devolución'),
+                                        child: Text('Procesar devoluciÃ³n'),
                                       ),
                                     const PopupMenuItem(
                                       value: 'eliminar',
@@ -439,9 +439,9 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirmar eliminación'),
+            title: const Text('Confirmar eliminaciÃ³n'),
             content: Text(
-              '¿Está seguro de eliminar la compra #${compra.numeroFactura ?? compra.id}?',
+              'Â¿EstÃ¡ seguro de eliminar la compra #${compra.numeroFactura ?? compra.id}?',
             ),
             actions: [
               TextButton(
@@ -476,3 +476,4 @@ class _PurchasesViewState extends ConsumerState<PurchasesView> {
     );
   }
 }
+

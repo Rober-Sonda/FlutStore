@@ -1,10 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:tienda_app/models/usuario.dart';
-import 'package:tienda_app/models/rol.dart';
-import 'package:tienda_app/services/id_validator.dart';
+import '../models/usuario.dart';
+import '../models/rol.dart';
+import '../services/id_validator.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 
@@ -89,15 +89,15 @@ class AuthService {
     }
   }
 
-  /// Cierra la sesión del usuario actual
+  /// Cierra la sesiÃ³n del usuario actual
   Future<void> logout() async {
     try {
-      // Aquí podrías agregar lógica adicional como:
-      // - Limpiar tokens de sesión
+      // AquÃ­ podrÃ­as agregar lÃ³gica adicional como:
+      // - Limpiar tokens de sesiÃ³n
       // - Registrar el logout en logs
-      // - Limpiar caché local
+      // - Limpiar cachÃ© local
       
-      print('Usuario ha cerrado sesión');
+      print('Usuario ha cerrado sesiÃ³n');
     } catch (e) {
       print('Error durante el logout: $e');
     }
@@ -115,7 +115,7 @@ class AuthService {
       final esAdminAEliminar = await isAdmin(usuarioAEliminar);
       if (!esAdminAEliminar) return true; // Puede eliminar usuarios no admin
 
-      // Si es admin, verificar que no sea el último
+      // Si es admin, verificar que no sea el Ãºltimo
       final admins = await isar.usuarios.filter().rolIdIsNotNull().findAll();
 
       int adminCount = 0;
@@ -128,7 +128,7 @@ class AuthService {
         }
       }
 
-      return adminCount > 1; // Solo puede eliminar si hay más de un admin
+      return adminCount > 1; // Solo puede eliminar si hay mÃ¡s de un admin
     } catch (e) {
       print('Error verificando si puede eliminar usuario: $e');
       return false;
@@ -170,7 +170,7 @@ class AuthService {
 
       return adminCount == 1;
     } catch (e) {
-      print('Error verificando si es último admin: $e');
+      print('Error verificando si es Ãºltimo admin: $e');
       return false;
     }
   }
@@ -192,7 +192,7 @@ class AuthService {
 
       return true;
     } catch (e) {
-      print('Error reseteando contraseña: $e');
+      print('Error reseteando contraseÃ±a: $e');
       return false;
     }
   }
@@ -274,3 +274,4 @@ class AuthService {
     }
   }
 }
+

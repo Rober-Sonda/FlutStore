@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/services/app_config_service.dart';
-import 'package:tienda_app/services/isar_service.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
-import 'package:tienda_app/services/dashboard_data_service.dart';
+import '../../services/app_config_service.dart';
+import '../../services/isar_service.dart';
+import '../../models/app_theme.dart';
+import '../../models/font_config.dart';
+import '../../services/dashboard_data_service.dart';
 import 'sections/financial_metrics_section.dart';
 import 'sections/operations_section.dart';
 import 'sections/inventory_alerts_section.dart';
@@ -15,16 +15,16 @@ import 'sections/quick_actions_section.dart';
 
 // Agrega los providers para stats y stockAlerts al inicio del archivo
 final statsProvider = Provider<Map<String, dynamic>>((ref) {
-  // Aquí deberías obtener los datos desde DashboardDataService usando Isar
-  // Este es un ejemplo básico, ajusta según tu arquitectura y contexto
+  // AquÃ­ deberÃ­as obtener los datos desde DashboardDataService usando Isar
+  // Este es un ejemplo bÃ¡sico, ajusta segÃºn tu arquitectura y contexto
   final isarService = ref.watch(isarServiceProvider);
-  // Este provider debe ser async si usas FutureProvider, aquí es solo ejemplo
-  // Reemplaza por FutureProvider si necesitas datos asíncronos
+  // Este provider debe ser async si usas FutureProvider, aquÃ­ es solo ejemplo
+  // Reemplaza por FutureProvider si necesitas datos asÃ­ncronos
   return {};
 });
 
 final stockAlertsProvider = Provider<List<Map<String, dynamic>>>((ref) {
-  // Igual que arriba, obtén los datos desde DashboardDataService
+  // Igual que arriba, obtÃ©n los datos desde DashboardDataService
   return [];
 });
 
@@ -55,7 +55,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
   int productosBajoStock = 5;
   int clientesNuevos = 3;
   List<String> notificaciones = [
-    '¡Tienes productos bajo stock!',
+    'Â¡Tienes productos bajo stock!',
     'Recuerda revisar los pedidos pendientes.',
     'Hay un sorteo activo, promociona en Instagram.',
     'Cierre de caja pendiente para hoy.',
@@ -84,7 +84,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     final isarService = ref.read(isarServiceProvider);
     final isar = await isarService.db;
 
-    // Obtén todos los datos desde los seeds usando los servicios
+    // ObtÃ©n todos los datos desde los seeds usando los servicios
     final statsData = await DashboardDataService.calculateStats(isar);
     final salesDataResult = await DashboardDataService.generateChartData(isar);
     final topProductsResult = await DashboardDataService.loadTopProducts(isar);
@@ -119,13 +119,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text('Análisis Detallado - $section'),
+            title: Text('AnÃ¡lisis Detallado - $section'),
             content: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Datos del período actual:'),
+                  Text('Datos del perÃ­odo actual:'),
                   const SizedBox(height: 8),
                   ...data.entries.map(
                     (entry) => Padding(
@@ -148,7 +148,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    // Usa los datos seeds a través de los providers
+    // Usa los datos seeds a travÃ©s de los providers
     final stats = ref.watch(statsProvider); // datos seeds
     final stockAlerts = ref.watch(stockAlertsProvider); // datos seeds
 
@@ -195,11 +195,11 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                   icon: Icon(Icons.refresh, color: theme.textColor),
                   tooltip: 'Actualizar datos',
                 ),
-                // Elimina cualquier IconButton de carrito aquí.
-                // El icono de carrito con punto rojo ya está en modern_title_bar.dart.
+                // Elimina cualquier IconButton de carrito aquÃ­.
+                // El icono de carrito con punto rojo ya estÃ¡ en modern_title_bar.dart.
               ],
             ),
-            // NUEVO: Descripción general del dashboard
+            // NUEVO: DescripciÃ³n general del dashboard
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 16),
               child: Card(
@@ -207,7 +207,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Text(
-                    'Aquí puedes ver un resumen de tu negocio: ventas, productos, pedidos, inventario y alertas importantes. Usa este panel para tomar decisiones rápidas y controlar el estado general de tu tienda.',
+                    'AquÃ­ puedes ver un resumen de tu negocio: ventas, productos, pedidos, inventario y alertas importantes. Usa este panel para tomar decisiones rÃ¡pidas y controlar el estado general de tu tienda.',
                     style: const TextStyle(color: Colors.white70, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
@@ -216,13 +216,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 1: Métricas Financieras
+            // SECCIÃ“N 1: MÃ©tricas Financieras
             FinancialMetricsSection(
               stats: stats,
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Métricas Financieras', {
+                  () => _showDetailedAnalysis('MÃ©tricas Financieras', {
                     'Ventas del mes':
                         '\$${stats['totalVentasMes']?.toStringAsFixed(2) ?? '0.00'}',
                     'Ganancia del mes':
@@ -239,7 +239,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 2: Operaciones y Productividad
+            // SECCIÃ“N 2: Operaciones y Productividad
             OperationsSection(
               stats: stats,
               theme: theme,
@@ -251,7 +251,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                     'Compras del mes': '${stats['comprasMes'] ?? 0}',
                     'Promedio por venta':
                         '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
-                    'Tasa de conversión':
+                    'Tasa de conversiÃ³n':
                         '${stats['tasaConversion']?.toStringAsFixed(1) ?? '0.0'}%',
                   }),
               isDesktop: isDesktop,
@@ -259,35 +259,35 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 3: Alertas de Inventario
+            // SECCIÃ“N 3: Alertas de Inventario
             InventoryAlertsSection(
               stats: stats,
               stockAlerts: stockAlerts,
               theme: theme,
               fontConfig: fontConfig,
-              onTap: null, // Corrige el error pasando null o una función válida
+              onTap: null, // Corrige el error pasando null o una funciÃ³n vÃ¡lida
               isDesktop: isDesktop,
               isTablet: isTablet,
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 4: Rendimiento por Categorías
+            // SECCIÃ“N 4: Rendimiento por CategorÃ­as
             CategoryPerformanceSection(
               categoryPerformance: categoryPerformance,
               stats: stats,
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Rendimiento por Categorías', {
-                    'Total de categorías': '${stats['categorias'] ?? 0}',
-                    'Categorías con productos': '${categoryPerformance.length}',
+                  () => _showDetailedAnalysis('Rendimiento por CategorÃ­as', {
+                    'Total de categorÃ­as': '${stats['categorias'] ?? 0}',
+                    'CategorÃ­as con productos': '${categoryPerformance.length}',
                   }),
               isDesktop: isDesktop,
               isTablet: isTablet,
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 5: Análisis de Ventas
+            // SECCIÃ“N 5: AnÃ¡lisis de Ventas
             SalesAnalysisSection(
               salesData: salesData,
               topProducts: topProducts,
@@ -295,10 +295,10 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Análisis de Ventas', {
-                    'Días con ventas':
+                  () => _showDetailedAnalysis('AnÃ¡lisis de Ventas', {
+                    'DÃ­as con ventas':
                         '${salesData.where((d) => d['ventas'] > 0).length}',
-                    'Total de días analizados': '${salesData.length}',
+                    'Total de dÃ­as analizados': '${salesData.length}',
                     'Promedio diario':
                         '\$${(stats['totalVentasMes'] ?? 0) / salesData.length}',
                   }),
@@ -306,7 +306,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 6: Pedidos Recientes
+            // SECCIÃ“N 6: Pedidos Recientes
             RecentOrdersSection(
               recentOrders: recentOrders,
               theme: theme,
@@ -320,7 +320,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 7: Acciones Rápidas
+            // SECCIÃ“N 7: Acciones RÃ¡pidas
             QuickActionsSection(
               theme: theme,
               fontConfig: fontConfig,
@@ -406,7 +406,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               ),
             ),
             const SizedBox(height: 32),
-            // ...puedes agregar aquí gráficos, tendencias, accesos rápidos, etc...
+            // ...puedes agregar aquÃ­ grÃ¡ficos, tendencias, accesos rÃ¡pidos, etc...
           ],
         ),
       ),
@@ -444,3 +444,4 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 }
+

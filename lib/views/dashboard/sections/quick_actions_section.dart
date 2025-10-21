@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
-import 'package:tienda_app/src/app_routes.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
+import '../../../src/app_routes.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/action_button.dart';
 
@@ -23,7 +23,7 @@ class QuickActionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardSection(
-      title: '⚡ Acciones Rápidas',
+      title: 'âš¡ Acciones RÃ¡pidas',
       subtitle: 'Acceso directo a funciones principales',
       theme: theme,
       fontConfig: fontConfig,
@@ -75,3 +75,4 @@ class QuickActionsSection extends StatelessWidget {
     );
   }
 }
+

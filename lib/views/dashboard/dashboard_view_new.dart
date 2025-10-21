@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tienda_app/services/app_config_service.dart';
-import 'package:tienda_app/services/isar_service.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
-import 'package:tienda_app/services/dashboard_data_service.dart';
+import '../../services/app_config_service.dart';
+import '../../services/isar_service.dart';
+import '../../models/app_theme.dart';
+import '../../models/font_config.dart';
+import '../../services/dashboard_data_service.dart';
 import 'sections/financial_metrics_section.dart';
 import 'sections/operations_section.dart';
 import 'sections/inventory_alerts_section.dart';
@@ -90,13 +90,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text('Análisis Detallado - $section'),
+            title: Text('AnÃ¡lisis Detallado - $section'),
             content: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Datos del período actual:'),
+                  Text('Datos del perÃ­odo actual:'),
                   const SizedBox(height: 8),
                   ...data.entries.map(
                     (entry) => Padding(
@@ -166,13 +166,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 1: Métricas Financieras
+            // SECCIÃ“N 1: MÃ©tricas Financieras
             FinancialMetricsSection(
               stats: stats,
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Métricas Financieras', {
+                  () => _showDetailedAnalysis('MÃ©tricas Financieras', {
                     'Ventas del mes':
                         '\$${stats['totalVentasMes']?.toStringAsFixed(2) ?? '0.00'}',
                     'Ganancia del mes':
@@ -189,7 +189,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 2: Operaciones y Productividad
+            // SECCIÃ“N 2: Operaciones y Productividad
             OperationsSection(
               stats: stats,
               theme: theme,
@@ -201,7 +201,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                     'Compras del mes': '${stats['comprasMes'] ?? 0}',
                     'Promedio por venta':
                         '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
-                    'Tasa de conversión':
+                    'Tasa de conversiÃ³n':
                         '${stats['tasaConversion']?.toStringAsFixed(1) ?? '0.0'}%',
                   }),
               isDesktop: isDesktop,
@@ -209,7 +209,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 3: Alertas de Inventario
+            // SECCIÃ“N 3: Alertas de Inventario
             InventoryAlertsSection(
               stats: stats,
               stockAlerts: stockAlerts,
@@ -217,7 +217,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               fontConfig: fontConfig,
               onTap:
                   () => _showDetailedAnalysis('Alertas de Inventario', {
-                    'Productos críticos': '${stats['productosCriticos'] ?? 0}',
+                    'Productos crÃ­ticos': '${stats['productosCriticos'] ?? 0}',
                     'Productos con stock bajo':
                         '${stats['productosBajoStock'] ?? 0}',
                     'Productos sin stock': '${stats['productosSinStock'] ?? 0}',
@@ -228,23 +228,23 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 4: Rendimiento por Categorías
+            // SECCIÃ“N 4: Rendimiento por CategorÃ­as
             CategoryPerformanceSection(
               categoryPerformance: categoryPerformance,
               stats: stats,
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Rendimiento por Categorías', {
-                    'Total de categorías': '${stats['categorias'] ?? 0}',
-                    'Categorías con productos': '${categoryPerformance.length}',
+                  () => _showDetailedAnalysis('Rendimiento por CategorÃ­as', {
+                    'Total de categorÃ­as': '${stats['categorias'] ?? 0}',
+                    'CategorÃ­as con productos': '${categoryPerformance.length}',
                   }),
               isDesktop: isDesktop,
               isTablet: isTablet,
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 5: Análisis de Ventas
+            // SECCIÃ“N 5: AnÃ¡lisis de Ventas
             SalesAnalysisSection(
               salesData: salesData,
               topProducts: topProducts,
@@ -252,10 +252,10 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               theme: theme,
               fontConfig: fontConfig,
               onTap:
-                  () => _showDetailedAnalysis('Análisis de Ventas', {
-                    'Días con ventas':
+                  () => _showDetailedAnalysis('AnÃ¡lisis de Ventas', {
+                    'DÃ­as con ventas':
                         '${salesData.where((d) => d['ventas'] > 0).length}',
-                    'Total de días analizados': '${salesData.length}',
+                    'Total de dÃ­as analizados': '${salesData.length}',
                     'Promedio diario':
                         '\$${(stats['totalVentasMes'] ?? 0) / salesData.length}',
                   }),
@@ -263,7 +263,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 6: Pedidos Recientes
+            // SECCIÃ“N 6: Pedidos Recientes
             RecentOrdersSection(
               recentOrders: recentOrders,
               theme: theme,
@@ -277,7 +277,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
             const SizedBox(height: 24),
 
-            // SECCIÓN 7: Acciones Rápidas
+            // SECCIÃ“N 7: Acciones RÃ¡pidas
             QuickActionsSection(
               theme: theme,
               fontConfig: fontConfig,
@@ -290,3 +290,4 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 }
+

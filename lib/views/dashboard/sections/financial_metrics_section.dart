@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/font_config.dart';
+﻿import 'package:flutter/material.dart';
+import '../../../models/app_theme.dart';
+import '../../../models/font_config.dart';
 import '../widgets/dashboard_section.dart';
 import '../widgets/metric_card.dart';
 
@@ -83,8 +83,8 @@ class FinancialMetricsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardSection(
-      title: '📊 Métricas Financieras',
-      subtitle: 'Rendimiento económico del negocio',
+      title: 'ðŸ“Š MÃ©tricas Financieras',
+      subtitle: 'Rendimiento econÃ³mico del negocio',
       theme: theme,
       fontConfig: fontConfig,
       onTap: onTap,
@@ -92,3 +92,4 @@ class FinancialMetricsSection extends StatelessWidget {
     );
   }
 }
+

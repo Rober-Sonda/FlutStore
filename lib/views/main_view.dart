@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_app/components/shared/app_navigation_rail.dart';
-import 'package:tienda_app/widgets/modern_title_bar.dart';
+import '../widgets/modern_title_bar.dart';
 
 class MainView extends StatelessWidget {
   final Widget child;
@@ -13,7 +13,7 @@ class MainView extends StatelessWidget {
     return Scaffold(
       body: MediaQuery.removePadding(
         context: context,
-        removeTop: true, // 🔥 Esto fuerza a ignorar padding de sistema
+        removeTop: true, // ðŸ”¥ Esto fuerza a ignorar padding de sistema
         child: Column(
           children: [
             // Modern Title Bar
@@ -33,3 +33,4 @@ class MainView extends StatelessWidget {
     );
   }
 }
+

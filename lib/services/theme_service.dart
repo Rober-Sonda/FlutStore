@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/models/app_theme.dart';
-import 'package:tienda_app/models/custom_theme.dart';
-import 'package:tienda_app/services/auth_service.dart';
-import 'package:tienda_app/services/id_validator.dart';
+import '../models/app_theme.dart';
+import '../models/custom_theme.dart';
+import '../services/auth_service.dart';
+import '../services/id_validator.dart';
 
 final themeServiceProvider = Provider<ThemeService>((ref) => ThemeService());
 
@@ -42,27 +42,27 @@ class ThemeService {
   // Guardar un tema personalizado
   Future<bool> saveCustomTheme(CustomTheme theme) async {
     try {
-      print('🔍 Intentando guardar tema: ${theme.name}');
+      print('ðŸ” Intentando guardar tema: ${theme.name}');
       final isar = Isar.getInstance();
       if (isar == null) {
-        print('❌ Isar es null');
+        print('âŒ Isar es null');
         return false;
       }
 
-      print('🔍 Isar obtenido correctamente');
+      print('ðŸ” Isar obtenido correctamente');
       await isar.writeTxn(() async {
-        print('🔍 Iniciando transacción de escritura');
+        print('ðŸ” Iniciando transacciÃ³n de escritura');
         await isar.customThemes.put(theme);
-        print('🔍 Tema guardado en la transacción');
+        print('ðŸ” Tema guardado en la transacciÃ³n');
       });
-      print('🔍 Transacción completada');
+      print('ðŸ” TransacciÃ³n completada');
 
-      // Verificar que el ID sea válido después del guardado
+      // Verificar que el ID sea vÃ¡lido despuÃ©s del guardado
       _logThemeInfo(theme, 'Tema guardado');
 
       return IdValidator.isValidId(theme.id);
     } catch (e) {
-      print('❌ Error guardando tema personalizado: $e');
+      print('âŒ Error guardando tema personalizado: $e');
       return false;
     }
   }
@@ -70,7 +70,7 @@ class ThemeService {
   // Actualizar un tema personalizado
   Future<bool> updateCustomTheme(CustomTheme theme) async {
     try {
-      print('🔍 Actualizando tema: ${theme.name}');
+      print('ðŸ” Actualizando tema: ${theme.name}');
       final isar = Isar.getInstance();
       if (isar == null) return false;
 
@@ -201,10 +201,10 @@ class ThemeService {
     // En el futuro se puede guardar en SharedPreferences o Isar
   }
 
-  // Método de prueba para verificar que todo funciona
+  // MÃ©todo de prueba para verificar que todo funciona
   Future<bool> testCreateTheme() async {
     try {
-      print('🧪 Iniciando prueba de creación de tema');
+      print('ðŸ§ª Iniciando prueba de creaciÃ³n de tema');
 
       final testTheme = createCustomTheme(
         userId: 'test_user',
@@ -223,20 +223,21 @@ class ThemeService {
         infoColor: Colors.blue,
       );
 
-      print('🧪 Tema de prueba creado: ${testTheme.name}');
+      print('ðŸ§ª Tema de prueba creado: ${testTheme.name}');
 
       final success = await saveCustomTheme(testTheme);
-      print('🧪 Resultado de la prueba: $success');
+      print('ðŸ§ª Resultado de la prueba: $success');
 
       return success;
     } catch (e) {
-      print('❌ Error en prueba: $e');
+      print('âŒ Error en prueba: $e');
       return false;
     }
   }
 
-  // Método de utilidad para imprimir información de debug de manera segura
+  // MÃ©todo de utilidad para imprimir informaciÃ³n de debug de manera segura
   void _logThemeInfo(CustomTheme theme, String operation) {
     IdValidator.logEntityWithName('Tema', theme.id, theme.name, operation);
   }
 }
+

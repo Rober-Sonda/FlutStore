@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tienda_app/src/app_routes.dart';
+import '../../src/app_routes.dart';
 import 'package:isar/isar.dart';
-import 'package:tienda_app/views/categorias/dialogs/propiedad_dialog.dart';
+import '../../iews/categorias/dialogs/propiedad_dialog.dart';
 import '../../models/categoria.dart';
 import '../../models/propiedad_categoria.dart';
 import '../../models/producto.dart';
@@ -22,7 +22,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   bool _error = false;
   final Set<int> _categoriasExpandidas = {};
 
-  // NUEVO: Filtros de búsqueda
+  // NUEVO: Filtros de bÃºsqueda
   String searchQuery = '';
 
   @override
@@ -37,7 +37,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 1. CARGA Y INICIALIZACIÓN DE DATOS
+  // 1. CARGA Y INICIALIZACIÃ“N DE DATOS
   // ===========================================================================
 
   Future<void> _loadCategorias() async {
@@ -82,12 +82,12 @@ class _CategoriesViewState extends State<CategoriesView> {
           _error = true;
         });
       }
-      print('Error cargando categorías: $e');
+      print('Error cargando categorÃ­as: $e');
     }
   }
 
   // ===========================================================================
-  // 2. MÉTODOS DE BÚSQUEDA Y MANIPULACIÓN DE CATEGORÍAS
+  // 2. MÃ‰TODOS DE BÃšSQUEDA Y MANIPULACIÃ“N DE CATEGORÃAS
   // ===========================================================================
 
   List<Categoria> _getCategoriasHijas(int? parentId) {
@@ -114,7 +114,7 @@ class _CategoriesViewState extends State<CategoriesView> {
     return rutas.join(' > ');
   }
 
-  // NUEVO: Filtro de búsqueda para categorías
+  // NUEVO: Filtro de bÃºsqueda para categorÃ­as
   List<Categoria> _getCategoriasFiltradas(int? parentId) {
     final base = _categorias.where((cat) => cat.parent == parentId).toList();
     if (searchQuery.isEmpty) return base;
@@ -126,7 +126,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 3. CONSTRUCCIÓN DE LA INTERFAZ DE CATEGORÍAS
+  // 3. CONSTRUCCIÃ“N DE LA INTERFAZ DE CATEGORÃAS
   // ===========================================================================
 
   Widget _buildContent() {
@@ -137,7 +137,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text('Cargando categorías...'),
+            Text('Cargando categorÃ­as...'),
           ],
         ),
       );
@@ -151,7 +151,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             const Text(
-              'Error al cargar categorías',
+              'Error al cargar categorÃ­as',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -180,13 +180,13 @@ class _CategoriesViewState extends State<CategoriesView> {
               const Icon(Icons.category_outlined, size: 80, color: Colors.grey),
               const SizedBox(height: 24),
               const Text(
-                'No hay categorías creadas',
+                'No hay categorÃ­as creadas',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               const Text(
-                'Las categorías son el molde de tus productos. Cada categoría define qué propiedades tendrán los productos que pertenezcan a ella.\n'
-                'Puedes crear categorías principales y subcategorías para organizar mejor tu inventario.',
+                'Las categorÃ­as son el molde de tus productos. Cada categorÃ­a define quÃ© propiedades tendrÃ¡n los productos que pertenezcan a ella.\n'
+                'Puedes crear categorÃ­as principales y subcategorÃ­as para organizar mejor tu inventario.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
               ),
@@ -194,14 +194,14 @@ class _CategoriesViewState extends State<CategoriesView> {
               ElevatedButton.icon(
                 onPressed: () => context.push(AppRoutes.categoryAdd),
                 icon: const Icon(Icons.add),
-                label: const Text('Crear Primera Categoría'),
+                label: const Text('Crear Primera CategorÃ­a'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
               ),
               const SizedBox(height: 16),
               const Text(
-                'Ejemplo: Ropa > Remeras > Remeras de Algodón',
+                'Ejemplo: Ropa > Remeras > Remeras de AlgodÃ³n',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -217,7 +217,7 @@ class _CategoriesViewState extends State<CategoriesView> {
 
     return Column(
       children: [
-        // NUEVO: Descripción de la sección de categorías
+        // NUEVO: DescripciÃ³n de la secciÃ³n de categorÃ­as
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
@@ -225,7 +225,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Text(
-                'En esta sección puedes crear y organizar las categorías de tus productos. Las categorías te ayudan a agrupar productos similares y definir sus propiedades. Puedes crear categorías principales y subcategorías para una mejor organización.',
+                'En esta secciÃ³n puedes crear y organizar las categorÃ­as de tus productos. Las categorÃ­as te ayudan a agrupar productos similares y definir sus propiedades. Puedes crear categorÃ­as principales y subcategorÃ­as para una mejor organizaciÃ³n.',
                 style: const TextStyle(color: Colors.white70, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
@@ -235,17 +235,17 @@ class _CategoriesViewState extends State<CategoriesView> {
         Expanded(
           child: Row(
             children: [
-              // Panel izquierdo - Categorías
+              // Panel izquierdo - CategorÃ­as
               Expanded(
                 flex: 1,
                 child: Column(
                   children: [
-                    // Barra de búsqueda arriba
+                    // Barra de bÃºsqueda arriba
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: 'Buscar categorías...',
+                          hintText: 'Buscar categorÃ­as...',
                           prefixIcon: const Icon(Icons.search),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -271,7 +271,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                             .toList(),
                       ),
                     ),
-                    // Botón "Nueva Categoría" al pie y alineado a la derecha
+                    // BotÃ³n "Nueva CategorÃ­a" al pie y alineado a la derecha
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: Row(
@@ -280,7 +280,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           FloatingActionButton.extended(
                             onPressed: _mostrarDialogoNuevaCategoria,
                             icon: const Icon(Icons.add),
-                            label: const Text('Nueva Categoría'),
+                            label: const Text('Nueva CategorÃ­a'),
                             heroTag: 'fab_categoria',
                           ),
                         ],
@@ -295,7 +295,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             ],
           ),
         ),
-        // FAB para agregar propiedad (abajo a la derecha, solo si hay categoría seleccionada)
+        // FAB para agregar propiedad (abajo a la derecha, solo si hay categorÃ­a seleccionada)
         if (_categoriaSeleccionada != null)
           Positioned(
             bottom: 24,
@@ -318,13 +318,13 @@ class _CategoriesViewState extends State<CategoriesView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text(
-            'Categorías',
+            'CategorÃ­as',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           ElevatedButton.icon(
             onPressed: () => _mostrarDialogoNuevaCategoria(),
             icon: const Icon(Icons.add),
-            label: const Text('Nueva Categoría'),
+            label: const Text('Nueva CategorÃ­a'),
           ),
         ],
       ),
@@ -369,7 +369,7 @@ class _CategoriesViewState extends State<CategoriesView> {
     final estaExpandida = _categoriasExpandidas.contains(categoria.id);
     final esSeleccionada = _categoriaSeleccionada?.id == categoria.id;
 
-    // NUEVO: Oculta las hijas si la búsqueda está activa y no hay coincidencias
+    // NUEVO: Oculta las hijas si la bÃºsqueda estÃ¡ activa y no hay coincidencias
     final hijasFiltradas =
         searchQuery.isEmpty
             ? hijas
@@ -446,24 +446,24 @@ class _CategoriesViewState extends State<CategoriesView> {
         IconButton(
           icon: const Icon(Icons.add, size: 18),
           onPressed: () => _mostrarDialogoCrearSubcategoria(categoria),
-          tooltip: 'Crear subcategoría',
+          tooltip: 'Crear subcategorÃ­a',
         ),
         IconButton(
           icon: const Icon(Icons.edit, size: 18),
           onPressed: () => _mostrarDialogoEditarCategoria(categoria),
-          tooltip: 'Editar categoría',
+          tooltip: 'Editar categorÃ­a',
         ),
         IconButton(
           icon: const Icon(Icons.delete, size: 18),
           onPressed: () => _eliminarCategoria(categoria),
-          tooltip: 'Eliminar categoría',
+          tooltip: 'Eliminar categorÃ­a',
         ),
       ],
     );
   }
 
   // ===========================================================================
-  // 4. DIÁLOGOS DE CATEGORÍAS
+  // 4. DIÃLOGOS DE CATEGORÃAS
   // ===========================================================================
 
   void _mostrarDialogoNuevaCategoria() {
@@ -472,7 +472,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Nueva Categoría'),
+            title: const Text('Nueva CategorÃ­a'),
             content: StatefulBuilder(
               builder:
                   (context, setState) => Column(
@@ -519,7 +519,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Nueva Subcategoría'),
+            title: const Text('Nueva SubcategorÃ­a'),
             content: StatefulBuilder(
               builder:
                   (context, setState) => Column(
@@ -527,7 +527,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                     children: [
                       TextField(
                         decoration: const InputDecoration(
-                          labelText: 'Nombre de subcategoría',
+                          labelText: 'Nombre de subcategorÃ­a',
                         ),
                         onChanged:
                             (value) => setState(() => nombre = value.trim()),
@@ -570,7 +570,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Editar Categoría'),
+            title: const Text('Editar CategorÃ­a'),
             content: StatefulBuilder(
               builder:
                   (context, setState) => Column(
@@ -612,14 +612,14 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 5. ELIMINACIÓN DE CATEGORÍAS
+  // 5. ELIMINACIÃ“N DE CATEGORÃAS
   // ===========================================================================
 
   Future<void> _eliminarCategoria(Categoria categoria) async {
     final hijas = _getCategoriasHijas(categoria.id);
     if (hijas.isNotEmpty) {
       _mostrarSnackBar(
-        'No se puede eliminar "${categoria.nombre}" porque tiene ${hijas.length} subcategoría${hijas.length == 1 ? '' : 's'}.',
+        'No se puede eliminar "${categoria.nombre}" porque tiene ${hijas.length} subcategorÃ­a${hijas.length == 1 ? '' : 's'}.',
         Colors.red,
       );
       return;
@@ -642,8 +642,8 @@ class _CategoriesViewState extends State<CategoriesView> {
     }
 
     final confirmar = await _mostrarDialogoConfirmacion(
-      '¿Eliminar "${categoria.nombre}"?',
-      'Esta acción no se puede deshacer.',
+      'Â¿Eliminar "${categoria.nombre}"?',
+      'Esta acciÃ³n no se puede deshacer.',
     );
 
     if (confirmar == true) {
@@ -660,7 +660,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 6. GESTIÓN DE PROPIEDADES
+  // 6. GESTIÃ“N DE PROPIEDADES
   // ===========================================================================
 
   Widget _buildTableroPropiedades() {
@@ -673,7 +673,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // NUEVO: Barra de búsqueda para propiedades
+          // NUEVO: Barra de bÃºsqueda para propiedades
           if (_categoriaSeleccionada != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
@@ -692,7 +692,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    // Implementa búsqueda de propiedades si lo deseas
+                    // Implementa bÃºsqueda de propiedades si lo deseas
                     // Por ahora, solo refresca la vista
                   });
                 },
@@ -714,7 +714,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           'Tablero de Propiedades',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        // El botón de agregar propiedad se elimina de aquí, ahora es FAB abajo a la derecha
+        // El botÃ³n de agregar propiedad se elimina de aquÃ­, ahora es FAB abajo a la derecha
       ],
     );
   }
@@ -729,12 +729,12 @@ class _CategoriesViewState extends State<CategoriesView> {
               Icon(Icons.category_outlined, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                'Selecciona una categoría',
+                'Selecciona una categorÃ­a',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
               Text(
-                'Elige una categoría del panel izquierdo para ver sus propiedades',
+                'Elige una categorÃ­a del panel izquierdo para ver sus propiedades',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -761,7 +761,7 @@ class _CategoriesViewState extends State<CategoriesView> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Agrega propiedades para definir los campos que tendrán los productos.',
+                'Agrega propiedades para definir los campos que tendrÃ¡n los productos.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -884,7 +884,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   void _agregarPropiedad() {
     if (_categoriaSeleccionada == null) {
       _mostrarSnackBar(
-        'Selecciona una categoría para agregar propiedades',
+        'Selecciona una categorÃ­a para agregar propiedades',
         Colors.orange,
       );
       return;
@@ -951,7 +951,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   void _eliminarPropiedad(int index) async {
     final confirm = await _mostrarDialogoConfirmacion(
       'Eliminar Propiedad',
-      '¿Estás seguro de que deseas eliminar esta propiedad?',
+      'Â¿EstÃ¡s seguro de que deseas eliminar esta propiedad?',
     );
     if (confirm != true) return;
 
@@ -983,7 +983,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 7. MÉTODOS AUXILIARES (ICONOS, MENSAJES, ETC.)
+  // 7. MÃ‰TODOS AUXILIARES (ICONOS, MENSAJES, ETC.)
   // ===========================================================================
 
   IconData _getIconForType(TipoPropiedad tipo) {
@@ -1006,9 +1006,9 @@ class _CategoriesViewState extends State<CategoriesView> {
       case TipoPropiedad.texto:
         return 'Texto libre';
       case TipoPropiedad.numero:
-        return 'Número';
+        return 'NÃºmero';
       case TipoPropiedad.booleano:
-        return 'Sí/No';
+        return 'SÃ­/No';
       case TipoPropiedad.fecha:
         return 'Fecha';
       case TipoPropiedad.seleccion:
@@ -1045,7 +1045,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   // ===========================================================================
-  // 8. VISTA DE JERARQUÍA (OPCIONAL)
+  // 8. VISTA DE JERARQUÃA (OPCIONAL)
   // ===========================================================================
 
   void _mostrarVistaJerarquia() {
@@ -1053,7 +1053,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Jerarquía de Categorías'),
+            title: const Text('JerarquÃ­a de CategorÃ­as'),
             content: SizedBox(
               height: 400,
               child: SingleChildScrollView(
