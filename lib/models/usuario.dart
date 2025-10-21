@@ -19,7 +19,7 @@ class Usuario {
 
   // Getter para obtener la imagen de usuario (avatar o por defecto)
   String get imagenPerfil =>
-      avatarUrl?.isNotEmpty == true
+      avatarUrl?.trim().isNotEmpty == true
           ? avatarUrl!
           : 'assets/images/icons/default_avatar.png';
 }
