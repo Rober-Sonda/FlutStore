@@ -6,7 +6,7 @@ import '../../services/isar_service.dart';
 import '../../widgets/permission_widget.dart';
 import 'fixed_expenses_view.dart';
 
-// Cambia la declaración de CashFlowView para que extienda de ConsumerStatefulWidget
+// Cambia la declaraciÃ³n de CashFlowView para que extienda de ConsumerStatefulWidget
 class CashFlowView extends ConsumerStatefulWidget {
   const CashFlowView({super.key});
 
@@ -96,7 +96,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            // Tab 1: General (Resumen de dinero de todas las áreas)
+            // Tab 1: General (Resumen de dinero de todas las ï¿½reas)
             Column(
               children: [
                 Padding(
@@ -106,7 +106,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
-                        'Resumen financiero general: aquí puedes ver el saldo total, ingresos, egresos y movimientos de todas las áreas del negocio (ventas, compras, caja, gastos fijos, etc). Usa los filtros para analizar el flujo de dinero global.',
+                        'Resumen financiero general: aquï¿½ puedes ver el saldo total, ingresos, egresos y movimientos de todas las ï¿½reas del negocio (ventas, compras, caja, gastos fijos, etc). Usa los filtros para analizar el flujo de dinero global.',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -129,7 +129,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
-                        'Aquí puedes registrar y consultar los gastos fijos del negocio (alquiler, servicios, sueldos, etc). Los gastos fijos se agregan automáticamente como egresos en las fechas que configures.',
+                        'Aquï¿½ puedes registrar y consultar los gastos fijos del negocio (alquiler, servicios, sueldos, etc). Los gastos fijos se agregan automï¿½ticamente como egresos en las fechas que configures.',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -152,7 +152,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
-                        'En esta sección puedes ver y registrar los movimientos de caja física, ingresos y egresos diarios. Controla el efectivo disponible y el historial de movimientos de caja.',
+                        'En esta secciï¿½n puedes ver y registrar los movimientos de caja fï¿½sica, ingresos y egresos diarios. Controla el efectivo disponible y el historial de movimientos de caja.',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -173,7 +173,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
   }
 
   Widget _buildGeneralTab(BuildContext context) {
-    // Aquí puedes mostrar el resumen de dinero de todas las áreas del negocio
+    // Aquï¿½ puedes mostrar el resumen de dinero de todas las ï¿½reas del negocio
     // Ejemplo: ingresos/egresos totales, saldo neto, lista de movimientos generales
     return _isLoading
         ? const Center(child: CircularProgressIndicator())
@@ -281,7 +281,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
                                 ),
                               ),
                               title: Text(
-                                flujo.descripcion ?? 'Sin descripción',
+                                flujo.descripcion ?? 'Sin descripciï¿½n',
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,7 +420,7 @@ class _CashFlowViewState extends ConsumerState<CashFlowView> {
                                 ),
                               ),
                               title: Text(
-                                flujo.descripcion ?? 'Sin descripción',
+                                flujo.descripcion ?? 'Sin descripciï¿½n',
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

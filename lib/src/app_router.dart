@@ -40,7 +40,6 @@ import '../views/pedidos/dialogs/pedido_proveedor_add_edit_view.dart';
 import '../views/reportes/utilidad_report_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/auth_service.dart';
-import '../views/sorteos/dialogs/sweepstake_add_edit_view.dart';
 import '../views/cuenta_corriente/dialogs/cuenta_corriente_add_edit_view.dart';
 import '../views/configuracion/optimization_view.dart';
 import '../views/finanzas/dialogs/fixed_expense_add_edit_view.dart';
@@ -106,7 +105,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/providers/edit/:id',
             builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
+              // final id = int.parse(state.pathParameters['id']!);
               // TODO: Cargar proveedor por ID y pasarlo al constructor
               return const ProviderAddEditView();
             },
@@ -122,7 +121,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/clients/edit/:id',
             builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
+              // final id = int.parse(state.pathParameters['id']!);
               // TODO: Cargar cliente por ID y pasarlo al constructor
               return const ClientAddEditView();
             },
