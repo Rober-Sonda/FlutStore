@@ -1,5 +1,5 @@
-﻿import 'package:flutter/material.dart';
-// Elimina la importaciÃ³n de flutter_screenutil si no estÃ¡ en tu proyecto
+import 'package:flutter/material.dart';
+// Elimina la importación de flutter_screenutil si no está en tu proyecto
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../models/producto.dart';
 import '../../../models/categoria.dart';
@@ -33,7 +33,7 @@ class ProductCard extends StatelessWidget {
         ? producto.imagenes!.first
         : null; // Cambia a null si no hay imagen
 
-    // Responsive manual: calcula el ancho mÃ¡ximo/min segÃºn el ancho de pantalla
+    // Responsive manual: calcula el ancho máximo/min según el ancho de pantalla
     final screenWidth = MediaQuery.of(context).size.width;
     double maxCardWidth = 320;
     double minCardWidth = 180;
@@ -146,11 +146,11 @@ class ProductCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          // CategorÃ­a
+                          // Categoría
                           Text(
                             getCategoryName(producto.categoriaId),
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.primary.withValues(alpha: 0.7),
+                              color: theme.colorScheme.primary.withOpacity(0.7),
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
                             ),
@@ -208,7 +208,7 @@ class ProductCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           const Spacer(),
-                          // BotÃ³n agregar al carrito
+                          // Botón agregar al carrito
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Tooltip(

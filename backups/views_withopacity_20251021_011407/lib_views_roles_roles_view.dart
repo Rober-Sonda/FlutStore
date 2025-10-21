@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
@@ -54,7 +54,7 @@ class _RolesViewState extends State<RolesView> {
           (context) => AlertDialog(
             title: const Text('Eliminar Rol'),
             content: Text(
-              'Â¿EstÃ¡s seguro de que quieres eliminar el rol "${rol.nombre}"?',
+              '¿Estás seguro de que quieres eliminar el rol "${rol.nombre}"?',
             ),
             actions: [
               TextButton(
@@ -121,7 +121,7 @@ class _RolesViewState extends State<RolesView> {
       }
     }
 
-    // Verificar permisos para roles (secciÃ³n actual)
+    // Verificar permisos para roles (sección actual)
     final permisosRoles = permisosPorSeccion['roles'] ?? [];
     final canView = permisosRoles.contains('visualizar') || permisos.isEmpty;
     final canEdit = permisosRoles.contains('editar');
@@ -131,7 +131,7 @@ class _RolesViewState extends State<RolesView> {
       elevation: 4,
       margin: const EdgeInsets.all(8),
       child: Container(
-        width: 300, // TamaÃ±o fijo para evitar desproporciÃ³n
+        width: 300, // Tamaño fijo para evitar desproporción
         height: 200, // Altura fija
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -142,7 +142,7 @@ class _RolesViewState extends State<RolesView> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.1),
+                    color: Colors.blue.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -208,10 +208,10 @@ class _RolesViewState extends State<RolesView> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withValues(alpha: 0.1),
+                        color: Colors.blue.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.blue.withValues(alpha: 0.3),
+                          color: Colors.blue.withOpacity(0.3),
                           width: 1,
                         ),
                       ),
@@ -247,13 +247,13 @@ class _RolesViewState extends State<RolesView> {
                                 children: [
                                   Text('Nombre: ${rol.nombre}'),
                                   if (rol.descripcion != null)
-                                    Text('DescripciÃ³n: ${rol.descripcion}'),
+                                    Text('Descripción: ${rol.descripcion}'),
                                   Text(
-                                    'Fecha de creaciÃ³n: ${rol.fechaCreacion?.toString().split(' ')[0] ?? 'No especificada'}',
+                                    'Fecha de creación: ${rol.fechaCreacion?.toString().split(' ')[0] ?? 'No especificada'}',
                                   ),
                                   const SizedBox(height: 8),
                                   const Text(
-                                    'Permisos por secciÃ³n:',
+                                    'Permisos por sección:',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -262,7 +262,7 @@ class _RolesViewState extends State<RolesView> {
                                     final seccion = entry.key;
                                     final acciones = entry.value;
                                     return Text(
-                                      'â€¢ ${_getSeccionDisplayName(seccion)}: ${acciones.join(', ')}',
+                                      '• ${_getSeccionDisplayName(seccion)}: ${acciones.join(', ')}',
                                     );
                                   }),
                                 ],
@@ -307,7 +307,7 @@ class _RolesViewState extends State<RolesView> {
       case 'productos':
         return 'Productos';
       case 'categorias':
-        return 'CategorÃ­as';
+        return 'Categorías';
       case 'proveedores':
         return 'Proveedores';
       case 'compras':
@@ -331,7 +331,7 @@ class _RolesViewState extends State<RolesView> {
       case 'usuarios':
         return 'Usuarios';
       case 'configuracion':
-        return 'ConfiguraciÃ³n';
+        return 'Configuración';
       default:
         return seccion;
     }
@@ -352,7 +352,7 @@ class _RolesViewState extends State<RolesView> {
       ),
       body: Column(
         children: [
-          // DescripciÃ³n de la secciÃ³n de roles
+          // Descripción de la sección de roles
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -360,7 +360,7 @@ class _RolesViewState extends State<RolesView> {
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  'En esta secciÃ³n puedes crear, editar y eliminar roles de usuario. Los roles te permiten definir los permisos y accesos de cada usuario en el sistema, asegurando una gestiÃ³n segura y personalizada de tu negocio.',
+                  'En esta sección puedes crear, editar y eliminar roles de usuario. Los roles te permiten definir los permisos y accesos de cada usuario en el sistema, asegurando una gestión segura y personalizada de tu negocio.',
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -444,10 +444,10 @@ class _RolesViewState extends State<RolesView> {
                           itemCount: _roles.length,
                           itemBuilder: (context, index) {
                             final rol = _roles[index];
-                            // Al hacer click en la card, navega a la pantalla de ediciÃ³n de roles (misma que agregar)
+                            // Al hacer click en la card, navega a la pantalla de edición de roles (misma que agregar)
                             return GestureDetector(
                               onTap: () {
-                                // Navega a la pantalla de agregar/editar rol, pasando el id como parÃ¡metro
+                                // Navega a la pantalla de agregar/editar rol, pasando el id como parámetro
                                 context.go('${AppRoutes.roleAdd}?id=${rol.id}');
                               },
                               child: _buildRoleCard(rol),
@@ -462,4 +462,3 @@ class _RolesViewState extends State<RolesView> {
     );
   }
 }
-

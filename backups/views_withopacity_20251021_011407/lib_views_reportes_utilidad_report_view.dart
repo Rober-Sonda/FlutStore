@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/producto.dart';
@@ -61,7 +61,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       _productosMediaUtilidad =
           await pedidoCompraService.obtenerProductosMediaUtilidad();
 
-      // Cargar categorÃ­as
+      // Cargar categorías
       final categoriasRaw = await isar.categorias.getAll([0]);
       final categorias = categoriasRaw.whereType<Categoria>().toList();
       _categorias = ['Todas', ...categorias.map((c) => c.nombre)];
@@ -93,7 +93,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
   void _aplicarFiltros() {
     List<Producto> productosFiltrados = _productos;
 
-    // Filtro por bÃºsqueda
+    // Filtro por búsqueda
     if (_busqueda.isNotEmpty) {
       productosFiltrados =
           productosFiltrados.where((producto) {
@@ -104,7 +104,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
           }).toList();
     }
 
-    // Filtro por categorÃ­a
+    // Filtro por categoría
     if (_categoriaSeleccionada != 'Todas') {
       productosFiltrados =
           productosFiltrados.where((producto) {
@@ -151,10 +151,10 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
 
   Future<void> _exportarReporte() async {
     try {
-      // TODO: Implementar exportaciÃ³n a PDF/Excel
+      // TODO: Implementar exportación a PDF/Excel
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Funcionalidad de exportaciÃ³n en desarrollo'),
+          content: Text('Funcionalidad de exportación en desarrollo'),
           backgroundColor: Colors.orange,
         ),
       );
@@ -241,7 +241,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.2),
+          backgroundColor: color.withOpacity(0.2),
           child: Icon(Icons.inventory, color: color),
         ),
         title: Text(
@@ -271,7 +271,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
             ),
             if (producto.categoriaId != null)
               Text(
-                'CategorÃ­a ID: ${producto.categoriaId}',
+                'Categoría ID: ${producto.categoriaId}',
                 style: TextStyle(
                   color: theme.textSecondaryColor,
                   fontFamily: fontConfig.bodyFont,
@@ -283,7 +283,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.2),
+            color: color.withOpacity(0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: color),
           ),
@@ -325,7 +325,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
             ),
             const SizedBox(height: 16),
 
-            // BÃºsqueda
+            // Búsqueda
             TextField(
               decoration: InputDecoration(
                 labelText: 'Buscar productos',
@@ -373,7 +373,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
                   child: DropdownButtonFormField<String>(
                     value: _categoriaSeleccionada,
                     decoration: const InputDecoration(
-                      labelText: 'CategorÃ­a',
+                      labelText: 'Categoría',
                       border: OutlineInputBorder(),
                     ),
                     items:
@@ -579,7 +579,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Ajusta los filtros para ver mÃ¡s resultados',
+                      'Ajusta los filtros para ver más resultados',
                       style: TextStyle(
                         color: theme.textSecondaryColor,
                         fontSize: 14,
@@ -596,4 +596,3 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
     );
   }
 }
-

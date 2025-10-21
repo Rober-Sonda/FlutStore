@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/loading_indicator.dart';
@@ -45,7 +45,7 @@ class _ProductosViewState extends State<ProductosView> {
             end: Alignment.bottomCenter,
             colors: [
               AppTheme.backgroundColor,
-              AppTheme.backgroundColor.withValues(alpha: 0.8),
+              AppTheme.backgroundColor.withOpacity(0.8),
             ],
           ),
         ),
@@ -180,7 +180,7 @@ class _ProductosViewState extends State<ProductosView> {
           Icon(
             Icons.inventory_2_outlined,
             size: 100,
-            color: AppTheme.textSecondary.withValues(alpha: 0.5),
+            color: AppTheme.textSecondary.withOpacity(0.5),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -248,12 +248,12 @@ class _ProductosViewState extends State<ProductosView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Filtrar por categorÃ­a'),
+          title: const Text('Filtrar por categoría'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: const Text('Todas las categorÃ­as'),
+                title: const Text('Todas las categorías'),
                 onTap: () {
                   provider.limpiarFiltros();
                   Navigator.pop(context);
@@ -276,17 +276,16 @@ class _ProductosViewState extends State<ProductosView> {
   }
 
   void _navigateToAddProduct() {
-    // TODO: Implementar navegaciÃ³n a pantalla de agregar producto
+    // TODO: Implementar navegación a pantalla de agregar producto
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('FunciÃ³n en desarrollo')));
+    ).showSnackBar(const SnackBar(content: Text('Función en desarrollo')));
   }
 
   void _navigateToProductDetail(Producto producto) {
-    // TODO: Implementar navegaciÃ³n a detalle del producto
+    // TODO: Implementar navegación a detalle del producto
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Ver detalles de: ${producto.nombre}')),
     );
   }
 }
-

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../src/app_routes.dart';
@@ -65,7 +65,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
     }
   }
 
-  // CÃ¡lculos para anÃ¡lisis
+  // Cálculos para análisis
   double get _totalIngresos {
     return _registros
         .where((r) => r.tipo == 'ingreso' && r.estado == 'confirmado')
@@ -95,7 +95,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
         appBar: AppBar(title: const Text('Registros Financieros')),
         body: Column(
           children: [
-            // DescripciÃ³n y navegaciÃ³n
+            // Descripción y navegación
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Card(
@@ -105,7 +105,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
                   child: Column(
                     children: [
                       const Text(
-                        'En esta secciÃ³n puedes consultar y registrar todos los movimientos financieros de tu negocio: ingresos, egresos, balances y mÃ¡s. Utiliza los filtros para analizar el flujo de dinero y accede rÃ¡pidamente al flujo de caja, caja y los gastos fijos desde aquÃ­.',
+                        'En esta sección puedes consultar y registrar todos los movimientos financieros de tu negocio: ingresos, egresos, balances y más. Utiliza los filtros para analizar el flujo de dinero y accede rápidamente al flujo de caja, caja y los gastos fijos desde aquí.',
                         style: TextStyle(color: Colors.white70, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
@@ -167,7 +167,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
             ),
           ],
         ),
-        // FAB correspondiente a cada secciÃ³n
+        // FAB correspondiente a cada sección
         floatingActionButton: Builder(
           builder: (context) {
             final tabIndex = DefaultTabController.of(context)?.index ?? 0;
@@ -213,7 +213,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
                 foregroundColor: Colors.white,
               );
             }
-            // SoluciÃ³n: Retorna un SizedBox.shrink() en vez de null
+            // Solución: Retorna un SizedBox.shrink() en vez de null
             return const SizedBox.shrink();
           },
         ),
@@ -321,7 +321,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Resumen de ganancias y pÃ©rdidas
+          // Resumen de ganancias y pérdidas
           Card(
             color: Colors.grey[900],
             child: Padding(
@@ -330,7 +330,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'AnÃ¡lisis de Ganancias y PÃ©rdidas',
+                    'Análisis de Ganancias y Pérdidas',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -386,7 +386,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
             ),
           ),
           const SizedBox(height: 20),
-          // GrÃ¡fico de distribuciÃ³n por categorÃ­as
+          // Gráfico de distribución por categorías
           Card(
             color: Colors.grey[900],
             child: Padding(
@@ -395,7 +395,7 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'DistribuciÃ³n por CategorÃ­as',
+                    'Distribución por Categorías',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -447,9 +447,9 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
         children: [
@@ -551,4 +551,3 @@ class _FinancialRecordsViewState extends ConsumerState<FinancialRecordsView> {
     );
   }
 }
-

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/sorteo.dart';
@@ -18,9 +18,9 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
   bool _isLoading = true;
   String _filtroSeleccionado = 'Todos';
 
-  // NUEVO: MÃ©todo para importar participantes desde Instagram
+  // NUEVO: Método para importar participantes desde Instagram
   Future<void> _importarParticipantesInstagram(Sorteo sorteo) async {
-    // AquÃ­ deberÃ­as integrar la API de Instagram (requiere backend y permisos)
+    // Aquí deberías integrar la API de Instagram (requiere backend y permisos)
     // Este ejemplo solo muestra el flujo de UI
     final confirm = await showDialog<bool>(
       context: context,
@@ -28,7 +28,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
           (context) => AlertDialog(
             title: const Text('Importar participantes de Instagram'),
             content: const Text(
-              'Esta opciÃ³n permite agregar como participantes a todos los usuarios que dieron like, comentaron o compartieron una publicaciÃ³n especÃ­fica de tu cuenta de Instagram.\n\nDebes conectar tu cuenta y seleccionar la publicaciÃ³n.',
+              'Esta opción permite agregar como participantes a todos los usuarios que dieron like, comentaron o compartieron una publicación específica de tu cuenta de Instagram.\n\nDebes conectar tu cuenta y seleccionar la publicación.',
             ),
             actions: [
               TextButton(
@@ -43,7 +43,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
           ),
     );
     if (confirm == true) {
-      // SimulaciÃ³n de importaciÃ³n
+      // Simulación de importación
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -52,7 +52,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
           ),
         );
       }
-      // TODO: Implementa la integraciÃ³n real con Instagram y agrega los usuarios al sorteo
+      // TODO: Implementa la integración real con Instagram y agrega los usuarios al sorteo
     }
   }
 
@@ -187,9 +187,9 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirmar cancelaciÃ³n'),
+            title: const Text('Confirmar cancelación'),
             content: Text(
-              'Â¿EstÃ¡s seguro de que quieres cancelar el sorteo "${sorteo.nombre}"?',
+              '¿Estás seguro de que quieres cancelar el sorteo "${sorteo.nombre}"?',
             ),
             actions: [
               TextButton(
@@ -242,16 +242,16 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
     try {
       final isar = await ref.read(isarServiceProvider).db;
 
-      // Calcular pÃ©rdida total de premios
+      // Calcular pérdida total de premios
       double perdidaTotal = 0.0;
       for (final premio in sorteo.premios) {
         perdidaTotal += premio.valorTotal;
       }
 
-      // Crear registro de pÃ©rdida por sorteo
+      // Crear registro de pérdida por sorteo
       final perdidaSorteo = RegistroFinanciero(
-        concepto: 'PÃ©rdida por sorteo: ${sorteo.nombre}',
-        descripcion: 'PÃ©rdida generada por premios de sorteo',
+        concepto: 'Pérdida por sorteo: ${sorteo.nombre}',
+        descripcion: 'Pérdida generada por premios de sorteo',
         monto: perdidaTotal,
         tipo: 'egreso',
         categoria: 'sorteos',
@@ -267,7 +267,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'PÃ©rdida registrada: \$${perdidaSorteo.monto.toStringAsFixed(2)}',
+              'Pérdida registrada: \$${perdidaSorteo.monto.toStringAsFixed(2)}',
             ),
             backgroundColor: Colors.orange,
           ),
@@ -277,7 +277,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al registrar pÃ©rdida: $e'),
+            content: Text('Error al registrar pérdida: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -326,7 +326,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: _getEstadoColor(sorteo).withValues(alpha: 0.1),
+                    color: _getEstadoColor(sorteo).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: _getEstadoColor(sorteo),
@@ -336,10 +336,10 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
                   child: Text(
                     sorteo.estadoFormateado,
                     style: const TextStyle(
-                      // Usa 'const' solo si no hay variables, y FontWeight.bold sin parÃ©ntesis
+                      // Usa 'const' solo si no hay variables, y FontWeight.bold sin paréntesis
                       color:
                           Colors
-                              .grey, // Si necesitas color dinÃ¡mico, quita 'const'
+                              .grey, // Si necesitas color dinámico, quita 'const'
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -411,7 +411,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // BotÃ³n Ver Detalles
+                // Botón Ver Detalles
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () {
@@ -427,7 +427,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
                 ),
                 const SizedBox(width: 8),
 
-                // BotÃ³n Iniciar (solo si es borrador)
+                // Botón Iniciar (solo si es borrador)
                 if (sorteo.esBorrador && sorteo.puedeIniciar)
                   Expanded(
                     child: ElevatedButton.icon(
@@ -441,7 +441,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
                     ),
                   ),
 
-                // BotÃ³n Finalizar (solo si estÃ¡ activo)
+                // Botón Finalizar (solo si está activo)
                 if (sorteo.estaActivo && sorteo.puedeFinalizar)
                   Expanded(
                     child: ElevatedButton.icon(
@@ -457,7 +457,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
 
                 const SizedBox(width: 8),
 
-                // BotÃ³n Cancelar (solo si no estÃ¡ finalizado)
+                // Botón Cancelar (solo si no está finalizado)
                 if (!sorteo.estaFinalizado)
                   Expanded(
                     child: OutlinedButton.icon(
@@ -473,13 +473,13 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
 
                 const SizedBox(width: 8),
 
-                // BotÃ³n Registrar PÃ©rdida (solo si tiene premios)
+                // Botón Registrar Pérdida (solo si tiene premios)
                 if (sorteo.premios.isNotEmpty)
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _registrarPerdidaSorteo(sorteo),
                       icon: const Icon(Icons.account_balance_wallet, size: 16),
-                      label: const Text('Registrar PÃ©rdida'),
+                      label: const Text('Registrar Pérdida'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.orange,
                         side: const BorderSide(color: Colors.orange),
@@ -487,7 +487,7 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
                     ),
                   ),
 
-                // BotÃ³n para importar participantes desde Instagram
+                // Botón para importar participantes desde Instagram
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => _importarParticipantesInstagram(sorteo),
@@ -687,9 +687,9 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
         children: [
@@ -717,4 +717,3 @@ class _SweepstakesViewState extends ConsumerState<SweepstakesView> {
     );
   }
 }
-

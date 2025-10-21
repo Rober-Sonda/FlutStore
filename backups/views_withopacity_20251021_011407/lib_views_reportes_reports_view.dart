@@ -594,7 +594,7 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: product['color'].withValues(alpha: 0.2),
+                        color: product['color'].withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -703,5 +703,4 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     );
   }
 }
-
 

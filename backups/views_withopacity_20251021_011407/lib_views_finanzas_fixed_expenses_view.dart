@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/gasto_fijo.dart';
@@ -198,7 +198,7 @@ class _FixedExpensesViewState extends ConsumerState<FixedExpensesView> {
                                       children: [
                                         Text(
                                           gasto.descripcion ??
-                                              'Sin descripciÃ³n',
+                                              'Sin descripción',
                                         ),
                                         const SizedBox(height: 4),
                                         Row(
@@ -240,7 +240,7 @@ class _FixedExpensesViewState extends ConsumerState<FixedExpensesView> {
                                           decoration: BoxDecoration(
                                             color: _getEstadoColor(
                                               gasto,
-                                            ).withValues(alpha: 0.1),
+                                            ).withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(
                                               8,
                                             ),
@@ -289,9 +289,9 @@ class _FixedExpensesViewState extends ConsumerState<FixedExpensesView> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
         children: [
@@ -325,4 +325,3 @@ class _FixedExpensesViewState extends ConsumerState<FixedExpensesView> {
     return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 }
-
