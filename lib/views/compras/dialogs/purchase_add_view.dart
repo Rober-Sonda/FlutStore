@@ -650,57 +650,6 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
               ),
     );
   }
-
-  void _mostrarCarrito() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Carrito de Compra'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ..._carrito.map(
-                    (item) => ListTile(
-                      title: Text(
-                        item.producto.nombre ?? 'Producto sin nombre',
-                      ),
-                      subtitle: Text(
-                        'Cantidad: ${item.cantidad} | Precio: \$${item.precioUnitario}',
-                      ),
-                      trailing: Text(
-                        '\$${(item.precioUnitario * item.cantidad).toStringAsFixed(2)}',
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    title: const Text(
-                      'Total',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    trailing: Text(
-                      '\$${_totalCarrito.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cerrar'),
-              ),
-            ],
-          ),
-    );
-  }
 }
 
 class ItemCarritoCompra {
