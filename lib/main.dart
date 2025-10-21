@@ -108,7 +108,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         // Make the app responsive
         final mediaQuery = MediaQuery.of(context);
-        final scale = mediaQuery.textScaleFactor.clamp(0.8, 1.4);
+        final scale = mediaQuery.textScaler.scale(1.0).clamp(0.8, 1.4);
 
         return MediaQuery(
           data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),

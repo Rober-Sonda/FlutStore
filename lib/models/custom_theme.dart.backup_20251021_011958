@@ -53,27 +53,27 @@ class CustomTheme {
 
   // Setters para convertir Color a valores int
   @ignore
-  set primaryColor(Color color) => primaryColorValue = color.toARGB32();
+  set primaryColor(Color color) => primaryColorValue = color.value;
   @ignore
-  set secondaryColor(Color color) => secondaryColorValue = color.toARGB32();
+  set secondaryColor(Color color) => secondaryColorValue = color.value;
   @ignore
-  set accentColor(Color color) => accentColorValue = color.toARGB32();
+  set accentColor(Color color) => accentColorValue = color.value;
   @ignore
-  set backgroundColor(Color color) => backgroundColorValue = color.toARGB32();
+  set backgroundColor(Color color) => backgroundColorValue = color.value;
   @ignore
-  set surfaceColor(Color color) => surfaceColorValue = color.toARGB32();
+  set surfaceColor(Color color) => surfaceColorValue = color.value;
   @ignore
-  set textColor(Color color) => textColorValue = color.toARGB32();
+  set textColor(Color color) => textColorValue = color.value;
   @ignore
-  set textSecondaryColor(Color color) => textSecondaryColorValue = color.toARGB32();
+  set textSecondaryColor(Color color) => textSecondaryColorValue = color.value;
   @ignore
-  set errorColor(Color color) => errorColorValue = color.toARGB32();
+  set errorColor(Color color) => errorColorValue = color.value;
   @ignore
-  set successColor(Color color) => successColorValue = color.toARGB32();
+  set successColor(Color color) => successColorValue = color.value;
   @ignore
-  set warningColor(Color color) => warningColorValue = color.toARGB32();
+  set warningColor(Color color) => warningColorValue = color.value;
   @ignore
-  set infoColor(Color color) => infoColorValue = color.toARGB32();
+  set infoColor(Color color) => infoColorValue = color.value;
 
   // MÃ©todo para crear un tema desde colores
   static CustomTheme fromColors({
@@ -191,5 +191,4 @@ extension AppThemeExtension on AppTheme {
     );
   }
 }
-
 

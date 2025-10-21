@@ -49,10 +49,10 @@ void main() {
       final originalColor = Colors.blue;
       final transparentColor = originalColor.withValues(alpha: 0.5);
       
-      expect(transparentColor.alpha, equals((255 * 0.5).round()));
-      expect(transparentColor.red, equals(originalColor.red));
-      expect(transparentColor.green, equals(originalColor.green));
-      expect(transparentColor.blue, equals(originalColor.blue));
+      expect((transparentColor.a * 255.0).round() & 0xff, equals((255 * 0.5).round()));
+      expect((transparentColor.r * 255.0).round() & 0xff, equals((originalColor.r * 255.0).round() & 0xff));
+      expect((transparentColor.g * 255.0).round() & 0xff, equals((originalColor.g * 255.0).round() & 0xff));
+      expect((transparentColor.b * 255.0).round() & 0xff, equals((originalColor.b * 255.0).round() & 0xff));
     });
   });
 

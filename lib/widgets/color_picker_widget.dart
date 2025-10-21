@@ -357,14 +357,14 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'RGB: ${_selectedColor.red}, ${_selectedColor.green}, ${_selectedColor.blue}',
+                                  'RGB: ${(_selectedColor.r * 255.0).round() & 0xff}, ${(_selectedColor.g * 255.0).round() & 0xff}, ${(_selectedColor.b * 255.0).round() & 0xff}',
                                   style: TextStyle(
                                     color: currentTheme.textSecondaryColor,
                                     fontSize: 12,
                                   ),
                                 ),
                                 Text(
-                                  'Hex: #${_selectedColor.value.toRadixString(16).substring(2).toUpperCase()}',
+                                  'Hex: #${_selectedColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
                                   style: TextStyle(
                                     color: currentTheme.textSecondaryColor,
                                     fontSize: 12,
