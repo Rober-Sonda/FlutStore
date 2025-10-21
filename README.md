@@ -1,4 +1,8 @@
-# Tienda NAJAM - Sistema de Gestión Comercial
+<<<<<<< HEAD
+# FlutStore - Sistema de Gestión Comercial
+=======
+# FlutStore
+>>>>>>> origin/master
 
 Un sistema completo de gestión para tiendas de ropa desarrollado en Flutter con soporte para desktop y mobile.
 
