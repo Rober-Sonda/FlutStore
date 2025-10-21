@@ -1,21 +1,21 @@
-
+﻿
 /// Servicio de utilidad para validar IDs y evitar IDs negativos
 class IdValidator {
-  /// Verifica si un ID es válido (positivo)
+  /// Verifica si un ID es vÃ¡lido (positivo)
   static bool isValidId(int id) {
     return id > 0;
   }
 
-  /// Imprime información de debug de manera segura
+  /// Imprime informaciÃ³n de debug de manera segura
   static void logEntityInfo(String entityName, int id, String operation) {
     if (isValidId(id)) {
-      print('✅ $operation - $entityName ID: $id');
+      // TODO: Replace with logger - print('âœ… $operation - $entityName ID: $id');
     } else {
-      print('⚠️ $operation - $entityName ID inválido: $id');
+      // TODO: Replace with logger - print('âš ï¸ $operation - $entityName ID invÃ¡lido: $id');
     }
   }
 
-  /// Imprime información de debug para entidades con nombre
+  /// Imprime informaciÃ³n de debug para entidades con nombre
   static void logEntityWithName(
     String entityName,
     int id,
@@ -23,13 +23,13 @@ class IdValidator {
     String operation,
   ) {
     if (isValidId(id)) {
-      print('✅ $operation - $entityName ID: $id, Nombre: $name');
+      // TODO: Replace with logger - print('âœ… $operation - $entityName ID: $id, Nombre: $name');
     } else {
-      print('⚠️ $operation - $entityName ID inválido: $id, Nombre: $name');
+      // TODO: Replace with logger - print('âš ï¸ $operation - $entityName ID invÃ¡lido: $id, Nombre: $name');
     }
   }
 
-  /// Verifica y registra el estado de una entidad después de guardar
+  /// Verifica y registra el estado de una entidad despuÃ©s de guardar
   static bool validateAndLogEntity(
     int id,
     String entityName,
@@ -40,7 +40,7 @@ class IdValidator {
     return isValid;
   }
 
-  /// Verifica y registra el estado de una entidad con nombre después de guardar
+  /// Verifica y registra el estado de una entidad con nombre despuÃ©s de guardar
   static bool validateAndLogEntityWithName(
     int id,
     String entityName,

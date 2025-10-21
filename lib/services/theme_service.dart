@@ -34,7 +34,7 @@ class ThemeService {
               .findAll();
       return themes;
     } catch (e) {
-      print('Error obteniendo temas personalizados: $e');
+      // TODO: Replace with logger - print('Error obteniendo temas personalizados: $e');
       return [];
     }
   }
@@ -42,27 +42,27 @@ class ThemeService {
   // Guardar un tema personalizado
   Future<bool> saveCustomTheme(CustomTheme theme) async {
     try {
-      print('ðŸ” Intentando guardar tema: ${theme.name}');
+      // TODO: Replace with logger - print('ðŸ” Intentando guardar tema: ${theme.name}');
       final isar = Isar.getInstance();
       if (isar == null) {
-        print('âŒ Isar es null');
+        // TODO: Replace with logger - print('âŒ Isar es null');
         return false;
       }
 
-      print('ðŸ” Isar obtenido correctamente');
+      // TODO: Replace with logger - print('ðŸ” Isar obtenido correctamente');
       await isar.writeTxn(() async {
-        print('ðŸ” Iniciando transacciÃ³n de escritura');
+        // TODO: Replace with logger - print('ðŸ” Iniciando transacciÃ³n de escritura');
         await isar.customThemes.put(theme);
-        print('ðŸ” Tema guardado en la transacciÃ³n');
+        // TODO: Replace with logger - print('ðŸ” Tema guardado en la transacciÃ³n');
       });
-      print('ðŸ” TransacciÃ³n completada');
+      // TODO: Replace with logger - print('ðŸ” TransacciÃ³n completada');
 
       // Verificar que el ID sea vÃ¡lido despuÃ©s del guardado
       _logThemeInfo(theme, 'Tema guardado');
 
       return IdValidator.isValidId(theme.id);
     } catch (e) {
-      print('âŒ Error guardando tema personalizado: $e');
+      // TODO: Replace with logger - print('âŒ Error guardando tema personalizado: $e');
       return false;
     }
   }
@@ -70,7 +70,7 @@ class ThemeService {
   // Actualizar un tema personalizado
   Future<bool> updateCustomTheme(CustomTheme theme) async {
     try {
-      print('ðŸ” Actualizando tema: ${theme.name}');
+      // TODO: Replace with logger - print('ðŸ” Actualizando tema: ${theme.name}');
       final isar = Isar.getInstance();
       if (isar == null) return false;
 
@@ -81,7 +81,7 @@ class ThemeService {
       _logThemeInfo(theme, 'Tema actualizado');
       return IdValidator.isValidId(theme.id);
     } catch (e) {
-      print('Error actualizando tema personalizado: $e');
+      // TODO: Replace with logger - print('Error actualizando tema personalizado: $e');
       return false;
     }
   }
@@ -97,7 +97,7 @@ class ThemeService {
       });
       return true;
     } catch (e) {
-      print('Error eliminando tema personalizado: $e');
+      // TODO: Replace with logger - print('Error eliminando tema personalizado: $e');
       return false;
     }
   }
@@ -111,7 +111,7 @@ class ThemeService {
       final theme = await isar.customThemes.get(themeId);
       return theme;
     } catch (e) {
-      print('Error obteniendo tema personalizado: $e');
+      // TODO: Replace with logger - print('Error obteniendo tema personalizado: $e');
       return null;
     }
   }
@@ -183,7 +183,7 @@ class ThemeService {
       if (excludeId != null && existingTheme.id == excludeId) return false;
       return true;
     } catch (e) {
-      print('Error verificando nombre de tema: $e');
+      // TODO: Replace with logger - print('Error verificando nombre de tema: $e');
       return false;
     }
   }
@@ -204,7 +204,7 @@ class ThemeService {
   // MÃ©todo de prueba para verificar que todo funciona
   Future<bool> testCreateTheme() async {
     try {
-      print('ðŸ§ª Iniciando prueba de creaciÃ³n de tema');
+      // TODO: Replace with logger - print('ðŸ§ª Iniciando prueba de creaciÃ³n de tema');
 
       final testTheme = createCustomTheme(
         userId: 'test_user',
@@ -223,14 +223,14 @@ class ThemeService {
         infoColor: Colors.blue,
       );
 
-      print('ðŸ§ª Tema de prueba creado: ${testTheme.name}');
+      // TODO: Replace with logger - print('ðŸ§ª Tema de prueba creado: ${testTheme.name}');
 
       final success = await saveCustomTheme(testTheme);
-      print('ðŸ§ª Resultado de la prueba: $success');
+      // TODO: Replace with logger - print('ðŸ§ª Resultado de la prueba: $success');
 
       return success;
     } catch (e) {
-      print('âŒ Error en prueba: $e');
+      // TODO: Replace with logger - print('âŒ Error en prueba: $e');
       return false;
     }
   }

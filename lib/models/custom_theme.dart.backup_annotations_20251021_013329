@@ -52,16 +52,27 @@ class CustomTheme {
   Color get infoColor => Color(infoColorValue);
 
   // Setters para convertir Color a valores int
+  @ignore
   set primaryColor(Color color) => primaryColorValue = color.toARGB32();
+  @ignore
   set secondaryColor(Color color) => secondaryColorValue = color.toARGB32();
+  @ignore
   set accentColor(Color color) => accentColorValue = color.toARGB32();
+  @ignore
   set backgroundColor(Color color) => backgroundColorValue = color.toARGB32();
+  @ignore
   set surfaceColor(Color color) => surfaceColorValue = color.toARGB32();
+  @ignore
   set textColor(Color color) => textColorValue = color.toARGB32();
+  @ignore
   set textSecondaryColor(Color color) => textSecondaryColorValue = color.toARGB32();
+  @ignore
   set errorColor(Color color) => errorColorValue = color.toARGB32();
+  @ignore
   set successColor(Color color) => successColorValue = color.toARGB32();
+  @ignore
   set warningColor(Color color) => warningColorValue = color.toARGB32();
+  @ignore
   set infoColor(Color color) => infoColorValue = color.toARGB32();
 
   // MÃ©todo para crear un tema desde colores
@@ -104,6 +115,7 @@ class CustomTheme {
   }
 
   // MÃ©todo para convertir a AppTheme
+  @ignore
   AppTheme toAppTheme() {
     return AppTheme(
       name: name,
@@ -123,6 +135,7 @@ class CustomTheme {
   }
 
   // MÃ©todo para actualizar el tema
+  @ignore
   void updateTheme({
     String? name,
     bool? isDark,
@@ -178,6 +191,5 @@ extension AppThemeExtension on AppTheme {
     );
   }
 }
-
 
 

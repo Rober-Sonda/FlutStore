@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -35,7 +35,7 @@ class AppConfigService {
     final prefs = await SharedPreferences.getInstance();
     final configName = prefs.getString(_fontConfigKey) ?? 'default';
     
-    // Buscar la configuración por nombre
+    // Buscar la configuraciÃ³n por nombre
     switch (configName) {
       case 'modern':
         return FontConfig.modernConfig;
@@ -83,7 +83,7 @@ class AppConfigService {
           infoColor: Color(themeData['infoColor'] ?? 0xFF3182CE),
         );
       } catch (e) {
-        print('Error al cargar tema personalizado: $e');
+        // TODO: Replace with logger - print('Error al cargar tema personalizado: $e');
         return null;
       }
     }
@@ -133,7 +133,7 @@ class AppConfigService {
           captionWeight: FontWeight.values[fontData['captionWeight'] ?? FontWeight.normal.index],
         );
       } catch (e) {
-        print('Error al cargar configuración de fuentes personalizada: $e');
+        // TODO: Replace with logger - print('Error al cargar configuraciÃ³n de fuentes personalizada: $e');
         return null;
       }
     }

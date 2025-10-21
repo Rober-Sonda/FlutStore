@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import '../models/usuario.dart';
 import '../models/rol.dart';
@@ -12,7 +12,7 @@ class PermissionService {
     return Isar.getInstance();
   }
 
-  /// Verifica si el usuario puede realizar una operación específica
+  /// Verifica si el usuario puede realizar una operaciÃ³n especÃ­fica
   Future<bool> canPerformAction(
     Usuario? user,
     String action,
@@ -34,7 +34,7 @@ class PermissionService {
         return true;
       }
 
-      // Para otros roles, definir permisos específicos
+      // Para otros roles, definir permisos especÃ­ficos
       switch (rol.nombre.toLowerCase()) {
         case 'vendedor':
           return _canVendedorPerformAction(action, resource);
@@ -46,7 +46,7 @@ class PermissionService {
           return false;
       }
     } catch (e) {
-      print('Error verificando permisos: $e');
+      // TODO: Replace with logger - print('Error verificando permisos: $e');
       return false;
     }
   }
@@ -63,7 +63,7 @@ class PermissionService {
       case 'productos':
         return action == 'read'; // Solo pueden ver productos
       case 'categorias':
-        return action == 'read'; // Solo pueden ver categorías
+        return action == 'read'; // Solo pueden ver categorÃ­as
       case 'clientes':
         return action == 'create' ||
             action == 'read' ||
@@ -92,7 +92,7 @@ class PermissionService {
       case 'sorteos':
         return false; // Los vendedores no pueden ver sorteos
       case 'configuracion':
-        return false; // No pueden modificar configuración
+        return false; // No pueden modificar configuraciÃ³n
       default:
         return false;
     }
@@ -114,7 +114,7 @@ class PermissionService {
       case 'categorias':
         return action == 'create' ||
             action == 'read' ||
-            action == 'update'; // Pueden gestionar categorías
+            action == 'update'; // Pueden gestionar categorÃ­as
       case 'clientes':
         return action == 'read'; // Solo pueden ver clientes
       case 'ventas':
@@ -168,7 +168,7 @@ class PermissionService {
       case 'productos':
         return action == 'read'; // Solo pueden ver productos
       case 'categorias':
-        return action == 'read'; // Solo pueden ver categorías
+        return action == 'read'; // Solo pueden ver categorÃ­as
       case 'clientes':
         return action == 'read'; // Solo pueden ver clientes
       case 'ventas':
@@ -208,7 +208,7 @@ class PermissionService {
     }
   }
 
-  // Métodos específicos para operaciones comunes
+  // MÃ©todos especÃ­ficos para operaciones comunes
   Future<bool> canCreateUser(Usuario? user) async {
     return await canPerformAction(user, 'create', 'usuarios');
   }

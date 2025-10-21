@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -46,18 +46,18 @@ class IsarService {
     // Intentar obtener una instancia existente
     final existing = Isar.getInstance();
     if (existing != null && existing.isOpen) {
-      print('⚠️ Usando instancia existente de Isar');
+      // TODO: Replace with logger - print('âš ï¸ Usando instancia existente de Isar');
       return existing;
     }
 
-    // Si hay una instancia pero no está abierta, cerrarla
+    // Si hay una instancia pero no estÃ¡ abierta, cerrarla
     if (_isarInstance != null && !_isarInstance!.isOpen) {
       await _isarInstance!.close();
       _isarInstance = null;
     }
 
     final dir = await getApplicationDocumentsDirectory();
-    print('🔄 Abriendo nueva instancia de Isar en ${dir.path}');
+    // TODO: Replace with logger - print('ðŸ”„ Abriendo nueva instancia de Isar en ${dir.path}');
 
     try {
       _isarInstance = await Isar.open(
@@ -93,10 +93,10 @@ class IsarService {
         name: 'default',
       );
 
-      print('✅ Instancia de Isar abierta exitosamente');
+      // TODO: Replace with logger - print('âœ… Instancia de Isar abierta exitosamente');
       return _isarInstance!;
     } catch (e) {
-      print('❌ Error abriendo Isar: $e');
+      // TODO: Replace with logger - print('âŒ Error abriendo Isar: $e');
       rethrow;
     }
   }
@@ -130,7 +130,7 @@ class IsarService {
   }
 
   Future<Isar> get _isar async {
-    // Si ya tenemos una instancia válida, usarla
+    // Si ya tenemos una instancia vÃ¡lida, usarla
     if (_isarInstance != null && _isarInstance!.isOpen) {
       return _isarInstance!;
     }
@@ -142,7 +142,7 @@ class IsarService {
       return existing;
     }
 
-    // Si no hay instancia válida, crear una nueva
+    // Si no hay instancia vÃ¡lida, crear una nueva
     return await _initDb();
   }
 
@@ -157,16 +157,16 @@ class IsarService {
       await isar.writeTxn(() async {
         await isar.productos.putAll([
           Producto()
-            ..nombre = 'Remera básica'
+            ..nombre = 'Remera bÃ¡sica'
             ..precio = 3500
             ..stock = 20,
           Producto()
-            ..nombre = 'Pantalón jeans'
+            ..nombre = 'PantalÃ³n jeans'
             ..precio = 6500
             ..stock = 15,
-          // ...agrega más productos seed aquí...
+          // ...agrega mÃ¡s productos seed aquÃ­...
         ]);
-        // ...agrega seeds para usuarios, categorías, etc...
+        // ...agrega seeds para usuarios, categorÃ­as, etc...
       });
     }
   }

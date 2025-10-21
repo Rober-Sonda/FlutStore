@@ -33,7 +33,7 @@ class ProductService {
   ) async {
     if (attribute == null) return -1;
 
-    print('ðŸŸ¡ Verificando atributo: ${attribute.name}');
+    // TODO: Replace with logger - print('ðŸŸ¡ Verificando atributo: ${attribute.name}');
 
     // Buscar si ya existe por name + type
     final existing =
@@ -44,7 +44,7 @@ class ProductService {
             .findFirst();
 
     if (existing != null) {
-      print(
+      // TODO: Replace with logger - print(
         'ðŸ” Atributo ya existente encontrado: ${existing.name} (ID: ${existing.id})',
       );
       attribute.id = existing.id;
@@ -77,8 +77,8 @@ class ProductService {
 
     final isNew = product.id <= 0;
 
-    print('ðŸ‘‰ Iniciando guardado de producto: ${product.name}');
-    print('Â¿Es nuevo? $isNew');
+    // TODO: Replace with logger - print('ðŸ‘‰ Iniciando guardado de producto: ${product.name}');
+    // TODO: Replace with logger - print('Â¿Es nuevo? $isNew');
 
     final random = Random();
 
@@ -93,8 +93,8 @@ class ProductService {
           'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
     }
 
-    print('SKU a guardar: ${product.sku}');
-    print('Barcode a guardar: ${product.barcode}');
+    // TODO: Replace with logger - print('SKU a guardar: ${product.sku}');
+    // TODO: Replace with logger - print('Barcode a guardar: ${product.barcode}');
 
     await isar.writeTxn(() async {
       final skuExists =
@@ -104,7 +104,7 @@ class ProductService {
               .findFirst();
 
       if (skuExists != null && (isNew || skuExists.id != product.id)) {
-        print(
+        // TODO: Replace with logger - print(
           'âŒ SKU duplicado detectado: ${product.sku} con ID: ${skuExists.id}',
         );
         throw Exception('SKU ya existe en otro producto.');
@@ -117,17 +117,17 @@ class ProductService {
               .findFirst();
 
       if (barcodeExists != null && (isNew || barcodeExists.id != product.id)) {
-        print(
+        // TODO: Replace with logger - print(
           'âŒ Barcode duplicado detectado: ${product.barcode} con ID: ${barcodeExists.id}',
         );
         throw Exception('Barcode ya existe en otro producto.');
       }
 
       try {
-        print('ðŸ’¾ Guardando atributos si no existen...');
+        // TODO: Replace with logger - print('ðŸ’¾ Guardando atributos si no existen...');
 
         if (product.category.value != null) {
-          print('ðŸŸ¡ Guardando category: ${product.category.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando category: ${product.category.value!.name}');
           product.category.value!.id = await _putAttributeIfNotExists(
             isar,
             product.category.value,
@@ -135,13 +135,13 @@ class ProductService {
         }
 
         if (product.size.value != null) {
-          print('ðŸŸ¡ Guardando size: ${product.size.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando size: ${product.size.value!.name}');
           final id = await _putAttributeIfNotExists(isar, product.size.value);
           product.size.value!.id = id;
         }
 
         if (product.color.value != null) {
-          print('ðŸŸ¡ Guardando color: ${product.color.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando color: ${product.color.value!.name}');
           product.color.value!.id = await _putAttributeIfNotExists(
             isar,
             product.color.value,
@@ -149,7 +149,7 @@ class ProductService {
         }
 
         if (product.season.value != null) {
-          print('ðŸŸ¡ Guardando season: ${product.season.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando season: ${product.season.value!.name}');
           product.season.value!.id = await _putAttributeIfNotExists(
             isar,
             product.season.value,
@@ -157,7 +157,7 @@ class ProductService {
         }
 
         if (product.brand.value != null) {
-          print('ðŸŸ¡ Guardando brand: ${product.brand.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando brand: ${product.brand.value!.name}');
           product.brand.value!.id = await _putAttributeIfNotExists(
             isar,
             product.brand.value,
@@ -165,7 +165,7 @@ class ProductService {
         }
 
         if (product.gender.value != null) {
-          print('ðŸŸ¡ Guardando gender: ${product.gender.value!.name}');
+          // TODO: Replace with logger - print('ðŸŸ¡ Guardando gender: ${product.gender.value!.name}');
           product.gender.value!.id = await _putAttributeIfNotExists(
             isar,
             product.gender.value,
@@ -185,7 +185,7 @@ class ProductService {
           'Producto guardado',
         );
 
-        print('âœ… Producto guardado con ID: $productId');
+        // TODO: Replace with logger - print('âœ… Producto guardado con ID: $productId');
 
         // Vincular atributos con el producto reciÃ©n guardado
         if (product.category.value != null) {
@@ -243,10 +243,10 @@ class ProductService {
           await product.gender.save();
         }
 
-        print('âœ… Producto y atributos guardados correctamente');
+        // TODO: Replace with logger - print('âœ… Producto y atributos guardados correctamente');
       } catch (e, stack) {
-        print('âŒ ERROR al guardar producto: $e');
-        print('ðŸ“ Stack: $stack');
+        // TODO: Replace with logger - print('âŒ ERROR al guardar producto: $e');
+        // TODO: Replace with logger - print('ðŸ“ Stack: $stack');
         rethrow;
       }
     });
