@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tienda_app/screens/backup_screen.dart';
+import 'package:tienda_app/views/backup_view.dart';
 
 void main() {
-  group('BackupScreen Widget Tests', () {
+  group('BackupView Widget Tests', () {
     
     testWidgets('debe mostrar título correcto en AppBar', (WidgetTester tester) async {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -22,7 +22,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -36,7 +36,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
       
@@ -53,7 +53,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -66,7 +66,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -83,7 +83,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -102,7 +102,7 @@ void main() {
       // Arrange: Construir widget
       await tester.pumpWidget(
         const MaterialApp(
-          home: BackupScreen(),
+          home: BackupView(),
         ),
       );
 
@@ -121,7 +121,7 @@ void main() {
         // Arrange: Construir widget con backup simulado
         await tester.pumpWidget(
           const MaterialApp(
-            home: BackupScreen(),
+            home: BackupView(),
           ),
         );
 
@@ -514,7 +514,7 @@ void main() {
         
         await tester.pumpWidget(
           const MaterialApp(
-            home: BackupScreen(),
+            home: BackupView(),
           ),
         );
 
@@ -532,7 +532,7 @@ void main() {
         // Arrange: Construir widget
         await tester.pumpWidget(
           const MaterialApp(
-            home: BackupScreen(),
+            home: BackupView(),
           ),
         );
 

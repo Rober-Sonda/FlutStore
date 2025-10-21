@@ -6,12 +6,12 @@ import '../utils/app_theme.dart';
 import '../models/producto.dart';
 import '../providers/producto_provider.dart';
 
-class ProductosScreen extends StatefulWidget {
+class ProductosView extends StatefulWidget {
   @override
-  _ProductosScreenState createState() => _ProductosScreenState();
+  _ProductosViewState createState() => _ProductosViewState();
 }
 
-class _ProductosScreenState extends State<ProductosScreen> {
+class _ProductosViewState extends State<ProductosView> {
   @override
   void initState() {
     super.initState();

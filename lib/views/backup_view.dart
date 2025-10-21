@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tienda_app/services/backup_service.dart';
 import 'dart:io';
 
-class BackupScreen extends StatefulWidget {
-  const BackupScreen({Key? key}) : super(key: key);
+class BackupView extends StatefulWidget {
+  const BackupView({Key? key}) : super(key: key);
 
   @override
-  State<BackupScreen> createState() => _BackupScreenState();
+  State<BackupView> createState() => _BackupViewState();
 }
 
-class _BackupScreenState extends State<BackupScreen> {
+class _BackupViewState extends State<BackupView> {
   final BackupService _backupService = BackupService();
   List<BackupInfo> _backups = [];
   bool _isLoading = false;
