@@ -18,7 +18,7 @@ void main() {
         nombre: 'Producto Test',
         descripcion: 'Descripción de prueba',
         precio: 100.0,
-        stock: 5,
+        stockActual: 5,
         categoria: 'Test',
       );
     });
@@ -37,7 +37,7 @@ void main() {
       final productos = await databaseService.getProductos();
       final producto = productos.firstWhere((p) => p.id == testProducto.id);
 
-      expect(producto.stock, 10);
+      expect(producto.stockActual, 10);
     });
 
     test('should delete product successfully', () async {

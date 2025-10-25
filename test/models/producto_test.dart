@@ -20,7 +20,7 @@ void main() {
           nombre: expectedNombre,
           descripcion: expectedDescripcion,
           precio: expectedPrecio,
-          stock: expectedStock,
+          stockActual: expectedStock,
           categoria: expectedCategoria,
           imagen: expectedImagen,
         );
@@ -30,7 +30,7 @@ void main() {
         expect(producto.nombre, expectedNombre);
         expect(producto.descripcion, expectedDescripcion);
         expect(producto.precio, expectedPrecio);
-        expect(producto.stock, expectedStock);
+        expect(producto.stockActual, expectedStock);
         expect(producto.categoria, expectedCategoria);
         expect(producto.imagen, expectedImagen);
         expect(producto.imagenes, isEmpty);
@@ -39,15 +39,13 @@ void main() {
 
       test('should create product with minimal required fields', () {
         // Arrange & Act
-        final producto = Producto(
-          nombre: 'Producto Básico',
-        );
+        final producto = Producto(nombre: 'Producto Básico');
 
         // Assert
         expect(producto.nombre, 'Producto Básico');
         expect(producto.descripcion, isNull);
         expect(producto.precio, isNull);
-        expect(producto.stock, isNull);
+        expect(producto.stockActual, isNull);
         expect(producto.categoria, isNull);
         expect(producto.imagenes, isEmpty);
         expect(producto.fechaCreacion, isNull);
@@ -56,7 +54,7 @@ void main() {
       test('should allow null fechaCreacion when not provided', () {
         // Arrange & Act
         final producto = Producto(nombre: 'Test');
-        
+
         // Assert
         expect(producto.fechaCreacion, isNull);
       });
@@ -70,7 +68,7 @@ void main() {
           nombre: 'Test',
           fechaCreacion: fechaEspecifica,
         );
-        
+
         // Assert
         expect(producto.fechaCreacion, fechaEspecifica);
       });
@@ -85,7 +83,7 @@ void main() {
           nombre: 'Mouse Inalámbrico',
           descripcion: 'Mouse inalámbrico ergonómico',
           precio: 25.99,
-          stock: 50,
+          stockActual: 50,
           categoria: 'Accesorios',
           imagen: 'mouse.jpg',
           fechaCreacion: fechaCreacion,
@@ -164,10 +162,13 @@ void main() {
         expect(producto.nombre, 'Teclado Mecánico');
         expect(producto.descripcion, 'Teclado mecánico RGB');
         expect(producto.precio, 75.50);
-        expect(producto.stock, 20);
+        expect(producto.stockActual, 20);
         expect(producto.categoria, 'Accesorios');
         expect(producto.imagen, 'teclado.jpg');
-        expect(producto.fechaCreacion, DateTime.parse('2023-10-20T10:30:00.000Z'));
+        expect(
+          producto.fechaCreacion,
+          DateTime.parse('2023-10-20T10:30:00.000Z'),
+        );
         expect(producto.codigoBarras, '987654321');
         expect(producto.sku, 'TEC-001');
         expect(producto.precioCosto, 45.00);
@@ -177,9 +178,7 @@ void main() {
 
       test('should handle missing fields in JSON gracefully', () {
         // Arrange
-        final json = {
-          'nombre': 'Producto Mínimo',
-        };
+        final json = {'nombre': 'Producto Mínimo'};
 
         // Act
         final producto = Producto.fromJson(json);
@@ -188,7 +187,7 @@ void main() {
         expect(producto.nombre, 'Producto Mínimo');
         expect(producto.descripcion, isNull);
         expect(producto.precio, isNull);
-        expect(producto.stock, isNull);
+        expect(producto.stockActual, isNull);
         expect(producto.categoria, isNull);
         expect(producto.imagen, isNull);
         expect(producto.fechaCreacion, isNull);
@@ -201,10 +200,7 @@ void main() {
 
       test('should handle null imagenes field in JSON', () {
         // Arrange
-        final json = {
-          'nombre': 'Producto Test',
-          'imagenes': null,
-        };
+        final json = {'nombre': 'Producto Test', 'imagenes': null};
 
         // Act
         final producto = Producto.fromJson(json);
@@ -267,35 +263,35 @@ void main() {
         expect(producto.imagenes, isEmpty);
       });
 
-      test('should get imagenPrincipal from imagen field when no images in collection', () {
-        // Arrange
-        final producto = Producto(
-          nombre: 'Test Product',
-          imagen: 'main.jpg',
-        );
+      test(
+        'should get imagenPrincipal from imagen field when no images in collection',
+        () {
+          // Arrange
+          final producto = Producto(nombre: 'Test Product', imagen: 'main.jpg');
 
-        // Act
-        final imagenPrincipal = producto.imagenPrincipal;
+          // Act
+          final imagenPrincipal = producto.imagenPrincipal;
 
-        // Assert
-        expect(imagenPrincipal, 'main.jpg');
-      });
+          // Assert
+          expect(imagenPrincipal, 'main.jpg');
+        },
+      );
 
-      test('should get imagenPrincipal from first image in collection when available', () {
-        // Arrange
-        final producto = Producto(
-          nombre: 'Test Product',
-          imagen: 'main.jpg',
-        );
-        producto.agregarImagen('first.jpg');
-        producto.agregarImagen('second.jpg');
+      test(
+        'should get imagenPrincipal from first image in collection when available',
+        () {
+          // Arrange
+          final producto = Producto(nombre: 'Test Product', imagen: 'main.jpg');
+          producto.agregarImagen('first.jpg');
+          producto.agregarImagen('second.jpg');
 
-        // Act
-        final imagenPrincipal = producto.imagenPrincipal;
+          // Act
+          final imagenPrincipal = producto.imagenPrincipal;
 
-        // Assert
-        expect(imagenPrincipal, 'first.jpg');
-      });
+          // Assert
+          expect(imagenPrincipal, 'first.jpg');
+        },
+      );
     });
 
     group('CopyWith Tests', () {
@@ -305,7 +301,7 @@ void main() {
           id: 1,
           nombre: 'Producto Original',
           precio: 100.0,
-          stock: 5,
+          stockActual: 5,
         );
         original.agregarImagen('imagen1.jpg');
 
@@ -319,16 +315,13 @@ void main() {
         expect(copia.id, 1); // Sin cambio
         expect(copia.nombre, 'Producto Modificado'); // Modificado
         expect(copia.precio, 150.0); // Modificado
-        expect(copia.stock, 5); // Sin cambio
+        expect(copia.stockActual, 5); // Sin cambio
         expect(copia.imagenes, ['imagen1.jpg']); // Se copian las imágenes
       });
 
       test('should preserve original when copying', () {
         // Arrange
-        final original = Producto(
-          nombre: 'Original',
-          precio: 100.0,
-        );
+        final original = Producto(nombre: 'Original', precio: 100.0);
 
         // Act
         final copia = original.copyWith(nombre: 'Copia');

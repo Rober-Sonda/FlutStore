@@ -4,7 +4,7 @@ import 'package:tienda_app/models/producto.dart';
 void main() {
   group('Producto Enhanced Model Tests - TDD', () {
     late Producto producto;
-    
+
     setUp(() {
       // Arrange: Producto base para tests
       producto = Producto(
@@ -12,7 +12,7 @@ void main() {
         descripcion: 'Remera de algodón para deporte',
         precio: 2500.0,
         precioCosto: 1000.0,
-        stock: 15,
+        stockActual: 15,
         stockMinimo: 5,
         stockMaximo: 100,
         marca: 'Nike',
@@ -67,31 +67,34 @@ void main() {
     group('Stock Management Tests - TDD', () {
       test('tieneStockBajo should return true when stock is below minimum', () {
         // Arrange
-        producto.stock = 3;
+        producto.stockActual = 3;
         producto.stockMinimo = 5;
-        
+
         // Act & Assert
         expect(producto.tieneStockBajo, true);
       });
 
-      test('tieneStockBajo should return false when stock is above minimum', () {
-        // Arrange
-        producto.stock = 10;
-        producto.stockMinimo = 5;
-        
-        // Act & Assert
-        expect(producto.tieneStockBajo, false);
-      });
+      test(
+        'tieneStockBajo should return false when stock is above minimum',
+        () {
+          // Arrange
+          producto.stockActual = 10;
+          producto.stockMinimo = 5;
+
+          // Act & Assert
+          expect(producto.tieneStockBajo, false);
+        },
+      );
 
       test('estaAgotado should return true when stock is zero or null', () {
         // Arrange
-        producto.stock = 0;
-        
+        producto.stockActual = 0;
+
         // Act & Assert
         expect(producto.estaAgotado, true);
-        
+
         // Test with null stock
-        producto.stock = null;
+        producto.stockActual = null;
         expect(producto.estaAgotado, true);
       });
 
@@ -100,11 +103,11 @@ void main() {
         producto.activo = true;
         producto.disponibleVenta = true;
         producto.estado = EstadoProducto.activo;
-        producto.stock = 10;
-        
+        producto.stockActual = 10;
+
         // Act & Assert
         expect(producto.estaDisponible, true);
-        
+
         // Test inactive product
         producto.activo = false;
         expect(producto.estaDisponible, false);
@@ -114,70 +117,73 @@ void main() {
         // Arrange
         const int nuevoStock = 20;
         const int usuarioId = 2;
-        
+
         // Act
         producto.actualizarStock(nuevoStock, usuarioId);
-        
+
         // Assert
-        expect(producto.stock, nuevoStock);
+        expect(producto.stockActual, nuevoStock);
         expect(producto.usuarioActualizacion, usuarioId);
         expect(producto.fechaActualizacion, isNotNull);
         expect(producto.estado, EstadoProducto.activo);
       });
 
-      test('actualizarStock should set estado to agotado when stock is zero', () {
-        // Act
-        producto.actualizarStock(0);
-        
-        // Assert
-        expect(producto.stock, 0);
-        expect(producto.estado, EstadoProducto.agotado);
-      });
+      test(
+        'actualizarStock should set estado to agotado when stock is zero',
+        () {
+          // Act
+          producto.actualizarStock(0);
+
+          // Assert
+          expect(producto.stockActual, 0);
+          expect(producto.estado, EstadoProducto.agotado);
+        },
+      );
 
       test('incrementarStock should add to existing stock', () {
         // Arrange
         const int stockInicial = 10;
         const int incremento = 5;
-        producto.stock = stockInicial;
-        
+        producto.stockActual = stockInicial;
+
         // Act
         producto.incrementarStock(incremento);
-        
+
         // Assert
-        expect(producto.stock, stockInicial + incremento);
+        expect(producto.stockActual, stockInicial + incremento);
       });
 
       test('decrementarStock should subtract from existing stock', () {
         // Arrange
         const int stockInicial = 10;
         const int decremento = 3;
-        producto.stock = stockInicial;
-        
+        producto.stockActual = stockInicial;
+
         // Act
         producto.decrementarStock(decremento);
-        
+
         // Assert
-        expect(producto.stock, stockInicial - decremento);
+        expect(producto.stockActual, stockInicial - decremento);
       });
 
       test('decrementarStock should not go below zero', () {
         // Arrange
-        producto.stock = 2;
-        
+        producto.stockActual = 2;
+
         // Act
         producto.decrementarStock(5); // Trying to decrement more than available
-        
+
         // Assert
-        expect(producto.stock, 0);
+        expect(producto.stockActual, 0);
       });
     });
 
     group('Business Logic Tests - TDD', () {
       test('porcentajeStock should calculate correct percentage', () {
         // Arrange
-        producto.stock = 25;
+        producto.stockActual = 25;
         producto.stockMaximo = 100;
-        
+
         // Act & Assert
         expect(producto.porcentajeStock, 25.0);
       });
@@ -186,10 +192,10 @@ void main() {
         // Arrange
         producto.precio = 2500.0;
         producto.precioCosto = 1000.0;
-        
+
         // Act
         final margen = producto.margenGanancia;
-        
+
         // Assert
         expect(margen, 150.0); // (2500-1000)/1000 * 100 = 150%
       });
@@ -198,10 +204,10 @@ void main() {
         // Arrange
         producto.precio = 1000.0;
         const double descuento = 20.0; // 20%
-        
+
         // Act
         final precioFinal = producto.precioConDescuento(descuento);
-        
+
         // Assert
         expect(precioFinal, 800.0); // 1000 * (1 - 20/100)
       });
@@ -209,7 +215,7 @@ void main() {
       test('marcarComoVendido should update sale timestamp', () {
         // Act
         producto.marcarComoVendido();
-        
+
         // Assert
         expect(producto.fechaUltimaVenta, isNotNull);
         expect(producto.fechaActualizacion, isNotNull);
@@ -217,14 +223,14 @@ void main() {
 
       test('necesitaReabastecimiento should identify restock needs', () {
         // Arrange: Stock bajo
-        producto.stock = 2;
+        producto.stockActual = 2;
         producto.stockMinimo = 5;
-        
+
         // Act & Assert
         expect(producto.necesitaReabastecimiento, true);
-        
+
         // Test with good stock
-        producto.stock = 20;
+        producto.stockActual = 20;
         expect(producto.necesitaReabastecimiento, false);
       });
     });
@@ -234,24 +240,24 @@ void main() {
         // Test inactive product
         producto.activo = false;
         expect(producto.descripcionEstado, 'Inactivo');
-        
+
         // Test unavailable for sale
         producto.activo = true;
         producto.disponibleVenta = false;
         expect(producto.descripcionEstado, 'No disponible');
-        
+
         // Test out of stock
         producto.disponibleVenta = true;
-        producto.stock = 0;
+        producto.stockActual = 0;
         expect(producto.descripcionEstado, 'Agotado');
-        
+
         // Test low stock
-        producto.stock = 2;
+        producto.stockActual = 2;
         producto.stockMinimo = 5;
         expect(producto.descripcionEstado, 'Stock bajo');
-        
+
         // Test available
-        producto.stock = 20;
+        producto.stockActual = 20;
         producto.estado = EstadoProducto.activo;
         expect(producto.descripcionEstado, 'Disponible');
       });
@@ -260,19 +266,19 @@ void main() {
         // Test unavailable - red
         producto.activo = false;
         expect(producto.colorEstado, 'red');
-        
+
         // Test low stock - orange
         producto.activo = true;
         producto.disponibleVenta = true;
-        producto.stock = 2;
+        producto.stockActual = 2;
         producto.stockMinimo = 5;
         expect(producto.colorEstado, 'orange');
-        
+
         // Test featured - gold
-        producto.stock = 20;
+        producto.stockActual = 20;
         producto.destacado = true;
         expect(producto.colorEstado, 'gold');
-        
+
         // Test normal available - green
         producto.destacado = false;
         expect(producto.colorEstado, 'green');
@@ -283,7 +289,7 @@ void main() {
       test('toJson should include all new fields', () {
         // Act
         final json = producto.toJson();
-        
+
         // Assert - Verificar campos nuevos
         expect(json['stockMinimo'], producto.stockMinimo);
         expect(json['stockMaximo'], producto.stockMaximo);
@@ -323,10 +329,10 @@ void main() {
           'garantiaMeses': 12,
           'usuarioCreacion': 1,
         };
-        
+
         // Act
         final productoFromJson = Producto.fromJson(json);
-        
+
         // Assert
         expect(productoFromJson.nombre, 'Test Product');
         expect(productoFromJson.stockMinimo, 5);
@@ -351,16 +357,16 @@ void main() {
           destacado: true,
           stockMinimo: 10,
         );
-        
+
         // Assert - Campos actualizados
         expect(productoCopiado.nombre, 'Nuevo Nombre');
         expect(productoCopiado.marca, 'Nueva Marca');
         expect(productoCopiado.destacado, true);
         expect(productoCopiado.stockMinimo, 10);
-        
+
         // Assert - Campos no cambiados
         expect(productoCopiado.precio, producto.precio);
-        expect(productoCopiado.stock, producto.stock);
+        expect(productoCopiado.stockActual, producto.stockActual);
         expect(productoCopiado.genero, producto.genero);
         expect(productoCopiado.activo, producto.activo);
       });
@@ -370,13 +376,13 @@ void main() {
       test('resumenProducto should provide complete summary', () {
         // Act
         final resumen = producto.resumenProducto;
-        
+
         // Assert
         expect(resumen['id'], producto.id);
         expect(resumen['nombre'], producto.nombre);
         expect(resumen['marca'], producto.marca);
         expect(resumen['precio'], producto.precio);
-        expect(resumen['stock'], producto.stock);
+        expect(resumen['stock'], producto.stockActual);
         expect(resumen['estado'], isA<String>());
         expect(resumen['disponible'], isA<bool>());
         expect(resumen['stockBajo'], isA<bool>());

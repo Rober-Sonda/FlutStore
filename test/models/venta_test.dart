@@ -9,6 +9,12 @@ void main() {
       // Arrange: Configurar objeto base para cada test
       venta = Venta(
         clienteId: 1,
+        clienteNombre: 'Cliente Test',
+        clienteEmail: 'cliente@test.com',
+        clienteTelefono: '1234567890',
+        clienteDocumento: 'DNI123456',
+        clienteDireccion: 'Calle Falsa 123',
+        clienteTipoCliente: 'regular',
         fecha: DateTime(2024, 1, 15),
         total: 150.50,
         metodoPago: 'efectivo',
@@ -22,6 +28,12 @@ void main() {
         // Arrange & Act
         final nuevaVenta = Venta(
           clienteId: 2,
+          clienteNombre: 'Cliente Nuevo',
+          clienteEmail: 'nuevo@test.com',
+          clienteTelefono: '0987654321',
+          clienteDocumento: 'DNI654321',
+          clienteDireccion: 'Avenida Siempre Viva 742',
+          clienteTipoCliente: 'regular',
           fecha: DateTime(2024, 2, 1),
           total: 99.99,
           metodoPago: 'tarjeta',

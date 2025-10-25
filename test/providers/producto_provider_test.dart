@@ -31,7 +31,7 @@ void main() {
           nombre: 'Test Product',
           descripcion: 'Test Description',
           precio: 50.0,
-          stock: 10,
+          stockActual: 10,
           categoria: 'Test',
         );
 
@@ -52,7 +52,7 @@ void main() {
         final producto = Producto(
           nombre: 'Original Product',
           precio: 100.0,
-          stock: 5,
+          stockActual: 5,
         );
         await provider.agregarProducto(producto);
         
