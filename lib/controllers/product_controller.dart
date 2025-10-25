@@ -1,6 +1,6 @@
 // lib/src/controllers/product_controller.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
+
 import '../models/producto.dart';
 import '../services/product_service.dart';
 

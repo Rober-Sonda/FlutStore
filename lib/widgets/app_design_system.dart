@@ -15,14 +15,20 @@ class AppDesignSystem {
   static const Color lightSurface = Color(0xFFFAFAFA);
   static const Color lightBackground = Color(0xFFFFFFFF);
 
-  // COLORES DE ACENTO ELEGANTES
+  // COLORES DE ACENTO MODERNOS - Estética Juvenil
+  static const Color vibrantPink = Color(0xFFFF6B9D);
+  static const Color electricBlue = Color(0xFF00D9FF);
+  static const Color neonGreen = Color(0xFF39FF14);
+  static const Color sunsetOrange = Color(0xFFFF7B54);
+  static const Color purpleHaze = Color(0xFF9F7AEA);
   static const Color goldAccent = Color(0xFFFFD700);
   static const Color silverAccent = Color(0xFFC0C0C0);
-  static const Color electricBlue = Color(0xFF00D9FF);
-  static const Color success = Color(0xFF00E676);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color error = Color(0xFFFF1744);
-  static const Color info = Color(0xFF00B0FF);
+
+  // Estados de la aplicación
+  static const Color success = Color(0xFF22C55E);
+  static const Color warning = Color(0xFFEAB308);
+  static const Color error = Color(0xFFEF4444);
+  static const Color info = Color(0xFF06B6D4);
 
   // COLORES PROFESIONALES PARA NAVEGACIÓN
   static const Color navPrimary = Color(0xFF1E293B); // Slate-800
@@ -67,6 +73,7 @@ class AppDesignSystem {
   static const double radiusSm = 8.0;
   static const double radiusMd = 16.0;
   static const double radiusLg = 24.0;
+  static const double radiusXl = 32.0;
   static const double radiusXs = 4.0;
 
   // SOMBRAS
@@ -119,6 +126,13 @@ class AppDesignSystem {
     letterSpacing: -0.15,
   );
 
+  static TextStyle bodyLg({Color? color}) => TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    color: color ?? textPrimary,
+    height: 1.6,
+  );
+
   static TextStyle bodyMd({Color? color}) => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
@@ -144,32 +158,32 @@ class AppDesignSystem {
   static Color get textTertiary => _isDark ? Colors.white54 : Colors.black54;
   static Color get textMuted => _isDark ? Colors.white38 : Colors.black38;
 
-  // IMÁGENES DE FONDO DE MODA
-  static const List<String> fashionBackgrounds = [
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200',
-    'https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200',
-    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200',
-    'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200',
-  ];
-
-  static String getRandomFashionBackground() {
-    final index =
-        DateTime.now().millisecondsSinceEpoch % fashionBackgrounds.length;
-    return fashionBackgrounds[index];
-  }
-
-  static BoxDecoration getFashionBackgroundDecoration() {
+  // INTEGRACIÓN CON FASHION BACKGROUND SYSTEM
+  static BoxDecoration getFashionBackgroundDecoration({List<String>? tags}) {
     return BoxDecoration(
-      image: DecorationImage(
-        image: NetworkImage(getRandomFashionBackground()),
-        fit: BoxFit.cover,
-        colorFilter: ColorFilter.mode(
-          (_isDark ? Colors.black : Colors.white).withOpacity(0.3),
-          BlendMode.overlay,
-        ),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          (_isDark ? darkBackground : lightBackground),
+          (_isDark ? darkSecondary : lightSecondary).withOpacity(0.8),
+        ],
       ),
     );
   }
+
+  // GRADIENTES JUVENILES ACTUALIZADOS
+  static LinearGradient get youthGradient => LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [vibrantPink.withOpacity(0.3), electricBlue.withOpacity(0.3)],
+  );
+
+  static LinearGradient get energyGradient => LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [sunsetOrange.withOpacity(0.2), purpleHaze.withOpacity(0.2)],
+  );
 
   // APPBAR PROFESIONAL
   static AppBar buildProfessionalAppBar({

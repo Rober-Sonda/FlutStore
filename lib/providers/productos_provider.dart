@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:tienda_app/models/product.dart';
 import '../models/producto.dart';
-import '../services/isar_service.dart';
 
 // Provider para obtener todos los productos
 final productosProvider = FutureProvider<List<Producto>>((ref) async {
@@ -18,16 +17,17 @@ final productosProvider = FutureProvider<List<Producto>>((ref) async {
     // Convertir los modelos de Isar (Product) a los modelos de dominio (Producto).
     // Mapeamos manualmente los campos comunes del modelo Isar `Product` al dominio `Producto`.
     // Ajusta los nombres de campos si tu modelo Isar usa otros nombres.
-    final productos = productosIsar.map((p) {
-      return Producto(
-        id: p.id,
-        nombre: p.name,
-        precio: p.price,
-        stockActual: p.stock,
-        activo: p.isDiscontinued,
-        fechaUltimaVenta: p.lastSoldAt,
-      );
-    }).toList();
+    final productos =
+        productosIsar.map((p) {
+          return Producto(
+            id: p.id,
+            nombre: p.name,
+            precio: p.price,
+            stockActual: p.stock,
+            activo: p.isDiscontinued,
+            fechaUltimaVenta: p.lastSoldAt,
+          );
+        }).toList();
     return productos;
   } catch (e) {
     // En caso de error, devolvemos lista vacía

@@ -1,4 +1,3 @@
-import 'package:isar/isar.dart';
 import 'valor_propiedad_producto.dart';
 
 // part 'producto.g.dart';

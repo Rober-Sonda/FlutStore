@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/loading_indicator.dart';
 import '../widgets/app_design_system.dart';
+import '../widgets/fashion_components.dart';
 import '../components/shared/professional_app_bar.dart';
-import '../components/shared/glass_containers.dart';
 import '../models/producto.dart';
 import '../providers/producto_provider.dart';
 
@@ -12,230 +11,419 @@ class ProductosView extends StatefulWidget {
   _ProductosViewState createState() => _ProductosViewState();
 }
 
-class _ProductosViewState extends State<ProductosView> {
+class _ProductosViewState extends State<ProductosView>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  String _selectedFilter = 'Todos';
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
+    // Animaciones
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeOut));
+
     // Inicializar datos de prueba cuando se carga la pantalla
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<ProductoProvider>(context, listen: false);
       provider.initializeTestData();
+      _fadeController.forward();
+      _slideController.forward();
     });
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _slideController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ProfessionalAppBar(
-        title: 'Productos',
+        title: '🛍️ Productos',
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
+          FashionButton(
+            text: 'Buscar',
+            icon: Icons.search_rounded,
+            style: FashionButtonStyle.ghost,
             onPressed: () => _showSearchDialog(),
-            tooltip: 'Buscar productos',
           ),
-          IconButton(
-            icon: const Icon(Icons.filter_list),
+          const SizedBox(width: 8),
+          FashionButton(
+            text: 'Filtros',
+            icon: Icons.tune_rounded,
+            style: FashionButtonStyle.ghost,
             onPressed: () => _showFilterDialog(),
-            tooltip: 'Filtrar productos',
           ),
+          const SizedBox(width: 16),
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppDesignSystem.surface,
-              AppDesignSystem.surface.withValues(alpha: 0.8),
-            ],
-          ),
-        ),
-        child: Consumer<ProductoProvider>(
-          builder: (context, provider, child) {
-            if (provider.isLoading) {
-              return const LoadingIndicator(message: 'Cargando productos...');
-            }
+      body: AnimatedBuilder(
+        animation: Listenable.merge([_fadeAnimation, _slideAnimation]),
+        builder: (context, child) {
+          return FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: Consumer<ProductoProvider>(
+                builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return const FashionLoader(
+                      message: 'Cargando productos con estilo...',
+                      size: 60,
+                    );
+                  }
 
-            if (provider.productos.isEmpty) {
-              return _buildEmptyState();
-            }
+                  if (provider.productos.isEmpty) {
+                    return _buildEmptyState();
+                  }
 
-            return RefreshIndicator(
-              onRefresh: () => provider.cargarProductos(),
-              child: Column(
-                children: [
-                  // Contenedor con filtros rápidos con efecto glass
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: GlassFormContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Filtros rápidos',
-                            style: AppDesignSystem.bodyMd().copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
+                  return RefreshIndicator(
+                    onRefresh: () => provider.cargarProductos(),
+                    color: AppDesignSystem.vibrantPink,
+                    child: Column(
+                      children: [
+                        // Barra de búsqueda moderna
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: ModernCard(
+                            glassMorphism: true,
+                            opacity: 0.9,
+                            borderColor: AppDesignSystem.vibrantPink
+                                .withOpacity(0.2),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildFilterChip('Todos', true),
-                                const SizedBox(width: 8),
-                                _buildFilterChip('Disponibles', false),
-                                const SizedBox(width: 8),
-                                _buildFilterChip('Sin Stock', false),
-                                const SizedBox(width: 8),
-                                _buildFilterChip('Destacados', false),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.search_rounded,
+                                      color: AppDesignSystem.vibrantPink,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Buscar productos',
+                                      style: AppDesignSystem.bodyMd().copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppDesignSystem.vibrantPink,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                FashionTextField(
+                                  controller: _searchController,
+                                  hint: 'Nombre del producto...',
+                                  prefixIcon: Icons.inventory_2_rounded,
+                                  suffixIcon: Icons.clear_rounded,
+                                  onSuffixIconTap: () {
+                                    _searchController.clear();
+                                    provider.limpiarFiltros();
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                // Filtros modernos
+                                Text(
+                                  'Filtros rápidos',
+                                  style: AppDesignSystem.bodySm().copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: AppDesignSystem.textSecondary,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      FashionChip(
+                                        label: 'Todos',
+                                        isSelected: _selectedFilter == 'Todos',
+                                        onTap: () => _setFilter('Todos'),
+                                        icon: Icons.inventory_rounded,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      FashionChip(
+                                        label: 'Disponibles',
+                                        isSelected:
+                                            _selectedFilter == 'Disponibles',
+                                        onTap: () => _setFilter('Disponibles'),
+                                        icon: Icons.check_circle_rounded,
+                                        selectedColor: AppDesignSystem.success,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      FashionChip(
+                                        label: 'Sin Stock',
+                                        isSelected:
+                                            _selectedFilter == 'Sin Stock',
+                                        onTap: () => _setFilter('Sin Stock'),
+                                        icon: Icons.warning_rounded,
+                                        selectedColor: AppDesignSystem.warning,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      FashionChip(
+                                        label: 'Destacados',
+                                        isSelected:
+                                            _selectedFilter == 'Destacados',
+                                        onTap: () => _setFilter('Destacados'),
+                                        icon: Icons.star_rounded,
+                                        selectedColor:
+                                            AppDesignSystem.sunsetOrange,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Cuadrícula de productos
-                  Expanded(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
+                        ),
+                        // Grid de productos con animación escalonada
+                        Expanded(
+                          child: GridView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.72,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                            itemCount: provider.productosFiltrados.length,
+                            itemBuilder: (context, index) {
+                              final producto =
+                                  provider.productosFiltrados[index];
+                              return TweenAnimationBuilder<double>(
+                                duration: Duration(
+                                  milliseconds: 300 + (index * 100),
+                                ),
+                                tween: Tween(begin: 0.0, end: 1.0),
+                                builder: (context, value, child) {
+                                  return Transform.scale(
+                                    scale: value,
+                                    child: Opacity(
+                                      opacity: value,
+                                      child: _buildProductCard(producto),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                           ),
-                      itemCount: provider.productosFiltrados.length,
-                      itemBuilder: (context, index) {
-                        final producto = provider.productosFiltrados[index];
-                        return _buildProductCard(producto);
-                      },
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FashionButton(
+        text: 'Nuevo Producto',
+        icon: Icons.add_rounded,
         onPressed: () => _navigateToAddProduct(),
-        icon: const Icon(Icons.add),
-        label: const Text('Agregar'),
+        style: FashionButtonStyle.primary,
       ),
     );
   }
 
   Widget _buildProductCard(Producto producto) {
-    return GestureDetector(
+    final stockStatus = (producto.stockActual ?? 0) > 5;
+
+    return ModernCard(
       onTap: () => _navigateToProductDetail(producto),
-      child: GlassCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppDesignSystem.surface.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child:
-                      producto.imagen != null
-                          ? Image.asset(
-                            producto.imagen!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                child: Icon(
-                                  Icons.inventory,
-                                  size: 48,
-                                  color: AppDesignSystem.textSecondary,
+      glassMorphism: true,
+      opacity: 0.95,
+      borderColor:
+          stockStatus
+              ? AppDesignSystem.success.withOpacity(0.3)
+              : AppDesignSystem.warning.withOpacity(0.3),
+      boxShadow: [
+        BoxShadow(
+          color: (stockStatus
+                  ? AppDesignSystem.success
+                  : AppDesignSystem.warning)
+              .withOpacity(0.2),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+        ),
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Imagen del producto con overlay juvenil
+          Expanded(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppDesignSystem.vibrantPink.withOpacity(0.1),
+                          AppDesignSystem.electricBlue.withOpacity(0.1),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child:
+                        producto.imagen != null
+                            ? Image.asset(
+                              producto.imagen!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Icon(
+                                    Icons.inventory_2_rounded,
+                                    size: 48,
+                                    color: AppDesignSystem.vibrantPink
+                                        .withOpacity(0.6),
+                                  ),
+                                );
+                              },
+                            )
+                            : Center(
+                              child: Icon(
+                                Icons.inventory_2_rounded,
+                                size: 48,
+                                color: AppDesignSystem.vibrantPink.withOpacity(
+                                  0.6,
                                 ),
-                              );
-                            },
-                          )
-                          : Center(
-                            child: Icon(
-                              Icons.inventory,
-                              size: 48,
-                              color: AppDesignSystem.textSecondary,
+                              ),
                             ),
-                          ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              producto.nombre ?? 'Sin nombre',
-              style: AppDesignSystem.bodyMd().copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppDesignSystem.textPrimary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '\$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
-              style: AppDesignSystem.bodyMd().copyWith(
-                fontWeight: FontWeight.w700,
-                color: AppDesignSystem.navAccent,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color:
-                    (producto.stockActual ?? 0) > 5
-                        ? AppDesignSystem.success.withOpacity(0.1)
-                        : AppDesignSystem.error.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color:
-                      (producto.stockActual ?? 0) > 5
-                          ? AppDesignSystem.success
-                          : AppDesignSystem.error,
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.inventory_2,
-                    size: 12,
-                    color:
-                        (producto.stockActual ?? 0) > 5
-                            ? AppDesignSystem.success
-                            : AppDesignSystem.error,
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Stock: ${producto.stockActual ?? 0}',
-                    style: AppDesignSystem.bodyMd().copyWith(
+                ),
+                // Badge de estado en la esquina
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
                       color:
-                          (producto.stockActual ?? 0) > 5
+                          stockStatus
                               ? AppDesignSystem.success
-                              : AppDesignSystem.error,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                              : AppDesignSystem.warning,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (stockStatus
+                                  ? AppDesignSystem.success
+                                  : AppDesignSystem.warning)
+                              .withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          stockStatus
+                              ? Icons.check_circle_rounded
+                              : Icons.warning_rounded,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${producto.stockActual ?? 0}',
+                          style: AppDesignSystem.bodySm().copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Información del producto
+          Text(
+            producto.nombre ?? 'Sin nombre',
+            style: AppDesignSystem.bodyMd().copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppDesignSystem.textPrimary,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 6),
+
+          // Precio con efecto gradiente
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppDesignSystem.vibrantPink.withOpacity(0.1),
+                  AppDesignSystem.electricBlue.withOpacity(0.1),
                 ],
               ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppDesignSystem.vibrantPink.withOpacity(0.3),
+                width: 1,
+              ),
             ),
-          ],
-        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
+                  style: AppDesignSystem.bodyMd().copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: AppDesignSystem.vibrantPink,
+                    fontSize: 16,
+                  ),
+                ),
+                Icon(
+                  Icons.shopping_cart_rounded,
+                  size: 16,
+                  color: AppDesignSystem.electricBlue,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -356,55 +544,34 @@ class _ProductosViewState extends State<ProductosView> {
   void _navigateToProductDetail(Producto producto) {
     // TODO: Implementar navegación a detalle del producto
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Ver detalles de: ${producto.nombre}')),
+      SnackBar(
+        content: Text('Ver detalles de: ${producto.nombre}'),
+        backgroundColor: AppDesignSystem.vibrantPink,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
     );
   }
 
-  Widget _buildFilterChip(String label, bool isSelected) {
-    return GestureDetector(
-      onTap: () {
-        // TODO: Implementar lógica de filtrado
-        setState(() {
-          // Aquí se implementaría la lógica de selección de filtros
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color:
-              isSelected
-                  ? AppDesignSystem.navAccent
-                  : (AppDesignSystem.isDark
-                      ? Colors.white.withOpacity(0.05)
-                      : Colors.black.withOpacity(0.03)),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color:
-                isSelected
-                    ? AppDesignSystem.navAccent
-                    : AppDesignSystem.navAccent.withOpacity(0.2),
-            width: 1,
-          ),
-          boxShadow:
-              isSelected
-                  ? [
-                    BoxShadow(
-                      color: AppDesignSystem.navAccent.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                  : null,
-        ),
-        child: Text(
-          label,
-          style: AppDesignSystem.bodyMd().copyWith(
-            color: isSelected ? Colors.white : AppDesignSystem.textSecondary,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          ),
-        ),
-      ),
-    );
+  void _setFilter(String filter) {
+    final provider = Provider.of<ProductoProvider>(context, listen: false);
+    setState(() {
+      _selectedFilter = filter;
+    });
+
+    switch (filter) {
+      case 'Todos':
+        provider.limpiarFiltros();
+        break;
+      case 'Disponibles':
+        // TODO: Implementar filtro por disponibles
+        break;
+      case 'Sin Stock':
+        // TODO: Implementar filtro por sin stock
+        break;
+      case 'Destacados':
+        // TODO: Implementar filtro por destacados
+        break;
+    }
   }
 }
