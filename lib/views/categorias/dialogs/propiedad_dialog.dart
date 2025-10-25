@@ -1,5 +1,7 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../models/propiedad_categoria.dart';
+import '../../../providers/theme_provider.dart';
 
 class PropiedadDialog extends StatefulWidget {
   final PropiedadCategoria? propiedad;
@@ -75,106 +77,416 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        widget.propiedad == null ? 'Nueva Propiedad' : 'Editar Propiedad',
-      ),
-      content: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _nombreController,
-                decoration: const InputDecoration(
-                  labelText: 'Nombre de la propiedad',
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 420, maxHeight: 600),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: themeProvider.getCardColor(context),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Título
+            Text(
+              widget.propiedad == null ? 'Nueva Propiedad' : 'Editar Propiedad',
+              style: TextStyle(
+                color: themeProvider.getTitleColor(context),
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.5,
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Contenido scrolleable
+            Expanded(
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Campo nombre
+                      TextFormField(
+                        controller: _nombreController,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: 'Nombre de la propiedad',
+                          labelStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.black87),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'El nombre es requerido';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Dropdown tipo
+                      DropdownButtonFormField<TipoPropiedad>(
+                        value: _tipoSeleccionado,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: 'Tipo de propiedad',
+                          labelStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.black87),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                        items:
+                            TipoPropiedad.values.map((tipo) {
+                              return DropdownMenuItem(
+                                value: tipo,
+                                child: Text(_getTypeName(tipo)),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _tipoSeleccionado = value!;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Campo valor por defecto
+                      TextFormField(
+                        controller: _valorPorDefectoController,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: 'Valor por defecto (opcional)',
+                          labelStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.black87),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Checkbox requerido
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: CheckboxListTile(
+                          title: const Text(
+                            'Propiedad requerida',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          value: _requerido,
+                          activeColor: Colors.black87,
+                          onChanged: (value) {
+                            setState(() {
+                              _requerido = value ?? false;
+                            });
+                          },
+                        ),
+                      ),
+                      // Sección de opciones para tipo selección
+                      if (_tipoSeleccionado == TipoPropiedad.seleccion) ...[
+                        const SizedBox(height: 16),
+                        Text(
+                          'Opciones disponibles:',
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Campo para nueva opción
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _opcionController,
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: 'Nueva opción',
+                                  labelStyle: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.grey.shade50,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                onPressed: _agregarOpcion,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Lista de opciones
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 150),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children:
+                                  _opciones
+                                      .asMap()
+                                      .entries
+                                      .map(
+                                        (entry) => Container(
+                                          margin: const EdgeInsets.only(
+                                            bottom: 8,
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 12,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey.shade300,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  entry.value,
+                                                  style: const TextStyle(
+                                                    color: Colors.black87,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap:
+                                                    () => _eliminarOpcion(
+                                                      entry.key,
+                                                    ),
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(
+                                                    4,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red.shade50,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
+                                                        ),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.delete_outline,
+                                                    color: Colors.red.shade600,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'El nombre es requerido';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<TipoPropiedad>(
-                value: _tipoSeleccionado,
-                decoration: const InputDecoration(
-                  labelText: 'Tipo de propiedad',
-                ),
-                items:
-                    TipoPropiedad.values.map((tipo) {
-                      return DropdownMenuItem(
-                        value: tipo,
-                        child: Text(_getTypeName(tipo)),
-                      );
-                    }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _tipoSeleccionado = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _valorPorDefectoController,
-                decoration: const InputDecoration(
-                  labelText: 'Valor por defecto (opcional)',
-                ),
-              ),
-              const SizedBox(height: 16),
-              CheckboxListTile(
-                title: const Text('Propiedad requerida'),
-                value: _requerido,
-                onChanged: (value) {
-                  setState(() {
-                    _requerido = value ?? false;
-                  });
-                },
-              ),
-              if (_tipoSeleccionado == TipoPropiedad.seleccion) ...[
-                const SizedBox(height: 16),
-                const Text('Opciones disponibles:'),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _opcionController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nueva opciÃ³n',
+            ),
+
+            // Botones de acción
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey.shade700,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: _agregarOpcion,
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                ..._opciones.asMap().entries.map(
-                  (entry) => ListTile(
-                    title: Text(entry.value),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _eliminarOpcion(entry.key),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextButton(
+                      onPressed: _guardar,
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Guardar',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ],
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-        ElevatedButton(onPressed: _guardar, child: const Text('Guardar')),
-      ],
     );
   }
 
@@ -193,4 +505,3 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
     }
   }
 }
-
