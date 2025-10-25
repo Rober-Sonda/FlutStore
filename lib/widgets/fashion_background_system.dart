@@ -227,7 +227,7 @@ class FashionBackgroundSystem {
     ),
   ];
 
-  static final Random _random = Random();
+  static final math.Random _random = math.Random();
   static FashionBackground? _currentBackground;
   static Timer? _rotationTimer;
 

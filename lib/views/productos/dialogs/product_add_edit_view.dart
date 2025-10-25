@@ -7,11 +7,9 @@ import '../../../models/categoria.dart';
 import '../../../models/propiedad_categoria.dart';
 import '../../../models/valor_propiedad_producto.dart';
 import '../../../services/product_service.dart';
-import '../../../services/app_config_service.dart';
-import '../../../models/app_theme.dart';
-import '../../../models/font_config.dart';
 import '../../../widgets/product_image_carousel.dart';
 import '../../../widgets/image_picker_widget.dart';
+import '../../../widgets/fashion_components.dart';
 
 class ProductAddEditView extends ConsumerStatefulWidget {
   final int? productId;
@@ -53,9 +51,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   List<String> _imagenesProducto = [];
   String? _imagenPrincipal;
 
-  // Tema y configuración
-  AppTheme? _currentTheme;
-  FontConfig? _currentFontConfig;
+  // Tema y configuración - Variables removidas para usar diseño fijo elegante
 
   @override
   void initState() {
@@ -80,14 +76,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   }
 
   Future<void> _loadTheme() async {
-    final configService = ref.read(appConfigServiceProvider);
-    final theme = await configService.getSelectedTheme();
-    final fontConfig = await configService.getSelectedFontConfig();
-
-    setState(() {
-      _currentTheme = theme;
-      _currentFontConfig = fontConfig;
-    });
+    // Tema removido - usando diseño fijo elegante
   }
 
   Future<void> _loadData() async {
@@ -411,73 +400,179 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Agregar Imagen'),
-            content: const Text(
-              'Selecciona una imagen desde tu dispositivo para agregarla al producto.',
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancelar'),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // El ImagePickerWidget manejará la selección
-                },
-                child: const Text('Continuar'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Agregar Imagen',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Selecciona una imagen desde tu dispositivo para agregarla al producto.',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Navigator.pop(context);
+                                // El ImagePickerWidget manejará la selección
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Center(
+                                  child: Text(
+                                    'Continuar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
     );
   }
 
   Widget _buildCategoriaCard(Categoria categoria) {
-    final theme = _currentTheme ?? AppTheme.darkTheme;
-
-    return Card(
-      color: theme.surfaceColor,
-      child: InkWell(
-        onTap: () => _onCategoriaSeleccionada(categoria),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Icon(Icons.folder, color: theme.primaryColor, size: 24),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      categoria.nombre,
-                      style: TextStyle(
-                        color: theme.textColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (categoria.descripcion != null &&
-                        categoria.descripcion!.isNotEmpty)
-                      Text(
-                        categoria.descripcion!,
-                        style: TextStyle(
-                          color: theme.textSecondaryColor,
-                          fontSize: 14,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => _onCategoriaSeleccionada(categoria),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.folder_outlined,
+                    color: Colors.black87,
+                    size: 24,
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: theme.textSecondaryColor,
-                size: 16,
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        categoria.nombre,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      if (categoria.descripcion != null &&
+                          categoria.descripcion!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          categoria.descripcion!,
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey.shade600,
+                    size: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -485,51 +580,74 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   }
 
   Widget _buildFormularioProducto() {
-    final theme = _currentTheme ?? AppTheme.darkTheme;
-    final fontConfig = _currentFontConfig ?? FontConfig.defaultConfig;
-
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Información básica
-          Card(
-            color: theme.surfaceColor,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Información Básica',
                     style: TextStyle(
-                      color: theme.textColor,
+                      color: Colors.black87,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: fontConfig.titleFont,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
 
                   // Nombre
                   TextFormField(
                     controller: _nombreController,
-                    style: TextStyle(
-                      color: theme.textColor,
-                      fontFamily: fontConfig.bodyFont,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                     decoration: InputDecoration(
                       labelText: 'Nombre del producto *',
                       labelStyle: TextStyle(
-                        color: theme.textSecondaryColor,
-                        fontFamily: fontConfig.bodyFont,
+                        color: Colors.grey.shade600,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.black87),
                       ),
                       filled: true,
-                      fillColor: theme.backgroundColor,
+                      fillColor: Colors.grey.shade50,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -538,30 +656,45 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Descripción
                   TextFormField(
                     controller: _descripcionController,
-                    style: TextStyle(
-                      color: theme.textColor,
-                      fontFamily: fontConfig.bodyFont,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                     decoration: InputDecoration(
                       labelText: 'Descripción',
                       labelStyle: TextStyle(
-                        color: theme.textSecondaryColor,
-                        fontFamily: fontConfig.bodyFont,
+                        color: Colors.grey.shade600,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.black87),
                       ),
                       filled: true,
-                      fillColor: theme.backgroundColor,
+                      fillColor: Colors.grey.shade50,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                     ),
                     maxLines: 3,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Precio y Stock
                   Row(
@@ -569,22 +702,48 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                       Expanded(
                         child: TextFormField(
                           controller: _precioController,
-                          style: TextStyle(
-                            color: theme.textColor,
-                            fontFamily: fontConfig.bodyFont,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                           decoration: InputDecoration(
                             labelText: 'Precio',
                             labelStyle: TextStyle(
-                              color: theme.textSecondaryColor,
-                              fontFamily: fontConfig.bodyFont,
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
                             ),
                             prefixText: '\$',
+                            prefixStyle: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                             filled: true,
-                            fillColor: theme.backgroundColor,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                           ),
                           keyboardType: TextInputType.number,
                         ),
@@ -593,21 +752,42 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                       Expanded(
                         child: TextFormField(
                           controller: _stockController,
-                          style: TextStyle(
-                            color: theme.textColor,
-                            fontFamily: fontConfig.bodyFont,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                           decoration: InputDecoration(
                             labelText: 'Stock',
                             labelStyle: TextStyle(
-                              color: theme.textSecondaryColor,
-                              fontFamily: fontConfig.bodyFont,
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
                             ),
                             filled: true,
-                            fillColor: theme.backgroundColor,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                           ),
                           keyboardType: TextInputType.number,
                         ),
@@ -621,23 +801,34 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
           const SizedBox(height: 16),
 
           // Sección de imágenes
-          Card(
-            color: theme.surfaceColor,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Imágenes del Producto',
                     style: TextStyle(
-                      color: theme.textColor,
+                      color: Colors.black87,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: fontConfig.titleFont,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
 
                   // Carrusel de imágenes
                   ProductImageCarousel(
@@ -665,23 +856,18 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
                       _mostrarSelectorImagenes();
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Widget para agregar imágenes
                   ImagePickerWidget(
                     imagenesExistentes: _imagenesProducto,
                     onImagenAgregada: (urlImagen) {
-                      print('Imagen agregada: $urlImagen');
-                      print('Lista antes: ${_imagenesProducto.length}');
                       setState(() {
                         _imagenesProducto.add(urlImagen);
                         _imagenPrincipal ??= urlImagen;
                       });
-                      print('Lista después: ${_imagenesProducto.length}');
-                      print('Imágenes: $_imagenesProducto');
                     },
                     onImagenEliminada: (urlImagen) {
-                      print('Imagen eliminada: $urlImagen');
                       setState(() {
                         _imagenesProducto.remove(urlImagen);
                         if (_imagenPrincipal == urlImagen) {
@@ -700,45 +886,77 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
           // Propiedades dinámicas
           if (_propiedadesCategoria.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Card(
-              color: theme.surfaceColor,
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade200),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Propiedades de ${_categoriaSeleccionada!.nombre}',
-                      style: TextStyle(
-                        color: theme.textColor,
+                      style: const TextStyle(
+                        color: Colors.black87,
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: fontConfig.titleFont,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
                     ..._propiedadesCategoria.map((propiedad) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: TextFormField(
                           controller: _propiedadesControllers[propiedad.nombre],
-                          style: TextStyle(
-                            color: theme.textColor,
-                            fontFamily: fontConfig.bodyFont,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                           decoration: InputDecoration(
                             labelText: propiedad.nombre,
                             labelStyle: TextStyle(
-                              color: theme.textSecondaryColor,
-                              fontFamily: fontConfig.bodyFont,
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
                             ),
                             filled: true,
-                            fillColor: theme.backgroundColor,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                           ),
                         ),
                       );
@@ -751,29 +969,46 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
           const SizedBox(height: 24),
 
-          // Botones
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _guardarProducto,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.accentColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+          // Botón de guardar
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Text(
-                    _isEditMode ? 'Actualizar Producto' : 'Guardar Producto',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: fontConfig.bodyFont,
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: _guardarProducto,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    child: Center(
+                      child: Text(
+                        _isEditMode
+                            ? 'Actualizar Producto'
+                            : 'Guardar Producto',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -783,28 +1018,76 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      final theme = _currentTheme ?? AppTheme.darkTheme;
-      return Scaffold(
-        backgroundColor: theme.backgroundColor,
-        body: Center(
-          child: CircularProgressIndicator(color: theme.accentColor),
+      return FashionScaffold(
+        overlayOpacity: 0.9,
+        overlayColor: Colors.white,
+        body: const Center(
+          child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2),
         ),
       );
     }
 
-    final theme = _currentTheme ?? AppTheme.darkTheme;
-
-    return Scaffold(
-      backgroundColor: theme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: theme.backgroundColor,
-        title: Text(
-          _isEditMode ? 'Editar Producto' : 'Agregar Producto',
-          style: TextStyle(color: theme.textColor),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.textColor),
-          onPressed: () => context.pop(),
+    return FashionScaffold(
+      overlayOpacity: 0.9,
+      overlayColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.95),
+            border: Border(
+              bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => context.pop(),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      _isEditMode ? 'Editar Producto' : 'Agregar Producto',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
       body: Padding(
@@ -814,48 +1097,81 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
           children: [
             // Breadcrumb de navegación
             if (_rutaSeleccionada.isNotEmpty) ...[
-              Card(
-                color: theme.surfaceColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back, color: theme.textColor),
-                        onPressed: _navegarAtras,
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade200),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      Expanded(
-                        child: Wrap(
-                          children:
-                              _rutaSeleccionada.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                final categoria = entry.value;
-                                return Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (index > 0)
-                                      Icon(
-                                        Icons.chevron_right,
-                                        color: theme.textSecondaryColor,
-                                        size: 16,
-                                      ),
-                                    Text(
-                                      categoria.nombre,
-                                      style: TextStyle(
-                                        color: theme.textColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: _navegarAtras,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black87,
+                              size: 18,
+                            ),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Wrap(
+                        children:
+                            _rutaSeleccionada.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final categoria = entry.value;
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (index > 0)
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                      ),
+                                      child: Icon(
+                                        Icons.chevron_right,
+                                        color: Colors.grey,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  Text(
+                                    categoria.nombre,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
             ],
 
             // Contenido principal

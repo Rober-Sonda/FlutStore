@@ -567,14 +567,15 @@ class _FashionTextFieldState extends State<FashionTextField>
                   contentPadding: const EdgeInsets.all(16),
                 ),
                 style: AppDesignSystem.bodyMd(),
-                onFocusChange: (focused) {
-                  setState(() => _isFocused = focused);
-                  if (focused) {
-                    _focusController.forward();
-                  } else {
-                    _focusController.reverse();
-                  }
-                },
+                focusNode:
+                    FocusNode()..addListener(() {
+                      setState(() => _isFocused = FocusNode().hasFocus);
+                      if (FocusNode().hasFocus) {
+                        _focusController.forward();
+                      } else {
+                        _focusController.reverse();
+                      }
+                    }),
               ),
             ),
           ],

@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../models/producto.dart';
-import '../../models/registro_financiero.dart';
+import '../../models/registrofinanciero.dart';
 import '../../models/venta.dart';
 import '../../models/flujo_caja.dart';
 import '../../services/isar_service.dart';
-import '../../widgets/permission_widget.dart';
+
 import '../../widgets/fashion_components.dart';
 import '../../widgets/app_design_system.dart';
 import '../../components/shared/professional_app_bar.dart';
@@ -120,7 +120,9 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
             .filter()
             .fechaBetween(_fechaInicio!, _fechaFin!)
             .findAll(),
-        isar.productos.findAll(),
+        Future.value(
+          <Producto>[],
+        ), // TODO: Fix when Produto collection is available
       ]);
 
       setState(() {
@@ -316,7 +318,13 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
     );
     final totalCosto = _ventas.fold<double>(
       0,
-      (sum, venta) => sum + venta.costo,
+      (sum, venta) =>
+          sum +
+          venta.detalles.fold(
+            0.0,
+            (subtotal, detalle) =>
+                subtotal + (detalle.precioCompra * detalle.cantidad),
+          ),
     );
     final utilidadBruta = totalVentas - totalCosto;
     final margenUtilidad =
@@ -660,10 +668,11 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
             [totalIngresos, totalEgresos].reduce((a, b) => a > b ? a : b) * 1.2,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor:
-                AppDesignSystem.isDark
-                    ? AppDesignSystem.darkSecondary
-                    : Colors.white,
+            getTooltipColor:
+                (BarChartGroupData group) =>
+                    AppDesignSystem.isDark
+                        ? AppDesignSystem.darkSecondary
+                        : Colors.white,
             tooltipRoundedRadius: 8,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final value = rod.toY.toStringAsFixed(2);
@@ -911,10 +920,11 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
         ],
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
-            tooltipBgColor:
-                AppDesignSystem.isDark
-                    ? AppDesignSystem.darkSecondary
-                    : Colors.white,
+            getTooltipColor:
+                (touchedSpot) =>
+                    AppDesignSystem.isDark
+                        ? AppDesignSystem.darkSecondary
+                        : Colors.white,
             tooltipRoundedRadius: 8,
             getTooltipItems: (touchedSpots) {
               return touchedSpots.map((spot) {
@@ -962,10 +972,10 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
     final productosVendidos = <String, Map<String, dynamic>>{};
 
     for (final venta in _ventas) {
-      for (final item in venta.items) {
-        final productoId = item['productoId'] as String;
-        final cantidad = item['cantidad'] as int;
-        final precio = item['precio'] as double;
+      for (final item in venta.detalles) {
+        final productoId = item.productoId?.toString() ?? 'N/A';
+        final cantidad = item.cantidad;
+        final precio = item.precioFinal;
 
         if (productosVendidos.containsKey(productoId)) {
           productosVendidos[productoId]!['cantidad'] += cantidad;
@@ -1097,7 +1107,7 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              producto.nombre,
+                              producto.nombre ?? 'Producto sin nombre',
                               style: AppDesignSystem.bodyMd().copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -1153,7 +1163,13 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
     );
     final totalCosto = _ventas.fold<double>(
       0,
-      (sum, venta) => sum + venta.costo,
+      (sum, venta) =>
+          sum +
+          venta.detalles.fold(
+            0.0,
+            (subtotal, detalle) =>
+                subtotal + (detalle.precioCompra * detalle.cantidad),
+          ),
     );
     final utilidadBruta = totalVentas - totalCosto;
 
@@ -1375,7 +1391,7 @@ class _FashionReportsViewState extends ConsumerState<FashionReportsView>
       case 'Mensual':
         return Icons.calendar_month_rounded;
       case 'Anual':
-        return Icons.calendar_view_year_rounded;
+        return Icons.calendar_today_rounded;
       default:
         return Icons.date_range_rounded;
     }

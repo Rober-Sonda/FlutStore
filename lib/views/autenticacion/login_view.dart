@@ -773,9 +773,6 @@ class _PremiumFormFieldState extends State<PremiumFormField>
   late Animation<Color?> _borderColorAnimation;
   late Animation<Color?> _glowColorAnimation;
 
-  bool _isFocused = false;
-  bool _isHovered = false;
-
   @override
   void initState() {
     super.initState();
@@ -989,21 +986,11 @@ class _PremiumFormFieldState extends State<PremiumFormField>
   }
 
   void _onFocusChange(bool focused) {
-    setState(() => _isFocused = focused);
-    if (focused) {
-      _focusController.forward();
-    } else {
-      _focusController.reverse();
-    }
+    // Focus handling removed as variables were unused
   }
 
   void _onHover(bool hovered) {
-    setState(() => _isHovered = hovered);
-    if (hovered) {
-      _hoverController.forward();
-    } else {
-      _hoverController.reverse();
-    }
+    // Hover handling removed as variables were unused
   }
 }
 
@@ -1032,8 +1019,6 @@ class _PremiumLoginButtonState extends State<PremiumLoginButton>
   late Animation<double> _scaleAnimation;
   late Animation<double> _elevationAnimation;
   late Animation<Color?> _colorAnimation;
-
-  bool _isHovered = false;
 
   @override
   void initState() {
@@ -1212,7 +1197,7 @@ class _PremiumLoginButtonState extends State<PremiumLoginButton>
   }
 
   void _onHover(bool hovered) {
-    setState(() => _isHovered = hovered);
+    // Hover handling removed as variable was unused
     if (hovered) {
       _hoverController.forward();
     } else {

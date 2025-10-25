@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/fashion_components.dart';
 import '../../widgets/app_design_system.dart';
-import '../../components/shared/professional_app_bar.dart';
 
 class FashionUserGuideView extends ConsumerStatefulWidget {
   const FashionUserGuideView({super.key});
@@ -63,9 +62,11 @@ class _FashionUserGuideViewState extends ConsumerState<FashionUserGuideView>
               borderRadius: 0,
               glassMorphism: true,
               opacity: 0.9,
-              child: ProfessionalAppBar(
-                title: '📖 Guía de Usuario FlutStore',
-                subtitle: 'Todo lo que necesitas saber para usar la aplicación',
+              child: AppBar(
+                title: const Text('📖 Guía de Usuario FlutStore'),
+                backgroundColor: AppDesignSystem.vibrantPink.withOpacity(0.9),
+                foregroundColor: Colors.white,
+                elevation: 0,
               ),
             ),
 
