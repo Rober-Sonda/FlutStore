@@ -270,13 +270,13 @@ class _ParisianFashionCarouselState extends State<ParisianFashionCarousel>
     ),
     ParisianFashionItem(
       imageUrl:
-          'https://images.unsplash.com/photo-1506629905607-d405c628ee1d?w=800&q=80',
+          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80',
       title: 'Elegancia Masculina',
       subtitle: 'Sofisticación Joven',
     ),
     ParisianFashionItem(
       imageUrl:
-          'https://images.unsplash.com/photo-1494790108755-2616c78b5c24?w=800&q=80',
+          'https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=800&q=80',
       title: 'Moda Femenina',
       subtitle: 'Estilo Único',
     ),
