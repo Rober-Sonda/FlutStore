@@ -1,12 +1,11 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../src/app_routes.dart';
 import 'package:isar/isar.dart';
 import '../../views/categorias/dialogs/propiedad_dialog.dart';
 import '../../models/categoria.dart';
 import '../../models/propiedad_categoria.dart';
 import '../../models/producto.dart';
 import '../../seed/isar_seed.dart';
+import '../../widgets/fashion_components.dart';
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});
@@ -33,7 +32,83 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildContent());
+    return FashionScaffold(
+      overlayOpacity: 0.9,
+      overlayColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.95),
+            border: Border(
+              bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Categorías',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.8,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: _mostrarDialogoNuevaCategoria,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add, color: Colors.white, size: 18),
+                              SizedBox(width: 8),
+                              Text(
+                                'Nueva Categoría',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: _buildContent(),
+    );
   }
 
   // ===========================================================================
@@ -135,9 +210,16 @@ class _CategoriesViewState extends State<CategoriesView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
+            CircularProgressIndicator(color: Colors.black, strokeWidth: 2),
             SizedBox(height: 16),
-            Text('Cargando categorÃ­as...'),
+            Text(
+              'Cargando categorías...',
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       );
@@ -145,26 +227,76 @@ class _CategoriesViewState extends State<CategoriesView> {
 
     if (_error) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
-            const Text(
-              'Error al cargar categorÃ­as',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'No se pudo conectar con la base de datos',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadCategorias,
-              child: const Text('Reintentar'),
-            ),
-          ],
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
+                  Icons.error_outline,
+                  size: 48,
+                  color: Colors.red.shade400,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Error al cargar categorías',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'No se pudo conectar con la base de datos',
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: _loadCategorias,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        'Reintentar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -172,41 +304,104 @@ class _CategoriesViewState extends State<CategoriesView> {
     if (_categorias.isEmpty) {
       return Center(
         child: Container(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(40),
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.category_outlined, size: 80, color: Colors.grey),
-              const SizedBox(height: 24),
-              const Text(
-                'No hay categorÃ­as creadas',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Las categorÃ­as son el molde de tus productos. Cada categorÃ­a define quÃ© propiedades tendrÃ¡n los productos que pertenezcan a ella.\n'
-                'Puedes crear categorÃ­as principales y subcategorÃ­as para organizar mejor tu inventario.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.category_outlined,
+                  size: 64,
+                  color: Colors.grey.shade400,
+                ),
               ),
               const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: () => context.push(AppRoutes.categoryAdd),
-                icon: const Icon(Icons.add),
-                label: const Text('Crear Primera CategorÃ­a'),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              const Text(
+                'No hay categorías creadas',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  letterSpacing: -0.5,
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Ejemplo: Ropa > Remeras > Remeras de AlgodÃ³n',
+              Text(
+                'Las categorías son el molde de tus productos. Cada categoría define qué propiedades tendrán los productos que pertenezcan a ella.\n\nPuedes crear categorías principales y subcategorías para organizar mejor tu inventario.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
+                  color: Colors.grey.shade600,
+                  height: 1.6,
+                ),
+              ),
+              const SizedBox(height: 40),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: _mostrarDialogoNuevaCategoria,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add, color: Colors.white, size: 20),
+                          SizedBox(width: 12),
+                          Text(
+                            'Crear Primera Categoría',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Text(
+                  'Ejemplo: Ropa → Remeras → Remeras de Algodón',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -217,19 +412,49 @@ class _CategoriesViewState extends State<CategoriesView> {
 
     return Column(
       children: [
-        // NUEVO: DescripciÃ³n de la secciÃ³n de categorÃ­as
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            color: Colors.blueGrey[900],
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                'En esta secciÃ³n puedes crear y organizar las categorÃ­as de tus productos. Las categorÃ­as te ayudan a agrupar productos similares y definir sus propiedades. Puedes crear categorÃ­as principales y subcategorÃ­as para una mejor organizaciÃ³n.',
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
-                textAlign: TextAlign.center,
+        // Descripción de la sección de categorías
+        Container(
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
               ),
-            ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.info_outline,
+                  color: Colors.grey.shade600,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  'En esta sección puedes crear y organizar las categorías de tus productos. Las categorías te ayudan a agrupar productos similares y definir sus propiedades.',
+                  style: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -240,20 +465,51 @@ class _CategoriesViewState extends State<CategoriesView> {
                 flex: 1,
                 child: Column(
                   children: [
-                    // Barra de bÃºsqueda arriba
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Buscar categorÃ­as...',
-                          prefixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    // Barra de búsqueda elegante
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                          isDense: true,
+                        ],
+                      ),
+                      child: TextField(
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Buscar categorías...',
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.grey.shade400,
+                              size: 20,
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
                           contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0,
-                            horizontal: 12,
+                            vertical: 16,
+                            horizontal: 16,
                           ),
                         ),
                         onChanged:
@@ -276,63 +532,20 @@ class _CategoriesViewState extends State<CategoriesView> {
                                 .toList(),
                       ),
                     ),
-                    // BotÃ³n "Nueva CategorÃ­a" al pie y alineado a la derecha
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          FloatingActionButton.extended(
-                            onPressed: _mostrarDialogoNuevaCategoria,
-                            icon: const Icon(Icons.add),
-                            label: const Text('Nueva CategorÃ­a'),
-                            heroTag: 'fab_categoria',
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
-              const VerticalDivider(width: 1),
+              Container(
+                width: 1,
+                color: Colors.grey.shade200,
+                margin: const EdgeInsets.symmetric(vertical: 20),
+              ),
               // Panel derecho - Propiedades
               Expanded(flex: 1, child: _buildTableroPropiedades()),
             ],
           ),
         ),
-        // FAB para agregar propiedad (abajo a la derecha, solo si hay categorÃ­a seleccionada)
-        if (_categoriaSeleccionada != null)
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: FloatingActionButton.extended(
-              onPressed: _agregarPropiedad,
-              icon: const Icon(Icons.add),
-              label: const Text('Nueva Propiedad'),
-              heroTag: 'fab_propiedad',
-            ),
-          ),
       ],
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'CategorÃ­as',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton.icon(
-            onPressed: () => _mostrarDialogoNuevaCategoria(),
-            icon: const Icon(Icons.add),
-            label: const Text('Nueva CategorÃ­a'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -345,24 +558,47 @@ class _CategoriesViewState extends State<CategoriesView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (tieneHijas && categoria != null)
-          IconButton(
-            icon: Icon(
-              estaExpandida ? Icons.expand_more : Icons.chevron_right,
-              size: 20,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(8),
             ),
-            onPressed: () {
-              setState(() {
-                if (estaExpandida) {
-                  _categoriasExpandidas.remove(categoria.id);
-                } else {
-                  _categoriasExpandidas.add(categoria.id);
-                }
-              });
-            },
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  setState(() {
+                    if (estaExpandida) {
+                      _categoriasExpandidas.remove(categoria.id);
+                    } else {
+                      _categoriasExpandidas.add(categoria.id);
+                    }
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Icon(
+                    estaExpandida ? Icons.expand_more : Icons.chevron_right,
+                    size: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ),
           ),
-        Icon(
-          tieneHijas ? Icons.folder : Icons.category,
-          color: tieneHijas ? Colors.orange : Colors.grey,
+        if (tieneHijas && categoria != null) const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: tieneHijas ? Colors.orange.shade50 : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            tieneHijas ? Icons.folder_outlined : Icons.category_outlined,
+            color: tieneHijas ? Colors.orange.shade600 : Colors.grey.shade600,
+            size: 20,
+          ),
         ),
       ],
     );
@@ -374,7 +610,6 @@ class _CategoriesViewState extends State<CategoriesView> {
     final estaExpandida = _categoriasExpandidas.contains(categoria.id);
     final esSeleccionada = _categoriaSeleccionada?.id == categoria.id;
 
-    // NUEVO: Oculta las hijas si la bÃºsqueda estÃ¡ activa y no hay coincidencias
     final hijasFiltradas =
         searchQuery.isEmpty
             ? hijas
@@ -389,20 +624,47 @@ class _CategoriesViewState extends State<CategoriesView> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(left: nivel * 20.0),
+          margin: EdgeInsets.fromLTRB(20 + (nivel * 20.0), 0, 20, 8),
           decoration: BoxDecoration(
-            color: esSeleccionada ? Colors.blue.withOpacity(0.1) : null,
-            borderRadius: BorderRadius.circular(8),
+            color:
+                esSeleccionada ? Colors.black.withOpacity(0.05) : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: esSeleccionada ? Colors.black87 : Colors.grey.shade200,
+              width: esSeleccionada ? 2 : 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          child: ListTile(
-            leading: _buildLeadingIcon(tieneHijas, estaExpandida, categoria),
-            title: _buildCategoriaTitle(categoria, nivel, esSeleccionada),
-            subtitle:
-                categoria.descripcion != null
-                    ? Text(categoria.descripcion!)
-                    : null,
-            onTap: () => setState(() => _categoriaSeleccionada = categoria),
-            trailing: _buildCategoriaActions(categoria),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => setState(() => _categoriaSeleccionada = categoria),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    _buildLeadingIcon(tieneHijas, estaExpandida, categoria),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildCategoriaTitle(
+                        categoria,
+                        nivel,
+                        esSeleccionada,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _buildCategoriaActions(categoria),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
         if (tieneHijas && (estaExpandida || searchQuery.isNotEmpty))
@@ -427,19 +689,40 @@ class _CategoriesViewState extends State<CategoriesView> {
         Text(
           categoria.nombre,
           style: TextStyle(
-            fontWeight: esSeleccionada ? FontWeight.bold : FontWeight.normal,
-            color: esSeleccionada ? Colors.blue : null,
+            fontWeight: esSeleccionada ? FontWeight.w600 : FontWeight.w500,
+            color: esSeleccionada ? Colors.black87 : Colors.black87,
+            fontSize: 16,
+            letterSpacing: -0.3,
           ),
         ),
-        if (nivel > 0)
+        if (categoria.descripcion != null &&
+            categoria.descripcion!.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            categoria.descripcion!,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w400,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+        if (nivel > 0) ...[
+          const SizedBox(height: 4),
           Text(
             _getRutaCompleta(categoria),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: Colors.grey,
+              color: Colors.grey.shade500,
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.italic,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
+        ],
       ],
     );
   }
@@ -448,20 +731,66 @@ class _CategoriesViewState extends State<CategoriesView> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          icon: const Icon(Icons.add, size: 18),
-          onPressed: () => _mostrarDialogoCrearSubcategoria(categoria),
-          tooltip: 'Crear subcategorÃ­a',
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.green.shade50,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(6),
+              onTap: () => _mostrarDialogoCrearSubcategoria(categoria),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(Icons.add, size: 16, color: Colors.green.shade600),
+              ),
+            ),
+          ),
         ),
-        IconButton(
-          icon: const Icon(Icons.edit, size: 18),
-          onPressed: () => _mostrarDialogoEditarCategoria(categoria),
-          tooltip: 'Editar categorÃ­a',
+        const SizedBox(width: 6),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(6),
+              onTap: () => _mostrarDialogoEditarCategoria(categoria),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  Icons.edit_outlined,
+                  size: 16,
+                  color: Colors.blue.shade600,
+                ),
+              ),
+            ),
+          ),
         ),
-        IconButton(
-          icon: const Icon(Icons.delete, size: 18),
-          onPressed: () => _eliminarCategoria(categoria),
-          tooltip: 'Eliminar categorÃ­a',
+        const SizedBox(width: 6),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.red.shade50,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(6),
+              onTap: () => _eliminarCategoria(categoria),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  Icons.delete_outline,
+                  size: 16,
+                  color: Colors.red.shade600,
+                ),
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -476,44 +805,155 @@ class _CategoriesViewState extends State<CategoriesView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Nueva CategorÃ­a'),
-            content: StatefulBuilder(
-              builder:
-                  (context, setState) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        decoration: const InputDecoration(labelText: 'Nombre'),
-                        onChanged:
-                            (value) => setState(() => nombre = value.trim()),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (nombre.isEmpty) return;
-                          final isar = Isar.getInstance();
-                          if (isar != null) {
-                            await isar.writeTxn(() async {
-                              await isar.collection<Categoria>().put(
-                                Categoria()..nombre = nombre,
-                              );
-                            });
-                            await _loadCategorias();
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Guardar'),
-                      ),
-                    ],
-                  ),
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 380),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-            ],
+              child: StatefulBuilder(
+                builder:
+                    (context, setState) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Nueva Categoría',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Nombre de la categoría',
+                            labelStyle: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                          ),
+                          onChanged:
+                              (value) => setState(() => nombre = value.trim()),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                child: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      nombre.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.black,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    onTap:
+                                        nombre.isEmpty
+                                            ? null
+                                            : () async {
+                                              final isar = Isar.getInstance();
+                                              if (isar != null) {
+                                                await isar.writeTxn(() async {
+                                                  await isar
+                                                      .collection<Categoria>()
+                                                      .put(
+                                                        Categoria()
+                                                          ..nombre = nombre,
+                                                      );
+                                                });
+                                                await _loadCategorias();
+                                              }
+                                              Navigator.pop(context);
+                                            },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Guardar',
+                                          style: TextStyle(
+                                            color:
+                                                nombre.isEmpty
+                                                    ? Colors.grey.shade600
+                                                    : Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+              ),
+            ),
           ),
     );
   }
@@ -523,48 +963,156 @@ class _CategoriesViewState extends State<CategoriesView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Nueva SubcategorÃ­a'),
-            content: StatefulBuilder(
-              builder:
-                  (context, setState) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Nombre de subcategorÃ­a',
-                        ),
-                        onChanged:
-                            (value) => setState(() => nombre = value.trim()),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (nombre.isEmpty) return;
-                          final isar = Isar.getInstance();
-                          if (isar != null) {
-                            await isar.writeTxn(() async {
-                              await isar.collection<Categoria>().put(
-                                Categoria()
-                                  ..nombre = nombre
-                                  ..parent = padre.id,
-                              );
-                            });
-                            await _loadCategorias();
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Guardar'),
-                      ),
-                    ],
-                  ),
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-            ],
+              child: StatefulBuilder(
+                builder:
+                    (context, setState) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Nueva Subcategoría de "${padre.nombre}"',
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Nombre de la subcategoría',
+                            labelStyle: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                          ),
+                          onChanged:
+                              (value) => setState(() => nombre = value.trim()),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                child: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      nombre.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.black,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    onTap:
+                                        nombre.isEmpty
+                                            ? null
+                                            : () async {
+                                              final isar = Isar.getInstance();
+                                              if (isar != null) {
+                                                await isar.writeTxn(() async {
+                                                  await isar
+                                                      .collection<Categoria>()
+                                                      .put(
+                                                        Categoria()
+                                                          ..nombre = nombre
+                                                          ..parent = padre.id,
+                                                      );
+                                                });
+                                                await _loadCategorias();
+                                              }
+                                              Navigator.pop(context);
+                                            },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Guardar',
+                                          style: TextStyle(
+                                            color:
+                                                nombre.isEmpty
+                                                    ? Colors.grey.shade600
+                                                    : Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+              ),
+            ),
           ),
     );
   }
@@ -574,44 +1122,156 @@ class _CategoriesViewState extends State<CategoriesView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Editar CategorÃ­a'),
-            content: StatefulBuilder(
-              builder:
-                  (context, setState) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: TextEditingController(text: nombre),
-                        onChanged:
-                            (value) => setState(() => nombre = value.trim()),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (nombre.isEmpty) return;
-                          final isar = Isar.getInstance();
-                          if (isar != null) {
-                            await isar.writeTxn(() async {
-                              await isar.collection<Categoria>().put(
-                                categoria..nombre = nombre,
-                              );
-                            });
-                            await _loadCategorias();
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Guardar'),
-                      ),
-                    ],
-                  ),
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-            ],
+              child: StatefulBuilder(
+                builder:
+                    (context, setState) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Editar Categoría',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: TextEditingController(text: nombre),
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Nombre de la categoría',
+                            labelStyle: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade50,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                          ),
+                          onChanged:
+                              (value) => setState(() => nombre = value.trim()),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                child: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      nombre.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.black,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    onTap:
+                                        nombre.isEmpty
+                                            ? null
+                                            : () async {
+                                              final isar = Isar.getInstance();
+                                              if (isar != null) {
+                                                await isar.writeTxn(() async {
+                                                  await isar
+                                                      .collection<Categoria>()
+                                                      .put(
+                                                        categoria
+                                                          ..nombre = nombre,
+                                                      );
+                                                });
+                                                await _loadCategorias();
+                                              }
+                                              Navigator.pop(context);
+                                            },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Guardar Cambios',
+                                          style: TextStyle(
+                                            color:
+                                                nombre.isEmpty
+                                                    ? Colors.grey.shade600
+                                                    : Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+              ),
+            ),
           ),
     );
   }
@@ -671,42 +1331,73 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   Widget _buildTableroPropiedades() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // NUEVO: Barra de bÃºsqueda para propiedades
+          // Barra de búsqueda para propiedades
           if (_categoriaSeleccionada != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+            Container(
+              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
               child: TextField(
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Buscar propiedades...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
                   ),
-                  isDense: true,
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade400,
+                      size: 18,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 12,
+                    vertical: 12,
+                    horizontal: 16,
                   ),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    // Implementa bÃºsqueda de propiedades si lo deseas
-                    // Por ahora, solo refresca la vista
+                    // Implementa búsqueda de propiedades si lo deseas
                   });
                 },
               ),
             ),
-          _buildPropiedadesHeader(),
-          const SizedBox(height: 16),
-          _buildPropiedadesContent(),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: _buildPropiedadesHeader(),
+          ),
+          Expanded(child: _buildPropiedadesContent()),
         ],
       ),
     );
@@ -717,34 +1408,99 @@ class _CategoriesViewState extends State<CategoriesView> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          'Tablero de Propiedades',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          'Propiedades',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+            letterSpacing: -0.5,
+          ),
         ),
-        // El botÃ³n de agregar propiedad se elimina de aquÃ­, ahora es FAB abajo a la derecha
+        if (_categoriaSeleccionada != null)
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: _agregarPropiedad,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add, color: Colors.white, size: 16),
+                      SizedBox(width: 6),
+                      Text(
+                        'Agregar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
 
   Widget _buildPropiedadesContent() {
     if (_categoriaSeleccionada == null) {
-      return const Expanded(
+      return Expanded(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.category_outlined, size: 64, color: Colors.grey),
-              SizedBox(height: 16),
-              Text(
-                'Selecciona una categorÃ­a',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Elige una categorÃ­a del panel izquierdo para ver sus propiedades',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
+          child: Container(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.category_outlined,
+                    size: 48,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Selecciona una categoría',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Elige una categoría del panel izquierdo para ver y gestionar sus propiedades',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 16,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -753,31 +1509,87 @@ class _CategoriesViewState extends State<CategoriesView> {
     if (_categoriaSeleccionada!.propiedades.isEmpty) {
       return Expanded(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.tune, size: 64, color: Colors.grey),
-              const SizedBox(height: 16),
-              Text(
-                'Sin propiedades en "${_categoriaSeleccionada!.nombre}"',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+          child: Container(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.tune,
+                    size: 48,
+                    color: Colors.grey.shade400,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Agrega propiedades para definir los campos que tendrÃ¡n los productos.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: _agregarPropiedad,
-                icon: const Icon(Icons.add),
-                label: const Text('Agregar Primera Propiedad'),
-              ),
-            ],
+                const SizedBox(height: 24),
+                Text(
+                  'Sin propiedades en "${_categoriaSeleccionada!.nombre}"',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Agrega propiedades para definir los campos que tendrán los productos de esta categoría.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 16,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: _agregarPropiedad,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.add, color: Colors.white, size: 18),
+                            SizedBox(width: 8),
+                            Text(
+                              'Agregar Primera Propiedad',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -809,32 +1621,71 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 
   Widget _buildPropiedadCard(PropiedadCategoria propiedad, int index) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildPropiedadHeader(propiedad, index),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             Text(
               propiedad.nombre,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.black87,
+                letterSpacing: -0.3,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
-            Text(
-              _getTypeDescription(propiedad.tipo),
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                _getTypeDescription(propiedad.tipo),
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
             if (propiedad.valorPorDefecto != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                'Default: ${propiedad.valorPorDefecto}',
-                style: const TextStyle(color: Colors.blue, fontSize: 11),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  'Default: ${propiedad.valorPorDefecto}',
+                  style: TextStyle(
+                    color: Colors.blue.shade600,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
             const Spacer(),
@@ -849,21 +1700,73 @@ class _CategoriesViewState extends State<CategoriesView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(_getIconForType(propiedad.tipo)),
-        PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'edit') _editarPropiedad(index);
-            if (value == 'delete') _eliminarPropiedad(index);
-          },
-          itemBuilder:
-              (context) => [
-                const PopupMenuItem(value: 'edit', child: Text('Editar')),
-                PopupMenuItem(
-                  value: 'delete',
-                  child: Text('Eliminar', style: TextStyle(color: Colors.red)),
-                ),
-              ],
-          child: const Icon(Icons.more_vert),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: _getColorForType(propiedad.tipo).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            _getIconForType(propiedad.tipo),
+            color: _getColorForType(propiedad.tipo),
+            size: 20,
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'edit') _editarPropiedad(index);
+              if (value == 'delete') _eliminarPropiedad(index);
+            },
+            itemBuilder:
+                (context) => [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.edit_outlined,
+                          size: 16,
+                          color: Colors.blue.shade600,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text('Editar'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.delete_outline,
+                          size: 16,
+                          color: Colors.red.shade600,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Eliminar',
+                          style: TextStyle(color: Colors.red.shade600),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Icon(
+                Icons.more_vert,
+                color: Colors.grey.shade600,
+                size: 16,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -871,17 +1774,24 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   Widget _buildRequeridoBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.orange.shade600,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: const Text(
         'Requerido',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -1013,6 +1923,21 @@ class _CategoriesViewState extends State<CategoriesView> {
     }
   }
 
+  Color _getColorForType(TipoPropiedad tipo) {
+    switch (tipo) {
+      case TipoPropiedad.texto:
+        return Colors.blue;
+      case TipoPropiedad.numero:
+        return Colors.green;
+      case TipoPropiedad.booleano:
+        return Colors.orange;
+      case TipoPropiedad.fecha:
+        return Colors.purple;
+      case TipoPropiedad.seleccion:
+        return Colors.red;
+    }
+  }
+
   String _getTypeDescription(TipoPropiedad tipo) {
     switch (tipo) {
       case TipoPropiedad.texto:
@@ -1038,82 +1963,123 @@ class _CategoriesViewState extends State<CategoriesView> {
     return showDialog<bool>(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: Text(titulo),
-            content: Text(contenido),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancelar'),
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 380),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Eliminar'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.warning_outlined,
+                          color: Colors.red.shade600,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          titulo,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    contenido,
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade600,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.red.withOpacity(0.2),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () => Navigator.pop(context, true),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Center(
+                                  child: Text(
+                                    'Eliminar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
     );
   }
 
   // ===========================================================================
   // 8. VISTA DE JERARQUÃA (OPCIONAL)
-  // ===========================================================================
-
-  void _mostrarVistaJerarquia() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('JerarquÃ­a de CategorÃ­as'),
-            content: SizedBox(
-              height: 400,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      _getCategoriasHijas(
-                        null,
-                      ).map((c) => _buildJerarquiaItem(c, 0)).toList(),
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  Widget _buildJerarquiaItem(Categoria categoria, int nivel) {
-    final hijas = _getCategoriasHijas(categoria.id);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: nivel * 20),
-          child: Row(
-            children: [
-              Icon(
-                hijas.isNotEmpty ? Icons.folder : Icons.category,
-                color: hijas.isNotEmpty ? Colors.orange : Colors.grey,
-              ),
-              const SizedBox(width: 8),
-              Expanded(child: Text(categoria.nombre)),
-              if (categoria.descripcion != null)
-                Text(
-                  '(${categoria.descripcion})',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-            ],
-          ),
-        ),
-        if (hijas.isNotEmpty)
-          ...hijas.map((hija) => _buildJerarquiaItem(hija, nivel + 1)),
-      ],
-    );
-  }
 }
