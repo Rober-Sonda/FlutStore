@@ -17,166 +17,206 @@ class AppNavigationRail extends ConsumerStatefulWidget {
 }
 
 class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
-  int _selectedIndex = 0;
   AppTheme? _currentTheme;
   FontConfig? _currentFontConfig;
-  int _hoveredIndex = -1;
-  List<_NavItemData> _filteredItems = [];
+  Set<String> _expandedCategories = {};
+  List<_NavCategory> _filteredCategories = [];
   bool _isLoadingPermissions = true;
+  String? _selectedRoute;
 
-  final List<_NavItemData> _allItems = const [
-    _NavItemData(
+  // Nueva estructura jerarquizada basada en principios UX/UI
+  final List<_NavCategory> _allCategories = const [
+    // 📊 PANEL - Centro de control principal
+    _NavCategory(
+      id: 'panel',
       icon: Icons.dashboard_rounded,
-      label: 'Dashboard',
-      route: AppRoutes.dashboard,
-      color: Color(0xFF6366F1), // Indigo moderno
-      resource: 'dashboard',
-      action: 'read',
+      label: 'Panel',
+      color: Color(0xFF6366F1),
+      items: [
+        _NavItemData(
+          icon: Icons.analytics_outlined,
+          label: 'Dashboard',
+          route: AppRoutes.dashboard,
+          resource: 'dashboard',
+          action: 'read',
+        ),
+      ],
     ),
-    _NavItemData(
+
+    // 🏪 INVENTARIO - Gestión de productos y stock
+    _NavCategory(
+      id: 'inventario',
       icon: Icons.inventory_2_rounded,
-      label: 'Productos',
-      route: AppRoutes.products,
-      color: Color(0xFF10B981), // Emerald moderno
-      resource: 'productos',
-      action: 'read',
+      label: 'Inventario',
+      color: Color(0xFF10B981),
+      items: [
+        _NavItemData(
+          icon: Icons.shopping_bag_outlined,
+          label: 'Productos',
+          route: AppRoutes.products,
+          resource: 'productos',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.category_outlined,
+          label: 'Categorías',
+          route: AppRoutes.categories,
+          resource: 'categorias',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.swap_horiz_rounded,
+          label: 'Movimientos Stock',
+          route: AppRoutes.stockMovements,
+          resource: 'stock',
+          action: 'read',
+        ),
+      ],
     ),
-    _NavItemData(
-      icon: Icons.category_rounded,
-      label: 'CategorÃ­as',
-      route: AppRoutes.categories,
-      color: Color(0xFF8B5CF6), // Violet moderno
-      resource: 'categorias',
-      action: 'read',
+
+    // 🤝 COMERCIAL - Clientes y ventas
+    _NavCategory(
+      id: 'comercial',
+      icon: Icons.store_rounded,
+      label: 'Comercial',
+      color: Color(0xFF06B6D4),
+      items: [
+        _NavItemData(
+          icon: Icons.people_outline,
+          label: 'Clientes',
+          route: AppRoutes.clients,
+          resource: 'clientes',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.point_of_sale_outlined,
+          label: 'Ventas',
+          route: AppRoutes.sales,
+          resource: 'ventas',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.assignment_outlined,
+          label: 'Pedidos Cliente',
+          route: AppRoutes.orders,
+          resource: 'pedidos',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.account_balance_outlined,
+          label: 'Cuenta Corriente',
+          route: AppRoutes.accountBalance,
+          resource: 'cuenta_corriente',
+          action: 'read',
+        ),
+      ],
     ),
-    _NavItemData(
+
+    // 📦 COMPRAS - Proveedores y adquisiciones
+    _NavCategory(
+      id: 'compras',
       icon: Icons.local_shipping_rounded,
-      label: 'Proveedores',
-      route: AppRoutes.providers,
-      color: Color(0xFFF59E0B), // Amber moderno
-      resource: 'proveedores',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.shopping_cart_rounded,
       label: 'Compras',
-      route: AppRoutes.purchases,
-      color: Color(0xFFEF4444), // Red moderno
-      resource: 'compras',
-      action: 'read',
+      color: Color(0xFFF59E0B),
+      items: [
+        _NavItemData(
+          icon: Icons.business_outlined,
+          label: 'Proveedores',
+          route: AppRoutes.providers,
+          resource: 'proveedores',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.shopping_cart_outlined,
+          label: 'Órdenes de Compra',
+          route: AppRoutes.purchases,
+          resource: 'compras',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.receipt_long_outlined,
+          label: 'Pedidos Proveedores',
+          route: AppRoutes.pedidosProveedor,
+          resource: 'pedidos',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.shopping_basket_outlined,
+          label: 'Carrito Compras',
+          route: AppRoutes.carritoCompra,
+          resource: 'carrito',
+          action: 'read',
+        ),
+      ],
     ),
-    _NavItemData(
-      icon: Icons.inventory_2_outlined,
-      label: 'Pedidos Proveedores',
-      route: AppRoutes.pedidosProveedor,
-      color: Color(0xFF8B5CF6), // Violet moderno
-      resource: 'pedidos',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.shopping_basket_rounded,
-      label: 'Carrito Compra',
-      route: AppRoutes.carritoCompra,
-      color: Color(0xFF6B7280), // Gray moderno
-      resource: 'carrito',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.assignment_rounded,
-      label: 'Pedidos',
-      route: AppRoutes.orders,
-      color: Color(0xFFEC4899), // Pink moderno
-      resource: 'pedidos',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.people_rounded,
-      label: 'Clientes',
-      route: AppRoutes.clients,
-      color: Color(0xFF06B6D4), // Cyan moderno
-      resource: 'clientes',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.account_balance_wallet_rounded,
-      label: 'Cuenta Corriente',
-      route: AppRoutes.accountBalance,
-      color: Color(0xFF84CC16), // Lime moderno
-      resource: 'cuenta_corriente',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.point_of_sale_rounded,
-      label: 'Ventas',
-      route: AppRoutes.sales,
-      color: Color(0xFFDC2626), // Red-600 moderno
-      resource: 'ventas',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.inventory_rounded,
-      label: 'Mov. Stock',
-      route: AppRoutes.stockMovements,
-      color: Color(0xFF7C3AED), // Violet-600 moderno
-      resource: 'stock',
-      action: 'read',
-    ),
-    _NavItemData(
+
+    // 💰 FINANZAS - Gestión financiera y reportes
+    _NavCategory(
+      id: 'finanzas',
       icon: Icons.attach_money_rounded,
       label: 'Finanzas',
-      route: AppRoutes.financialRecords,
-      color: Color(0xFF059669), // Emerald-600 moderno
-      resource: 'finanzas',
-      action: 'read',
+      color: Color(0xFF059669),
+      items: [
+        _NavItemData(
+          icon: Icons.receipt_outlined,
+          label: 'Registros Financieros',
+          route: AppRoutes.financialRecords,
+          resource: 'finanzas',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.assessment_outlined,
+          label: 'Informes',
+          route: AppRoutes.reports,
+          resource: 'reportes',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.local_offer_outlined,
+          label: 'Ofertas',
+          route: AppRoutes.offers,
+          resource: 'ofertas',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.card_giftcard_outlined,
+          label: 'Sorteos',
+          route: AppRoutes.sweepstakes,
+          resource: 'sorteos',
+          action: 'read',
+        ),
+      ],
     ),
-    _NavItemData(
-      icon: Icons.analytics_rounded,
-      label: 'Informes',
-      route: AppRoutes.reports,
-      color: Color(0xFF7C2D12), // Orange-900 moderno
-      resource: 'reportes',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.admin_panel_settings_rounded,
-      label: 'Roles',
-      route: AppRoutes.roles,
-      color: Color(0xFF1E40AF), // Blue-800 moderno
-      resource: 'roles',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.people_alt_rounded,
-      label: 'Usuarios',
-      route: AppRoutes.users,
-      color: Color(0xFF0D9488), // Teal-600 moderno
-      resource: 'usuarios',
-      action: 'read',
-    ),
-    _NavItemData(
+
+    // ⚙️ GESTIÓN - Administración del sistema
+    _NavCategory(
+      id: 'gestion',
       icon: Icons.settings_rounded,
-      label: 'ConfiguraciÃ³n',
-      route: AppRoutes.settings,
-      color: Color(0xFF6B7280), // Gray-500 moderno
-      resource: 'configuracion',
-      action: 'read',
-    ),
-    // Nuevas secciones
-    _NavItemData(
-      icon: Icons.local_offer_rounded,
-      label: 'Ofertas',
-      route: AppRoutes.offers,
-      color: Color(0xFFFCD34D), // Yellow-300 moderno
-      resource: 'ofertas',
-      action: 'read',
-    ),
-    _NavItemData(
-      icon: Icons.card_giftcard_rounded,
-      label: 'Sorteos',
-      route: AppRoutes.sweepstakes,
-      color: Color(0xFFA78BFA), // Violet-400 moderno
-      resource: 'sorteos',
-      action: 'read',
+      label: 'Gestión',
+      color: Color(0xFF6B7280),
+      items: [
+        _NavItemData(
+          icon: Icons.people_alt_outlined,
+          label: 'Usuarios',
+          route: AppRoutes.users,
+          resource: 'usuarios',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.admin_panel_settings_outlined,
+          label: 'Roles y Permisos',
+          route: AppRoutes.roles,
+          resource: 'roles',
+          action: 'read',
+        ),
+        _NavItemData(
+          icon: Icons.tune_outlined,
+          label: 'Configuración',
+          route: AppRoutes.settings,
+          resource: 'configuracion',
+          action: 'read',
+        ),
+      ],
     ),
   ];
 
@@ -207,26 +247,44 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
 
     if (currentUser == null) {
       setState(() {
-        _filteredItems = [];
+        _filteredCategories = [];
         _isLoadingPermissions = false;
       });
       return;
     }
 
-    final filteredItems = <_NavItemData>[];
-    for (final item in _allItems) {
-      final hasPermission = await permissionService.canPerformAction(
-        currentUser,
-        item.action,
-        item.resource,
-      );
-      if (hasPermission) {
-        filteredItems.add(item);
+    final filteredCategories = <_NavCategory>[];
+
+    for (final category in _allCategories) {
+      final filteredItems = <_NavItemData>[];
+
+      for (final item in category.items) {
+        final hasPermission = await permissionService.canPerformAction(
+          currentUser,
+          item.action,
+          item.resource,
+        );
+        if (hasPermission) {
+          filteredItems.add(item);
+        }
+      }
+
+      // Solo incluir categorías que tengan al menos un item con permisos
+      if (filteredItems.isNotEmpty) {
+        filteredCategories.add(
+          _NavCategory(
+            id: category.id,
+            icon: category.icon,
+            label: category.label,
+            color: category.color,
+            items: filteredItems,
+          ),
+        );
       }
     }
 
     setState(() {
-      _filteredItems = filteredItems;
+      _filteredCategories = filteredCategories;
       _isLoadingPermissions = false;
     });
   }
@@ -234,16 +292,13 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _selectedIndex = _getIndexFromRoute(context);
+    _updateSelectedRoute(context);
   }
 
   @override
   void didUpdateWidget(covariant AppNavigationRail oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final newIndex = _getIndexFromRoute(context);
-    if (newIndex != _selectedIndex) {
-      setState(() => _selectedIndex = newIndex);
-    }
+    _updateSelectedRoute(context);
   }
 
   @override
@@ -258,7 +313,7 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     final carrito = ref.watch(carritoProvider);
 
     if (currentUser != null &&
-        _filteredItems.isEmpty &&
+        _filteredCategories.isEmpty &&
         !_isLoadingPermissions) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _filterItemsByPermissions();
@@ -317,32 +372,56 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
       ),
       child: Column(
         children: [
-          // Header
+          // Header - Diseño más moderno y fluido
           Container(
-            padding: EdgeInsets.symmetric(vertical: isCompact ? 20 : 24),
+            padding: EdgeInsets.symmetric(
+              vertical: isCompact ? 24 : 32,
+              horizontal: isCompact ? 8 : 16,
+            ),
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withValues(alpha: 0.05),
+                  Colors.transparent,
+                ],
+              ),
               border: Border(
                 bottom: BorderSide(
-                  color: theme.textSecondaryColor.withValues(alpha: 0.1),
+                  color: Colors.white.withValues(alpha: 0.08),
                   width: 1,
                 ),
               ),
             ),
             child: Column(
               children: [
+                // Logo mejorado con gradiente
                 Container(
-                  width: isCompact ? 48 : 64,
-                  height: isCompact ? 48 : 64,
+                  width: isCompact ? 52 : 72,
+                  height: isCompact ? 52 : 72,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF6366F1), // Indigo
+                        Color(0xFF8B5CF6), // Violet
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                        spreadRadius: 1,
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                        blurRadius: 24,
+                        offset: const Offset(0, 8),
+                        spreadRadius: -4,
                       ),
                     ],
                   ),
@@ -351,18 +430,29 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                     children: [
                       Icon(
                         Icons.storefront_rounded,
-                        size: isCompact ? 24 : 32,
-                        color: Colors.black,
+                        size: isCompact ? 28 : 36,
+                        color: Colors.white,
                       ),
+                      // Dot de estado activo
                       Positioned(
-                        top: 4,
-                        left: 4,
+                        top: 8,
+                        right: 8,
                         child: Container(
-                          width: 8,
-                          height: 8,
+                          width: 10,
+                          height: 10,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.6),
-                            borderRadius: BorderRadius.circular(4),
+                            color: const Color(0xFF10B981), // Verde éxito
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(
+                                  0xFF10B981,
+                                ).withValues(alpha: 0.4),
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -370,38 +460,53 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                   ),
                 ),
                 if (!isCompact) ...[
-                  const SizedBox(height: 16),
-                  Text(
-                    'NAJAM',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2.0,
-                      fontSize: 24,
-                      fontFamily: fontConfig.titleFont,
+                  const SizedBox(height: 20),
+                  // Título con mejor tipografía
+                  ShaderMask(
+                    shaderCallback:
+                        (bounds) => const LinearGradient(
+                          colors: [Colors.white, Color(0xFFE5E7EB)],
+                        ).createShader(bounds),
+                    child: Text(
+                      'NAJAM',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 3.0,
+                        fontSize: 26,
+                        fontFamily: fontConfig.titleFont,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
+                  // Subtitle con mejor estilo
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
+                      horizontal: 16,
+                      vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withValues(alpha: 0.15),
+                          Colors.white.withValues(alpha: 0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: Colors.white.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),
                     child: Text(
                       'TIENDA OFICIAL',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontWeight: FontWeight.w600,
-                        fontSize: 10,
-                        letterSpacing: 1.2,
+                        fontSize: 11,
+                        letterSpacing: 1.5,
                         fontFamily: fontConfig.bodyFont,
                       ),
                     ),
@@ -410,11 +515,11 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
               ],
             ),
           ),
-          // Navigation Items (Ã­conos y textos SIEMPRE blancos)
+          // Navigation Items - Nueva estructura jerárquica
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                if (_filteredItems.isEmpty) {
+                if (_filteredCategories.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -431,14 +536,16 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                             color: Colors.white.withValues(alpha: 0.5),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
+                            fontFamily: fontConfig.bodyFont,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'No tienes acceso a ninguna secciÃ³n',
+                          'No tienes acceso a ninguna sección',
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.3),
                             fontSize: 12,
+                            fontFamily: fontConfig.bodyFont,
                           ),
                         ),
                       ],
@@ -446,264 +553,270 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
                   );
                 }
 
-                final itemHeight =
-                    (constraints.maxHeight - 40) / _filteredItems.length;
-                final minItemHeight = 52.0;
-                final actualItemHeight =
-                    itemHeight < minItemHeight ? minItemHeight : itemHeight;
-
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: _filteredItems.length,
-                  itemBuilder: (context, index) {
-                    final item = _filteredItems[index];
-                    final selected = _selectedIndex == index;
-                    final isHovered = _hoveredIndex == index;
+                  itemCount: _filteredCategories.length,
+                  itemBuilder: (context, categoryIndex) {
+                    final category = _filteredCategories[categoryIndex];
+                    final isExpanded = _expandedCategories.contains(
+                      category.id,
+                    );
 
-                    // Detecta si es el Ã­tem del carrito
-                    final isCarrito = item.label == 'Carrito Compra';
+                    return Column(
+                      children: [
+                        // Header de categoría
+                        _buildCategoryHeader(
+                          category,
+                          isExpanded,
+                          isCompact,
+                          fontConfig,
+                        ),
 
-                    return MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      onEnter: (_) => setState(() => _hoveredIndex = index),
-                      onExit: (_) => setState(() => _hoveredIndex = -1),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() => _selectedIndex = index);
-                          _onTap(context, index);
-                        },
-                        child: AnimatedContainer(
+                        // Items de la categoría (expandible)
+                        AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
-                          height: actualItemHeight,
-                          margin: EdgeInsets.symmetric(
-                            horizontal: isCompact ? 6 : 12,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withValues(
-                              alpha: selected || isHovered ? 0.1 : 0.05,
+                          height: isExpanded ? category.items.length * 48.0 : 0,
+                          child: ClipRect(
+                            child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: category.items.length,
+                              itemBuilder: (context, itemIndex) {
+                                final item = category.items[itemIndex];
+                                final isSelected = _selectedRoute == item.route;
+
+                                return _buildSubMenuItem(
+                                  item,
+                                  isSelected,
+                                  isCompact,
+                                  fontConfig,
+                                  carrito,
+                                );
+                              },
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: isCompact ? 12 : 20),
-                              Stack(
-                                children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Icon(
-                                      isCarrito
-                                          ? Icons
-                                              .shopping_cart // Solo el carrito usa este icono
-                                          : item
-                                              .icon, // Los demÃ¡s usan su icono original
-                                      color: Colors.white,
-                                      size:
-                                          selected
-                                              ? (isCompact ? 24 : 28)
-                                              : (isCompact ? 20 : 24),
-                                    ),
-                                  ),
-                                  if (isCarrito && carrito.isNotEmpty)
-                                    Positioned(
-                                      right: 2,
-                                      top: 2,
-                                      child: Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 1.5,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              if (!isCompact) ...[
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.label,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight:
-                                              selected
-                                                  ? FontWeight.w700
-                                                  : FontWeight.w500,
-                                          fontSize: 15,
-                                          fontFamily: fontConfig.bodyFont,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              if (selected || isHovered)
-                                Container(
-                                  width: 4,
-                                  height: 24,
-                                  margin: EdgeInsets.only(
-                                    right: isCompact ? 8 : 16,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(2),
-                                    boxShadow:
-                                        selected
-                                            ? [
-                                              BoxShadow(
-                                                color: Colors.white.withValues(
-                                                  alpha: 0.5,
-                                                ),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 1),
-                                              ),
-                                            ]
-                                            : null,
-                                  ),
-                                ),
-                            ],
                           ),
                         ),
-                      ),
+
+                        if (categoryIndex < _filteredCategories.length - 1)
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            height: 1,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.white.withValues(alpha: 0.1),
+                                  Colors.transparent,
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
                     );
                   },
                 );
               },
             ),
           ),
-          // Bottom Actions (logout y perfil, Ã­conos/textos blancos)
+          // Bottom Actions - Acciones de usuario mejoradas
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: isCompact ? 8 : 16,
-              vertical: 12,
+              vertical: 16,
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  width: 1,
+                ),
+              ),
             ),
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  height: isCompact ? 40 : 48,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        theme.errorColor.withValues(alpha: 0.1),
-                        theme.errorColor.withValues(alpha: 0.05),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: theme.errorColor.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () async {
-                        final authService = ref.read(authServiceProvider);
-                        await authService.logout();
-                        ref.read(currentUserProvider.notifier).state = null;
-                        ref.read(isAuthenticatedProvider.notifier).state =
-                            false;
-                        if (context.mounted) {
-                          context.go('/');
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout_rounded,
-                            size: isCompact ? 18 : 22,
-                            color: Colors.white,
-                          ),
-                          if (!isCompact) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              'Cerrar SesiÃ³n',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                fontFamily: fontConfig.bodyFont,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 if (!isCompact) ...[
-                  const SizedBox(height: 8),
+                  // Botón de Perfil mejorado
                   Container(
                     width: double.infinity,
-                    height: 48,
+                    height: 52,
+                    margin: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          theme.primaryColor.withValues(alpha: 0.1),
-                          theme.primaryColor.withValues(alpha: 0.05),
+                          const Color(0xFF6366F1).withValues(alpha: 0.15),
+                          const Color(0xFF6366F1).withValues(alpha: 0.05),
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: theme.primaryColor.withValues(alpha: 0.2),
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         onTap: () {
                           context.go(AppRoutes.profile);
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.account_circle_rounded,
-                              size: 22,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Mi Perfil',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                fontFamily: fontConfig.bodyFont,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF6366F1,
+                                  ).withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Icon(
+                                  Icons.account_circle_outlined,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 12),
+                              const Expanded(
+                                child: Text(
+                                  'Mi Perfil',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                color: Colors.white.withValues(alpha: 0.6),
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
+
+                // Botón de Cerrar Sesión mejorado
+                Container(
+                  width: double.infinity,
+                  height: isCompact ? 44 : 52,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xFFEF4444).withValues(alpha: 0.15),
+                        const Color(0xFFEF4444).withValues(alpha: 0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: const Color(0xFFEF4444).withValues(alpha: 0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () async {
+                        // Confirmación antes de cerrar sesión
+                        final shouldLogout = await showDialog<bool>(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                backgroundColor: Colors.grey[900],
+                                title: const Text(
+                                  '¿Cerrar sesión?',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                content: const Text(
+                                  '¿Estás seguro de que quieres cerrar sesión?',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(context).pop(false),
+                                    child: const Text('Cancelar'),
+                                  ),
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(context).pop(true),
+                                    child: const Text(
+                                      'Cerrar Sesión',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
+
+                        if (shouldLogout == true) {
+                          final authService = ref.read(authServiceProvider);
+                          await authService.logout();
+                          ref.read(currentUserProvider.notifier).state = null;
+                          ref.read(isAuthenticatedProvider.notifier).state =
+                              false;
+                          if (context.mounted) {
+                            context.go('/');
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isCompact ? 8 : 16,
+                        ),
+                        child: Row(
+                          mainAxisAlignment:
+                              isCompact
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(
+                                  0xFFEF4444,
+                                ).withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                Icons.logout_rounded,
+                                size: isCompact ? 16 : 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                            if (!isCompact) ...[
+                              const SizedBox(width: 12),
+                              const Text(
+                                'Cerrar Sesión',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -713,22 +826,205 @@ class _AppNavigationRailState extends ConsumerState<AppNavigationRail> {
     );
   }
 
-  int _getIndexFromRoute(BuildContext context) {
+  void _updateSelectedRoute(BuildContext context) {
     final uri = GoRouter.of(context).routeInformationProvider.value.uri;
     final path = uri.path;
 
-    for (int i = 0; i < _filteredItems.length; i++) {
-      // Coincidencia exacta o path segmentado
-      if (path == _filteredItems[i].route ||
-          path.startsWith('${_filteredItems[i].route}/')) {
-        return i;
+    setState(() {
+      _selectedRoute = path;
+    });
+
+    // Auto-expandir la categoría que contiene la ruta actual
+    for (final category in _filteredCategories) {
+      for (final item in category.items) {
+        if (path == item.route || path.startsWith('${item.route}/')) {
+          setState(() {
+            _expandedCategories.add(category.id);
+          });
+          return;
+        }
       }
     }
-    return 0;
   }
 
-  void _onTap(BuildContext context, int index) {
-    context.go(_filteredItems[index].route);
+  Widget _buildCategoryHeader(
+    _NavCategory category,
+    bool isExpanded,
+    bool isCompact,
+    FontConfig fontConfig,
+  ) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (isExpanded) {
+              _expandedCategories.remove(category.id);
+            } else {
+              _expandedCategories.add(category.id);
+            }
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(
+            horizontal: isCompact ? 6 : 12,
+            vertical: 2,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: isCompact ? 12 : 16,
+            vertical: 12,
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                category.color.withValues(alpha: isExpanded ? 0.15 : 0.08),
+                category.color.withValues(alpha: isExpanded ? 0.08 : 0.04),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: category.color.withValues(alpha: 0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: category.color.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  category.icon,
+                  color: Colors.white,
+                  size: isCompact ? 18 : 20,
+                ),
+              ),
+              if (!isCompact) ...[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    category.label,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      fontFamily: fontConfig.bodyFont,
+                    ),
+                  ),
+                ),
+                Icon(
+                  isExpanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
+                  color: Colors.white.withValues(alpha: 0.7),
+                  size: 20,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubMenuItem(
+    _NavItemData item,
+    bool isSelected,
+    bool isCompact,
+    FontConfig fontConfig,
+    List carrito,
+  ) {
+    final isCarrito = item.label.contains('Carrito');
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedRoute = item.route;
+          });
+          context.go(item.route);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(
+            horizontal: isCompact ? 10 : 16,
+            vertical: 2,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: isCompact ? 8 : 12,
+            vertical: 8,
+          ),
+          decoration: BoxDecoration(
+            color:
+                isSelected
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border:
+                isSelected
+                    ? Border.all(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      width: 1,
+                    )
+                    : null,
+          ),
+          child: Row(
+            children: [
+              SizedBox(width: isCompact ? 4 : 8),
+              Stack(
+                children: [
+                  Icon(
+                    item.icon,
+                    color:
+                        isSelected
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.7),
+                    size: isCompact ? 16 : 18,
+                  ),
+                  if (isCarrito && carrito.isNotEmpty)
+                    Positioned(
+                      right: -2,
+                      top: -2,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              if (!isCompact) ...[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    item.label,
+                    style: TextStyle(
+                      color:
+                          isSelected
+                              ? Colors.white
+                              : Colors.white.withValues(alpha: 0.8),
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontSize: 13,
+                      fontFamily: fontConfig.bodyFont,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -736,7 +1032,6 @@ class _NavItemData {
   final IconData icon;
   final String label;
   final String route;
-  final Color color;
   final String resource;
   final String action;
 
@@ -744,10 +1039,23 @@ class _NavItemData {
     required this.icon,
     required this.label,
     required this.route,
-    required this.color,
     required this.resource,
     required this.action,
   });
 }
 
+class _NavCategory {
+  final String id;
+  final IconData icon;
+  final String label;
+  final Color color;
+  final List<_NavItemData> items;
 
+  const _NavCategory({
+    required this.id,
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.items,
+  });
+}
