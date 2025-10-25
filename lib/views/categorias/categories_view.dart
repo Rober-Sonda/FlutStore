@@ -1461,141 +1461,133 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   Widget _buildPropiedadesContent() {
     if (_categoriaSeleccionada == null) {
-      return Expanded(
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Icon(
-                    Icons.category_outlined,
-                    size: 48,
-                    color: Colors.grey.shade400,
-                  ),
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Selecciona una categoría',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
+                child: Icon(
+                  Icons.category_outlined,
+                  size: 48,
+                  color: Colors.grey.shade400,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Elige una categoría del panel izquierdo para ver y gestionar sus propiedades',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 16,
-                    height: 1.4,
-                  ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Selecciona una categoría',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Elige una categoría del panel izquierdo para ver y gestionar sus propiedades',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 16,
+                  height: 1.4,
+                ),
+              ),
+            ],
           ),
         ),
       );
     }
 
     if (_categoriaSeleccionada!.propiedades.isEmpty) {
-      return Expanded(
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Icon(
-                    Icons.tune,
-                    size: 48,
-                    color: Colors.grey.shade400,
-                  ),
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(height: 24),
-                Text(
-                  'Sin propiedades en "${_categoriaSeleccionada!.nombre}"',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Icon(Icons.tune, size: 48, color: Colors.grey.shade400),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Sin propiedades en "${_categoriaSeleccionada!.nombre}"',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Agrega propiedades para definir los campos que tendrán los productos de esta categoría.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 16,
-                    height: 1.4,
-                  ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Agrega propiedades para definir los campos que tendrán los productos de esta categoría.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 16,
+                  height: 1.4,
                 ),
-                const SizedBox(height: 24),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
+              ),
+              const SizedBox(height: 24),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                    onTap: _agregarPropiedad,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
                       ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: _agregarPropiedad,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.add, color: Colors.white, size: 18),
-                            SizedBox(width: 8),
-                            Text(
-                              'Agregar Primera Propiedad',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add, color: Colors.white, size: 18),
+                          SizedBox(width: 8),
+                          Text(
+                            'Agregar Primera Propiedad',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
     }
 
-    return Expanded(child: _buildPropiedadesGrid());
+    return _buildPropiedadesGrid();
   }
 
   Widget _buildPropiedadesGrid() {
