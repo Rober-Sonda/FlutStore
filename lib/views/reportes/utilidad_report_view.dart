@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import '../../models/producto.dart';
 import '../../models/categoria.dart';
 import '../../models/app_theme.dart';
@@ -47,8 +48,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       setState(() => _isLoading = true);
 
       final isar = await ref.read(isarServiceProvider).db;
-      final productosRaw = await isar.productos.getAll([0]);
-      final productos = productosRaw.whereType<Producto>().toList();
+      final productos = await isar.collection<Producto>().where().findAll();
 
       final pedidoCompraService = PedidoCompraService();
 
@@ -61,9 +61,8 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       _productosMediaUtilidad =
           await pedidoCompraService.obtenerProductosMediaUtilidad();
 
-      // Cargar categorÃ­as
-      final categoriasRaw = await isar.categorias.getAll([0]);
-      final categorias = categoriasRaw.whereType<Categoria>().toList();
+      // Cargar categorías
+      final categorias = await isar.collection<Categoria>().where().findAll();
       _categorias = ['Todas', ...categorias.map((c) => c.nombre)];
 
       // Cargar tema
@@ -596,4 +595,3 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
     );
   }
 }
-

@@ -57,10 +57,10 @@ class _SweepstakeAddEditViewState extends ConsumerState<SweepstakeAddEditView> {
 
       // Cargar productos
       final isar = await ref.read(isarServiceProvider).db;
-      _productos = await isar.productos.where().findAll();
+      _productos = await isar.collection<Producto>().where().findAll();
 
       if (widget.sorteoId != null) {
-        _sorteo = await isar.sorteos.get(widget.sorteoId!);
+        _sorteo = await isar.collection<Sorteo>().get(widget.sorteoId!);
 
         if (_sorteo != null) {
           _loadSorteoData();
@@ -151,7 +151,7 @@ class _SweepstakeAddEditViewState extends ConsumerState<SweepstakeAddEditView> {
       sorteo.premios = _premios;
 
       await isar.writeTxn(() async {
-        await isar.sorteos.put(sorteo);
+        await isar.collection<Sorteo>().put(sorteo);
       });
 
       if (mounted) {

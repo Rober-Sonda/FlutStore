@@ -86,11 +86,19 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(start, end).findAll();
+        await isar
+            .collection<Pedido>()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
     final compras =
-        await isar.compras.filter().fechaBetween(start, end).findAll();
-    final productos = await isar.productos.where().findAll();
-    final clientes = await isar.clientes.where().findAll();
+        await isar
+            .collection<Compra>()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final clientes = await isar.collection<Cliente>().where().findAll();
 
     double totalVentas = pedidos.fold(0, (sum, p) => sum + (p.total ?? 0));
     double totalCompras = compras.fold(0, (sum, c) => sum + (c.total ?? 0));
@@ -150,9 +158,13 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(start, end).findAll();
-    final productos = await isar.productos.where().findAll();
-    final categorias = await isar.categorias.where().findAll();
+        await isar
+            .collection<Pedido>()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final categorias = await isar.collection<Categoria>().where().findAll();
 
     // Ventas por dÃ­a
     Map<int, double> ventasPorDia = {};
@@ -703,5 +715,3 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     );
   }
 }
-
-

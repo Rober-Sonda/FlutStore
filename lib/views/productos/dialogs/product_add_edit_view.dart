@@ -99,12 +99,12 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
       // Cargar categorías principales
       _categoriasPrincipales =
-          await isar.categorias.filter().parentIsNull().findAll();
+          await isar.collection<Categoria>().filter().parentIsNull().findAll();
       _categoriasActuales = _categoriasPrincipales;
 
       // Si estamos editando, cargar el producto
       if (_isEditMode && widget.productId != null) {
-        _producto = await isar.productos.get(widget.productId!);
+        _producto = await isar.collection<Producto>().get(widget.productId!);
         if (_producto != null) {
           await _cargarDatosProducto();
         }
@@ -126,7 +126,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
     _nombreController.text = _producto!.nombre ?? 'Producto sin nombre';
     _precioController.text = _producto!.precio?.toString() ?? '';
-    _stockController.text = _producto!.stock?.toString() ?? '';
+    _stockController.text = _producto!.stockActual?.toString() ?? '';
 
     // Cargar imágenes del producto
     _imagenesProducto = List.from(_producto!.imagenes);
@@ -139,7 +139,9 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
         final isar = await productService.db;
 
         // Buscar la categoría del producto
-        final categoria = await isar.categorias.get(_producto!.categoriaId!);
+        final categoria = await isar.collection<Categoria>().get(
+          _producto!.categoriaId!,
+        );
         if (categoria != null) {
           // Cargar la ruta completa de categorías
           await _cargarRutaCategoria(categoria);
@@ -182,7 +184,9 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
           categoriaActual,
         ); // Insertar al inicio para mantener orden
         if (categoriaActual.parent != null) {
-          categoriaActual = await isar.categorias.get(categoriaActual.parent!);
+          categoriaActual = await isar.collection<Categoria>().get(
+            categoriaActual.parent!,
+          );
         } else {
           categoriaActual = null;
         }
@@ -193,7 +197,8 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
       if (ruta.length > 1) {
         final categoriaPadre = ruta[ruta.length - 2];
         categoriasActuales =
-            await isar.categorias
+            await isar
+                .collection<Categoria>()
                 .filter()
                 .parentEqualTo(categoriaPadre.id)
                 .findAll();
@@ -222,7 +227,11 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
       // Verificar si tiene subcategorías
       final subcategorias =
-          await isar.categorias.filter().parentEqualTo(categoria.id).findAll();
+          await isar
+              .collection<Categoria>()
+              .filter()
+              .parentEqualTo(categoria.id)
+              .findAll();
 
       if (subcategorias.isNotEmpty) {
         // Navegar a subcategorías
@@ -272,7 +281,9 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
         // Buscar categoría padre
         if (categoriaActual.parent != null) {
-          categoriaActual = await isar.categorias.get(categoriaActual.parent!);
+          categoriaActual = await isar.collection<Categoria>().get(
+            categoriaActual.parent!,
+          );
         } else {
           categoriaActual = null;
         }
@@ -351,7 +362,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
               ? null
               : _nombreController.text.trim();
       producto.precio = double.tryParse(_precioController.text) ?? 0.0;
-      producto.stock = int.tryParse(_stockController.text) ?? 0;
+      producto.stockActual = int.tryParse(_stockController.text) ?? 0;
       producto.categoriaId = _categoriaSeleccionada!.id;
 
       // Guardar imágenes del producto
@@ -374,7 +385,7 @@ class _ProductAddEditViewState extends ConsumerState<ProductAddEditView> {
 
       // Guardar en base de datos
       await isar.writeTxn(() async {
-        await isar.productos.put(producto);
+        await isar.collection<Producto>().put(producto);
       });
 
       if (mounted) {

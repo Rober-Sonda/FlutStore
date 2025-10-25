@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import '../../../models/pedido_proveedor.dart';
 import '../../../models/proveedor.dart';
 import '../../../models/producto.dart';
@@ -50,11 +51,11 @@ class _PedidoProveedorAddEditViewState
       final isar = await ref.read(isarServiceProvider).db;
 
       // Cargar proveedores y productos
-      final proveedoresRaw = await isar.proveedors.getAll([0]);
-      _proveedores = proveedoresRaw.whereType<Proveedor>().toList();
+      final proveedores = await isar.collection<Proveedor>().where().findAll();
+      _proveedores = proveedores;
 
-      final productosRaw = await isar.productos.getAll([0]);
-      _productos = productosRaw.whereType<Producto>().toList();
+      final productos = await isar.collection<Producto>().where().findAll();
+      _productos = productos;
 
       // Cargar tema
       final configService = ref.read(appConfigServiceProvider);
@@ -63,7 +64,9 @@ class _PedidoProveedorAddEditViewState
 
       // Si es edición, cargar el pedido
       if (widget.pedidoId != null) {
-        _pedido = await isar.pedidoProveedors.get(widget.pedidoId!);
+        _pedido = await isar.collection<PedidoProveedor>().get(
+          widget.pedidoId!,
+        );
         if (_pedido != null) {
           _proveedorSeleccionado = _proveedores.firstWhere(
             (p) => p.id == _pedido!.proveedorId,
@@ -108,7 +111,7 @@ class _PedidoProveedorAddEditViewState
       _pedido!.totalEstimado = _pedido!.calcularTotalEstimado();
 
       await isar.writeTxn(() async {
-        await isar.pedidoProveedors.put(_pedido!);
+        await isar.collection<PedidoProveedor>().put(_pedido!);
       });
 
       if (mounted) {

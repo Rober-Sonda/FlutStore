@@ -19,10 +19,12 @@ class ConvertirPedidoCompraView extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConvertirPedidoCompraView> createState() => _ConvertirPedidoCompraViewState();
+  ConsumerState<ConvertirPedidoCompraView> createState() =>
+      _ConvertirPedidoCompraViewState();
 }
 
-class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompraView> {
+class _ConvertirPedidoCompraViewState
+    extends ConsumerState<ConvertirPedidoCompraView> {
   final Map<int, TextEditingController> _precioControllers = {};
   final Map<int, Producto> _productos = {};
   bool _isLoading = true;
@@ -47,7 +49,7 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
       final isar = await ref.read(isarServiceProvider).db;
 
       for (final item in widget.pedido.items) {
-        final producto = await isar.productos.get(item.productoId);
+        final producto = await isar.collection<Producto>().get(item.productoId);
         if (producto != null) {
           _productos[item.productoId] = producto;
           _precioControllers[item.productoId] = TextEditingController(
@@ -75,7 +77,9 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
     try {
       final preciosFinales = <int, double>{};
       for (final item in widget.pedido.items) {
-        final precio = double.tryParse(_precioControllers[item.productoId]?.text ?? '0');
+        final precio = double.tryParse(
+          _precioControllers[item.productoId]?.text ?? '0',
+        );
         if (precio != null) {
           preciosFinales[item.productoId] = precio;
         }
@@ -91,7 +95,9 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Pedido convertido a compra #${compra.id} exitosamente'),
+            content: Text(
+              'Pedido convertido a compra #${compra.id} exitosamente',
+            ),
             backgroundColor: Colors.green,
           ),
         );
@@ -115,7 +121,9 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
 
   bool _validarPrecios() {
     for (final item in widget.pedido.items) {
-      final precio = double.tryParse(_precioControllers[item.productoId]?.text ?? '');
+      final precio = double.tryParse(
+        _precioControllers[item.productoId]?.text ?? '',
+      );
       if (precio == null || precio <= 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -152,98 +160,106 @@ class _ConvertirPedidoCompraViewState extends ConsumerState<ConvertirPedidoCompr
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Pedido #${widget.pedido.id}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Pedido #${widget.pedido.id}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text('Proveedor: ${widget.proveedor.nombre}'),
-                          Text('Total estimado: \$${widget.pedido.totalEstimado?.toStringAsFixed(2) ?? '0.00'}'),
-                        ],
+                            const SizedBox(height: 8),
+                            Text('Proveedor: ${widget.proveedor.nombre}'),
+                            Text(
+                              'Total estimado: \$${widget.pedido.totalEstimado?.toStringAsFixed(2) ?? '0.00'}',
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Precios Finales',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Precios Finales',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: widget.pedido.items.length,
-                      itemBuilder: (context, index) {
-                        final item = widget.pedido.items[index];
-                        final producto = _productos[item.productoId];
-                        final controller = _precioControllers[item.productoId];
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: widget.pedido.items.length,
+                        itemBuilder: (context, index) {
+                          final item = widget.pedido.items[index];
+                          final producto = _productos[item.productoId];
+                          final controller =
+                              _precioControllers[item.productoId];
 
-                        if (producto == null || controller == null) {
-                          return const SizedBox.shrink();
-                        }
+                          if (producto == null || controller == null) {
+                            return const SizedBox.shrink();
+                          }
 
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  producto.nombre ?? 'Producto sin nombre',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    producto.nombre ?? 'Producto sin nombre',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text('Cantidad: ${item.cantidad}'),
-                                Text('Precio estimado: \$${item.precioEstimado?.toStringAsFixed(2) ?? '0.00'}'),
-                                const SizedBox(height: 8),
-                                TextFormField(
-                                  controller: controller,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Precio Final',
-                                    border: OutlineInputBorder(),
-                                    prefixText: '\$',
+                                  const SizedBox(height: 4),
+                                  Text('Cantidad: ${item.cantidad}'),
+                                  Text(
+                                    'Precio estimado: \$${item.precioEstimado?.toStringAsFixed(2) ?? '0.00'}',
                                   ),
-                                  keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    final precio = double.tryParse(value ?? '');
-                                    if (precio == null || precio <= 0) {
-                                      return 'Precio debe ser mayor a 0';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ],
+                                  const SizedBox(height: 8),
+                                  TextFormField(
+                                    controller: controller,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Precio Final',
+                                      border: OutlineInputBorder(),
+                                      prefixText: '\$',
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    validator: (value) {
+                                      final precio = double.tryParse(
+                                        value ?? '',
+                                      );
+                                      if (precio == null || precio <= 0) {
+                                        return 'Precio debe ser mayor a 0';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
     );
   }
-} 
+}

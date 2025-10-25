@@ -262,7 +262,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Cliente: ${_obtenerNombreCliente(venta.clienteId)}',
+                                  'Cliente: ${_obtenerNombreCliente(venta.clienteId ?? 0)}',
                                 ),
                                 Text(
                                   'Total: \$${venta.total.toStringAsFixed(2)}',
@@ -402,4 +402,3 @@ class _SalesViewState extends ConsumerState<SalesView> {
     );
   }
 }
-

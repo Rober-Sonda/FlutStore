@@ -42,8 +42,8 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
     setState(() => isLoading = true);
     final productService = ref.read(productServiceProvider);
     final isar = await productService.db;
-    final productosDb = await isar.productos.where().findAll();
-    final categoriasDb = await isar.categorias.where().findAll();
+    final productosDb = await isar.collection<Producto>().where().findAll();
+    final categoriasDb = await isar.collection<Categoria>().where().findAll();
     setState(() {
       productos = productosDb;
       categorias = categoriasDb;
@@ -64,9 +64,11 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
             selectedCategoryId == null ||
             producto.categoriaId == selectedCategoryId;
         final matchesLowStock =
-            !showLowStock || (producto.stock != null && producto.stock! <= 10);
+            !showLowStock ||
+            (producto.stockActual != null && producto.stockActual! <= 10);
         final matchesOutOfStock =
-            !showOutOfStock || (producto.stock != null && producto.stock! == 0);
+            !showOutOfStock ||
+            (producto.stockActual != null && producto.stockActual! == 0);
         return matchesSearch &&
             matchesCategory &&
             matchesLowStock &&
@@ -82,7 +84,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
             comparison = (a.precio ?? 0).compareTo(b.precio ?? 0);
             break;
           case 'stock':
-            comparison = (a.stock ?? 0).compareTo(b.stock ?? 0);
+            comparison = (a.stockActual ?? 0).compareTo(b.stockActual ?? 0);
             break;
           case 'categoria':
             final categoriaA = categorias?.firstWhere(
@@ -106,14 +108,20 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
     if (productos == null) return {};
     final totalProducts = productos!.length;
     final productsWithStock =
-        productos!.where((p) => p.stock != null && p.stock! > 0).length;
+        productos!
+            .where((p) => p.stockActual != null && p.stockActual! > 0)
+            .length;
     final lowStockProducts =
-        productos!.where((p) => p.stock != null && p.stock! <= 10).length;
+        productos!
+            .where((p) => p.stockActual != null && p.stockActual! <= 10)
+            .length;
     final outOfStockProducts =
-        productos!.where((p) => p.stock != null && p.stock! == 0).length;
+        productos!
+            .where((p) => p.stockActual != null && p.stockActual! == 0)
+            .length;
     final totalValue = productos!.fold<double>(
       0,
-      (sum, p) => sum + ((p.precio ?? 0) * (p.stock ?? 0)),
+      (sum, p) => sum + ((p.precio ?? 0) * (p.stockActual ?? 0)),
     );
     return {
       'total': totalProducts,
@@ -154,7 +162,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
                     final productService = ref.read(productServiceProvider);
                     final isar = await productService.db;
                     await isar.writeTxn(() async {
-                      await isar.productos.delete(producto.id);
+                      await isar.collection<Producto>().delete(producto.id);
                     });
                     _loadData();
                     if (mounted) {
@@ -185,9 +193,7 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Productos'),
-      ),
+      appBar: AppBar(title: const Text('Productos')),
       body: Column(
         children: [
           // NUEVO: DescripciÃ³n de la secciÃ³n de productos
@@ -213,70 +219,74 @@ class _ProductsViewState extends ConsumerState<ProductsView> {
             showLowStock: showLowStock,
             showOutOfStock: showOutOfStock,
             categorias: categorias,
-            onSearchChanged:
-                (value) => setState(() => searchQuery = value),
+            onSearchChanged: (value) => setState(() => searchQuery = value),
             onCategoryChanged:
                 (value) => setState(() => selectedCategoryId = value),
             onSortChanged: (value) => setState(() => sortBy = value),
-            onLowStockChanged:
-                (value) => setState(() => showLowStock = value),
+            onLowStockChanged: (value) => setState(() => showLowStock = value),
             onOutOfStockChanged:
                 (value) => setState(() => showOutOfStock = value),
           ),
           const SizedBox(height: 16),
           // Lista de productos ocupa todo el alto disponible
           Expanded(
-            child: productos == null || productos!.isEmpty
-                ? const EmptyStateWidget()
-                : filteredProducts.isEmpty
+            child:
+                productos == null || productos!.isEmpty
+                    ? const EmptyStateWidget()
+                    : filteredProducts.isEmpty
                     ? const Center(
-                        child: Text(
-                          'No hay productos que coincidan con los filtros',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      )
-                    : LayoutBuilder(
-                        builder: (context, constraints) {
-                          // Calcula el ancho ideal de la card (mÃ¡ximo 320, mÃ­nimo 200)
-                          const double minCardWidth = 200;
-                          const double maxCardWidth = 320;
-                          final double gridWidth = constraints.maxWidth;
-                          // Calcula cuÃ¡ntas cards entran por fila segÃºn el ancho disponible
-                          int crossAxisCount = (gridWidth / maxCardWidth).floor();
-                          if (crossAxisCount < 1) crossAxisCount = 1;
-                          // Si hay mucho espacio, reduce el ancho de la card para que entren mÃ¡s
-                          double cardWidth = (gridWidth / crossAxisCount).clamp(minCardWidth, maxCardWidth);
-
-                          return GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: cardWidth / (cardWidth / 0.7),
-                            ),
-                            itemCount: filteredProducts.length,
-                            itemBuilder: (context, index) {
-                              final producto = filteredProducts[index];
-                              return ProductCard(
-                                producto: producto,
-                                categorias: categorias,
-                                inventoryStats: inventoryStats, // <-- corrige aquÃ­, antes era 'stats'
-                                onEdit: () async {
-                                  final result = await context.push(
-                                    AppRoutes.productEdit.replaceAll(
-                                      ':id',
-                                      producto.id.toString(),
-                                    ),
-                                  );
-                                  if (result == true) _loadData();
-                                },
-                                onDelete: () => _showDeleteDialog(producto),
-                                getCategoryName: getCategoryName,
-                              );
-                            },
-                          );
-                        },
+                      child: Text(
+                        'No hay productos que coincidan con los filtros',
+                        style: TextStyle(color: Colors.white70),
                       ),
+                    )
+                    : LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Calcula el ancho ideal de la card (mÃ¡ximo 320, mÃ­nimo 200)
+                        const double minCardWidth = 200;
+                        const double maxCardWidth = 320;
+                        final double gridWidth = constraints.maxWidth;
+                        // Calcula cuÃ¡ntas cards entran por fila segÃºn el ancho disponible
+                        int crossAxisCount = (gridWidth / maxCardWidth).floor();
+                        if (crossAxisCount < 1) crossAxisCount = 1;
+                        // Si hay mucho espacio, reduce el ancho de la card para que entren mÃ¡s
+                        double cardWidth = (gridWidth / crossAxisCount).clamp(
+                          minCardWidth,
+                          maxCardWidth,
+                        );
+
+                        return GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: cardWidth / (cardWidth / 0.7),
+                              ),
+                          itemCount: filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            final producto = filteredProducts[index];
+                            return ProductCard(
+                              producto: producto,
+                              categorias: categorias,
+                              inventoryStats:
+                                  inventoryStats, // <-- corrige aquÃ­, antes era 'stats'
+                              onEdit: () async {
+                                final result = await context.push(
+                                  AppRoutes.productEdit.replaceAll(
+                                    ':id',
+                                    producto.id.toString(),
+                                  ),
+                                );
+                                if (result == true) _loadData();
+                              },
+                              onDelete: () => _showDeleteDialog(producto),
+                              getCategoryName: getCategoryName,
+                            );
+                          },
+                        );
+                      },
+                    ),
           ),
         ],
       ),

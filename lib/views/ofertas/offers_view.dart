@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import '../../models/oferta.dart';
 import '../../models/producto.dart';
 import '../../models/registrofinanciero.dart';
@@ -31,10 +32,8 @@ class _OffersViewState extends ConsumerState<OffersView> {
       setState(() => _isLoading = true);
 
       final isar = await ref.read(isarServiceProvider).db;
-      final ofertasRaw = await isar.ofertas.getAll([0]);
-      final ofertas = ofertasRaw.whereType<Oferta>().toList();
-      final productosRaw = await isar.productos.getAll([0]);
-      final productos = productosRaw.whereType<Producto>().toList();
+      final ofertas = await isar.collection<Oferta>().where().findAll();
+      final productos = await isar.collection<Producto>().where().findAll();
 
       setState(() {
         _ofertas = ofertas;
@@ -114,7 +113,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
       oferta.fechaActualizacion = DateTime.now();
 
       await isar.writeTxn(() async {
-        await isar.ofertas.put(oferta);
+        await isar.collection<Oferta>().put(oferta);
       });
 
       setState(() {});
@@ -147,7 +146,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
       oferta.fechaActualizacion = DateTime.now();
 
       await isar.writeTxn(() async {
-        await isar.ofertas.put(oferta);
+        await isar.collection<Oferta>().put(oferta);
       });
 
       setState(() {});
@@ -200,7 +199,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
         final isar = await ref.read(isarServiceProvider).db;
 
         await isar.writeTxn(() async {
-          await isar.ofertas.delete(oferta.id);
+          await isar.collection<Oferta>().delete(oferta.id);
         });
 
         setState(() {
@@ -244,7 +243,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
       );
 
       await isar.writeTxn(() async {
-        await isar.registroFinancieros.put(perdidaOferta);
+        await isar.collection<RegistroFinanciero>().put(perdidaOferta);
       });
 
       if (mounted) {
@@ -508,9 +507,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ofertas'),
-      ),
+      appBar: AppBar(title: const Text('Ofertas')),
       body: Column(
         children: [
           // NUEVO: Descripción de la sección de ofertas
@@ -537,10 +534,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
                 children: [
                   const Text(
                     'Resumen de Ofertas',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -591,9 +585,7 @@ class _OffersViewState extends ConsumerState<OffersView> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       itemCount: _ofertasFiltradas.length,
                       itemBuilder: (context, index) {
-                        return _buildOfertaCard(
-                          _ofertasFiltradas[index],
-                        );
+                        return _buildOfertaCard(_ofertasFiltradas[index]);
                       },
                     ),
           ),

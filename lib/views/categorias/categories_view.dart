@@ -2,7 +2,7 @@
 import 'package:go_router/go_router.dart';
 import '../../src/app_routes.dart';
 import 'package:isar/isar.dart';
-import '../../iews/categorias/dialogs/propiedad_dialog.dart';
+import '../../views/categorias/dialogs/propiedad_dialog.dart';
 import '../../models/categoria.dart';
 import '../../models/propiedad_categoria.dart';
 import '../../models/producto.dart';
@@ -56,11 +56,11 @@ class _CategoriesViewState extends State<CategoriesView> {
         return;
       }
 
-      if (await isar.categorias.count() == 0) {
+      if (await isar.collection<Categoria>().count() == 0) {
         await seedIsar(isar);
       }
 
-      final categorias = await isar.categorias.where().findAll();
+      final categorias = await isar.collection<Categoria>().where().findAll();
       categorias.sort((a, b) {
         if (a.parent == b.parent) {
           return a.orden.compareTo(b.orden);
@@ -256,8 +256,9 @@ class _CategoriesViewState extends State<CategoriesView> {
                             horizontal: 12,
                           ),
                         ),
-                        onChanged: (value) =>
-                            setState(() => searchQuery = value.trim()),
+                        onChanged:
+                            (value) =>
+                                setState(() => searchQuery = value.trim()),
                       ),
                     ),
                     Expanded(
@@ -266,9 +267,13 @@ class _CategoriesViewState extends State<CategoriesView> {
                           horizontal: 16,
                           vertical: 8,
                         ),
-                        children: _getCategoriasFiltradas(null)
-                            .map((categoria) => _buildCategoriaItem(categoria, 0))
-                            .toList(),
+                        children:
+                            _getCategoriasFiltradas(null)
+                                .map(
+                                  (categoria) =>
+                                      _buildCategoriaItem(categoria, 0),
+                                )
+                                .toList(),
                       ),
                     ),
                     // BotÃ³n "Nueva CategorÃ­a" al pie y alineado a la derecha
@@ -490,7 +495,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           final isar = Isar.getInstance();
                           if (isar != null) {
                             await isar.writeTxn(() async {
-                              await isar.categorias.put(
+                              await isar.collection<Categoria>().put(
                                 Categoria()..nombre = nombre,
                               );
                             });
@@ -539,7 +544,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           final isar = Isar.getInstance();
                           if (isar != null) {
                             await isar.writeTxn(() async {
-                              await isar.categorias.put(
+                              await isar.collection<Categoria>().put(
                                 Categoria()
                                   ..nombre = nombre
                                   ..parent = padre.id,
@@ -588,7 +593,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           final isar = Isar.getInstance();
                           if (isar != null) {
                             await isar.writeTxn(() async {
-                              await isar.categorias.put(
+                              await isar.collection<Categoria>().put(
                                 categoria..nombre = nombre,
                               );
                             });
@@ -627,11 +632,12 @@ class _CategoriesViewState extends State<CategoriesView> {
 
     final isar = Isar.getInstance();
     if (isar != null) {
+      final todosLosProductos =
+          await isar.collection<Producto>().where().findAll();
       final productos =
-          await isar.productos
-              .filter()
-              .categoriaIdEqualTo(categoria.id)
-              .findAll();
+          todosLosProductos
+              .where((p) => p.categoriaId == categoria.id)
+              .toList();
       if (productos.isNotEmpty) {
         _mostrarSnackBar(
           'No se puede eliminar "${categoria.nombre}" porque tiene ${productos.length} producto${productos.length == 1 ? '' : 's'} asociado.',
@@ -650,7 +656,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       final isar = Isar.getInstance();
       if (isar == null) return;
       await isar.writeTxn(() async {
-        await isar.categorias.delete(categoria.id);
+        await isar.collection<Categoria>().delete(categoria.id);
       });
       if (_categoriaSeleccionada?.id == categoria.id) {
         _categoriaSeleccionada = null;
@@ -899,7 +905,9 @@ class _CategoriesViewState extends State<CategoriesView> {
               if (isar != null) {
                 _categoriaSeleccionada!.propiedades.add(propiedad);
                 await isar.writeTxn(() async {
-                  await isar.categorias.put(_categoriaSeleccionada!);
+                  await isar.collection<Categoria>().put(
+                    _categoriaSeleccionada!,
+                  );
                 });
                 setState(() {});
               }
@@ -912,11 +920,12 @@ class _CategoriesViewState extends State<CategoriesView> {
     final isar = Isar.getInstance();
     List<Producto> productosAsociados = [];
     if (isar != null) {
+      final todosLosProductos =
+          await isar.collection<Producto>().where().findAll();
       productosAsociados =
-          await isar.productos
-              .filter()
-              .categoriaIdEqualTo(_categoriaSeleccionada!.id)
-              .findAll();
+          todosLosProductos
+              .where((p) => p.categoriaId == _categoriaSeleccionada!.id)
+              .toList();
     }
 
     showDialog(
@@ -939,7 +948,9 @@ class _CategoriesViewState extends State<CategoriesView> {
               }
               if (isar != null) {
                 await isar.writeTxn(() async {
-                  await isar.categorias.put(_categoriaSeleccionada!);
+                  await isar.collection<Categoria>().put(
+                    _categoriaSeleccionada!,
+                  );
                 });
               }
               setState(() {});
@@ -956,11 +967,12 @@ class _CategoriesViewState extends State<CategoriesView> {
     if (confirm != true) return;
 
     final isar = Isar.getInstance();
+    final todosLosProductos =
+        await isar!.collection<Producto>().where().findAll();
     final productosAsociados =
-        await isar!.productos
-            .filter()
-            .categoriaIdEqualTo(_categoriaSeleccionada!.id)
-            .findAll();
+        todosLosProductos
+            .where((p) => p.categoriaId == _categoriaSeleccionada!.id)
+            .toList();
 
     if (productosAsociados.isNotEmpty) {
       _mostrarSnackBar(
@@ -977,7 +989,7 @@ class _CategoriesViewState extends State<CategoriesView> {
     _categoriaSeleccionada!.propiedades = propiedades;
 
     await isar.writeTxn(() async {
-      await isar.categorias.put(_categoriaSeleccionada!);
+      await isar.collection<Categoria>().put(_categoriaSeleccionada!);
     });
     setState(() {});
   }

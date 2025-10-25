@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import '../../../models/oferta.dart';
 import '../../../models/producto.dart';
 import '../../../services/isar_service.dart';
@@ -67,11 +68,10 @@ class _OfferAddEditViewState extends ConsumerState<OfferAddEditView> {
       final isar = await ref.read(isarServiceProvider).db;
 
       // Cargar productos
-      final productosRaw = await isar.productos.getAll([0]);
-      final productos = productosRaw.whereType<Producto>().toList();
+      final productos = await isar.collection<Producto>().where().findAll();
 
       if (widget.ofertaId != null) {
-        _oferta = await isar.ofertas.get(widget.ofertaId!);
+        _oferta = await isar.collection<Oferta>().get(widget.ofertaId!);
 
         if (_oferta != null) {
           _loadOfertaData();
@@ -251,7 +251,7 @@ class _OfferAddEditViewState extends ConsumerState<OfferAddEditView> {
       }
 
       await isar.writeTxn(() async {
-        await isar.ofertas.put(_oferta!);
+        await isar.collection<Oferta>().put(_oferta!);
       });
 
       if (mounted) {

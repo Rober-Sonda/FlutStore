@@ -45,8 +45,9 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
     try {
       final isar = Isar.getInstance();
       if (isar != null) {
-        final proveedores = await isar.proveedors.where().findAll();
-        final productos = await isar.productos.where().findAll();
+        final proveedores =
+            await isar.collection<Proveedor>().where().findAll();
+        final productos = await isar.collection<Producto>().where().findAll();
 
         setState(() {
           _proveedores = proveedores;
@@ -94,7 +95,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Stock actual: ${producto.stock ?? 0}'),
+                Text('Stock actual: ${producto.stockActual ?? 0}'),
                 const SizedBox(height: 16),
                 TextField(
                   controller: cantidadController,
@@ -262,6 +263,13 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
           fecha: DateTime.now(),
           total: _totalCarrito,
           proveedorId: _proveedorSeleccionado!.id,
+          proveedorNombre: _proveedorSeleccionado!.nombre ?? '',
+          proveedorEmail: _proveedorSeleccionado!.email ?? '',
+          proveedorTelefono: _proveedorSeleccionado!.telefono ?? '',
+          proveedorDocumento: '',
+          proveedorDireccion: _proveedorSeleccionado!.direccion ?? '',
+          proveedorContacto: _proveedorSeleccionado!.contacto ?? '',
+          proveedorTipoProveedor: '',
           observaciones: _observacionesController.text.trim(),
           estado: 'pendiente',
         );
@@ -269,23 +277,23 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
         // Agregar productos al carrito de la compra
         for (final item in _carrito) {
           compra.productos.add(
-            CompraProducto(
+            CompraProductoCompleto(
               productoId: item.producto.id,
-              nombreProducto: item.producto.nombre ?? 'Producto sin nombre',
+              nombre: item.producto.nombre ?? 'Producto sin nombre',
               cantidad: item.cantidad,
-              precioUnitario: item.precioUnitario,
+              precioFinal: item.precioUnitario,
             ),
           );
         }
 
         await isar.writeTxn(() async {
-          await isar.compras.put(compra);
+          await isar.collection<Compra>().put(compra);
 
           // Actualizar stock de productos
           for (final item in _carrito) {
             final producto = item.producto;
-            producto.stock = (producto.stock ?? 0) + item.cantidad;
-            await isar.productos.put(producto);
+            producto.stockActual = (producto.stockActual ?? 0) + item.cantidad;
+            await isar.collection<Producto>().put(producto);
           }
         });
 
@@ -488,7 +496,7 @@ class _PurchaseAddViewState extends ConsumerState<PurchaseAddView> {
                                             'Producto sin nombre',
                                       ),
                                       subtitle: Text(
-                                        'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stock ?? 0}',
+                                        'Precio: \$${(producto.precio ?? 0).toStringAsFixed(2)} | Stock: ${producto.stockActual ?? 0}',
                                       ),
                                       trailing: ElevatedButton.icon(
                                         icon: const Icon(Icons.add),

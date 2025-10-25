@@ -103,11 +103,11 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
       final isar = await ref.read(isarServiceProvider).db;
 
       // Cargar productos y clientes
-      _productos = await isar.productos.where().findAll();
-      _clientes = await isar.clientes.where().findAll();
+      _productos = await isar.collection<Producto>().where().findAll();
+      _clientes = await isar.collection<Cliente>().where().findAll();
 
       if (widget.ventaId != null) {
-        _venta = await isar.ventas.get(widget.ventaId!);
+        _venta = await isar.collection<Venta>().get(widget.ventaId!);
         if (_venta != null) {
           _loadVentaData();
         }
@@ -214,7 +214,8 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
         _productos
             .where(
               (p) =>
-                  (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false) ||
+                  (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ??
+                      false) ||
                   (p.codigoBarras?.toLowerCase().contains(
                         codigo.toLowerCase(),
                       ) ??
@@ -252,7 +253,7 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
                     title: Text(producto.nombre ?? 'Producto sin nombre'),
                     subtitle: Text(
                       'Precio: \$${producto.precio?.toStringAsFixed(2) ?? '0.00'} - '
-                      'Stock: ${producto.stock ?? 0}',
+                      'Stock: ${producto.stockActual ?? 0}',
                     ),
                     trailing:
                         producto.codigoBarras != null || producto.sku != null
@@ -296,7 +297,9 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
               children: [
                 Icon(Icons.add_shopping_cart, color: Colors.blue),
                 const SizedBox(width: 8),
-                Expanded(child: Text('Agregar ${producto.nombre ?? 'Producto'}')),
+                Expanded(
+                  child: Text('Agregar ${producto.nombre ?? 'Producto'}'),
+                ),
               ],
             ),
             content: Column(
@@ -321,12 +324,12 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
                           'Precio sugerido: \$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
-                        if (producto.stock != null)
+                        if (producto.stockActual != null)
                           Text(
-                            'Stock disponible: ${producto.stock}',
+                            'Stock disponible: ${producto.stockActual}',
                             style: TextStyle(
                               color:
-                                  producto.stock! > 0
+                                  producto.stockActual! > 0
                                       ? Colors.green
                                       : Colors.red,
                             ),
@@ -538,6 +541,18 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
           _venta ??
           Venta(
             clienteId: _clienteSeleccionadoId!,
+            clienteNombre: _clientes.firstWhere((c) => c.id == _clienteSeleccionadoId!, orElse: () => Cliente(id: 0, nombre: '')).nombre ?? '',
+            clienteEmail: _emailClienteController.text.isEmpty
+                ? (_clientes.firstWhere((c) => c.id == _clienteSeleccionadoId!, orElse: () => Cliente(id: 0, nombre: '')).email ?? '')
+                : _emailClienteController.text,
+            clienteTelefono: _telefonoClienteController.text.isEmpty
+                ? ''
+                : _telefonoClienteController.text,
+            clienteDocumento: '',
+            clienteDireccion: _direccionEntregaController.text.isEmpty
+                ? (_clientes.firstWhere((c) => c.id == _clienteSeleccionadoId!, orElse: () => Cliente(id: 0, nombre: '')).direccion ?? '')
+                : _direccionEntregaController.text,
+            clienteTipoCliente: '',
             fecha: DateTime.now(),
             total: _total,
             metodoPago: _metodoPago,
@@ -619,7 +634,7 @@ class _SaleAddEditViewState extends ConsumerState<SaleAddEditView> {
               : _notasInternasController.text;
 
       await isar.writeTxn(() async {
-        await isar.ventas.put(venta);
+        await isar.collection<Venta>().put(venta);
       });
 
       if (mounted) {

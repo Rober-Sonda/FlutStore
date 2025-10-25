@@ -99,11 +99,11 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
       final isar = await ref.read(isarServiceProvider).db;
 
       // Cargar productos y proveedores
-      _productos = await isar.productos.where().findAll();
-      _proveedores = await isar.proveedors.where().findAll();
+      _productos = await isar.collection<Producto>().where().findAll();
+      _proveedores = await isar.collection<Proveedor>().where().findAll();
 
       if (widget.compraId != null) {
-        _compra = await isar.compras.get(widget.compraId!);
+        _compra = await isar.collection<Compra>().get(widget.compraId!);
         if (_compra != null) {
           _loadCompraData();
         }
@@ -187,14 +187,15 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
           (p.codigoBarras?.toLowerCase() == codigo.toLowerCase()) ||
           (p.sku?.toLowerCase() == codigo.toLowerCase()) ||
           (p.nombre?.toLowerCase().contains(codigo.toLowerCase()) ?? false),
-      orElse: () => Producto(
-        id: 0,
-        nombre: '',
-        descripcion: '',
-        precio: 0.0,
-        stock: 0,
-        categoria: '',
-      ),
+      orElse:
+          () => Producto(
+            id: 0,
+            nombre: '',
+            descripcion: '',
+            precio: 0.0,
+            stockActual: 0,
+            categoria: '',
+          ),
     );
 
     if (producto.id != 0) {
@@ -259,7 +260,7 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
                     title: Text(producto.nombre ?? 'Producto sin nombre'),
                     subtitle: Text(
                       'Costo: \$${producto.precioCosto?.toStringAsFixed(2) ?? '0.00'} - '
-                      'Stock: ${producto.stock ?? 0}',
+                      'Stock: ${producto.stockActual ?? 0}',
                     ),
                     trailing:
                         producto.codigoBarras != null || producto.sku != null
@@ -328,12 +329,12 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
                           'Costo sugerido: \$${(producto.precioCosto ?? 0.0).toStringAsFixed(2)}',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
-                        if (producto.stock != null)
+                        if (producto.stockActual != null)
                           Text(
-                            'Stock disponible: ${producto.stock}',
+                            'Stock disponible: ${producto.stockActual}',
                             style: TextStyle(
                               color:
-                                  producto.stock! > 0
+                                  producto.stockActual! > 0
                                       ? Colors.green
                                       : Colors.red,
                             ),
@@ -541,6 +542,31 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
 
       final isar = await ref.read(isarServiceProvider).db;
 
+      // Extraer información del proveedor seleccionado (si existe) para cumplir con los parámetros requeridos
+      final selectedIndex =
+          _proveedores.indexWhere((p) => p.id == _proveedorSeleccionadoId);
+      final proveedorNombre = selectedIndex != -1
+          ? (_proveedores[selectedIndex].nombre ?? '')
+          : '';
+      final proveedorEmail = selectedIndex != -1
+          ? (_proveedores[selectedIndex].email ?? '')
+          : '';
+      final proveedorTelefono = selectedIndex != -1
+          ? (_proveedores[selectedIndex].telefono ?? '')
+          : '';
+      final proveedorDocumento = selectedIndex != -1
+          ? ('')
+          : '';
+      final proveedorDireccion = selectedIndex != -1
+          ? (_proveedores[selectedIndex].direccion ?? '')
+          : '';
+      final proveedorContacto = selectedIndex != -1
+          ? (_proveedores[selectedIndex].contacto ?? '')
+          : '';
+      final proveedorTipoProveedor = selectedIndex != -1
+          ? ('')
+          : '';
+
       final compra =
           _compra ??
           Compra(
@@ -554,6 +580,13 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
                     : _observacionesController.text,
             estado: _estado,
             proveedorId: _proveedorSeleccionadoId,
+            proveedorNombre: proveedorNombre,
+            proveedorEmail: proveedorEmail,
+            proveedorTelefono: proveedorTelefono,
+            proveedorDocumento: proveedorDocumento,
+            proveedorDireccion: proveedorDireccion,
+            proveedorContacto: proveedorContacto,
+            proveedorTipoProveedor: proveedorTipoProveedor,
             metodoPago: _metodoPago,
             montoPagado: _montoPagado,
             saldoPendiente: _saldoPendiente,
@@ -647,10 +680,11 @@ class _PurchaseAddEditViewState extends ConsumerState<PurchaseAddEditView> {
                   observaciones: item.observaciones,
                 ),
               )
-              .toList();
+              .toList()
+              .cast<CompraProductoCompleto>();
 
       await isar.writeTxn(() async {
-        await isar.compras.put(compra);
+        await isar.collection<Compra>().put(compra);
       });
 
       if (mounted) {
