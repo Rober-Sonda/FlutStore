@@ -17,25 +17,45 @@ const RolSchema = CollectionSchema(
   name: r'Rol',
   id: -1783669233979747451,
   properties: {
-    r'descripcion': PropertySchema(
+    r'activo': PropertySchema(
       id: 0,
+      name: r'activo',
+      type: IsarType.bool,
+    ),
+    r'descripcion': PropertySchema(
+      id: 1,
       name: r'descripcion',
       type: IsarType.string,
     ),
+    r'esSistema': PropertySchema(
+      id: 2,
+      name: r'esSistema',
+      type: IsarType.bool,
+    ),
+    r'fechaActualizacion': PropertySchema(
+      id: 3,
+      name: r'fechaActualizacion',
+      type: IsarType.dateTime,
+    ),
     r'fechaCreacion': PropertySchema(
-      id: 1,
+      id: 4,
       name: r'fechaCreacion',
       type: IsarType.dateTime,
     ),
     r'nombre': PropertySchema(
-      id: 2,
+      id: 5,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'permisos': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'permisos',
       type: IsarType.stringList,
+    ),
+    r'usuariosAsignados': PropertySchema(
+      id: 7,
+      name: r'usuariosAsignados',
+      type: IsarType.long,
     )
   },
   estimateSize: _rolEstimateSize,
@@ -86,10 +106,14 @@ void _rolSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.descripcion);
-  writer.writeDateTime(offsets[1], object.fechaCreacion);
-  writer.writeString(offsets[2], object.nombre);
-  writer.writeStringList(offsets[3], object.permisos);
+  writer.writeBool(offsets[0], object.activo);
+  writer.writeString(offsets[1], object.descripcion);
+  writer.writeBool(offsets[2], object.esSistema);
+  writer.writeDateTime(offsets[3], object.fechaActualizacion);
+  writer.writeDateTime(offsets[4], object.fechaCreacion);
+  writer.writeString(offsets[5], object.nombre);
+  writer.writeStringList(offsets[6], object.permisos);
+  writer.writeLong(offsets[7], object.usuariosAsignados);
 }
 
 Rol _rolDeserialize(
@@ -98,12 +122,17 @@ Rol _rolDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Rol();
-  object.descripcion = reader.readStringOrNull(offsets[0]);
-  object.fechaCreacion = reader.readDateTimeOrNull(offsets[1]);
+  final object = Rol(
+    activo: reader.readBoolOrNull(offsets[0]) ?? true,
+    descripcion: reader.readStringOrNull(offsets[1]),
+    esSistema: reader.readBoolOrNull(offsets[2]) ?? false,
+    fechaActualizacion: reader.readDateTimeOrNull(offsets[3]),
+    fechaCreacion: reader.readDateTimeOrNull(offsets[4]),
+    nombre: reader.readStringOrNull(offsets[5]) ?? '',
+    permisos: reader.readStringList(offsets[6]),
+    usuariosAsignados: reader.readLongOrNull(offsets[7]),
+  );
   object.id = id;
-  object.nombre = reader.readString(offsets[2]);
-  object.permisos = reader.readStringList(offsets[3]);
   return object;
 }
 
@@ -115,13 +144,21 @@ P _rolDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? true) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 6:
       return (reader.readStringList(offset)) as P;
+    case 7:
+      return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -215,6 +252,15 @@ extension RolQueryWhere on QueryBuilder<Rol, Rol, QWhereClause> {
 }
 
 extension RolQueryFilter on QueryBuilder<Rol, Rol, QFilterCondition> {
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> activoEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'activo',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Rol, Rol, QAfterFilterCondition> descripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -357,6 +403,84 @@ extension RolQueryFilter on QueryBuilder<Rol, Rol, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'descripcion',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> esSistemaEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'esSistema',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'fechaActualizacion',
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'fechaActualizacion',
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fechaActualizacion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fechaActualizacion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fechaActualizacion',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> fechaActualizacionBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fechaActualizacion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -839,6 +963,75 @@ extension RolQueryFilter on QueryBuilder<Rol, Rol, QFilterCondition> {
       );
     });
   }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'usuariosAsignados',
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'usuariosAsignados',
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'usuariosAsignados',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'usuariosAsignados',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'usuariosAsignados',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterFilterCondition> usuariosAsignadosBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'usuariosAsignados',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension RolQueryObject on QueryBuilder<Rol, Rol, QFilterCondition> {}
@@ -846,6 +1039,18 @@ extension RolQueryObject on QueryBuilder<Rol, Rol, QFilterCondition> {}
 extension RolQueryLinks on QueryBuilder<Rol, Rol, QFilterCondition> {}
 
 extension RolQuerySortBy on QueryBuilder<Rol, Rol, QSortBy> {
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByActivoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.desc);
+    });
+  }
+
   QueryBuilder<Rol, Rol, QAfterSortBy> sortByDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'descripcion', Sort.asc);
@@ -855,6 +1060,30 @@ extension RolQuerySortBy on QueryBuilder<Rol, Rol, QSortBy> {
   QueryBuilder<Rol, Rol, QAfterSortBy> sortByDescripcionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'descripcion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByEsSistema() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esSistema', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByEsSistemaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esSistema', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByFechaActualizacion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaActualizacion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByFechaActualizacionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaActualizacion', Sort.desc);
     });
   }
 
@@ -881,9 +1110,33 @@ extension RolQuerySortBy on QueryBuilder<Rol, Rol, QSortBy> {
       return query.addSortBy(r'nombre', Sort.desc);
     });
   }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByUsuariosAsignados() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuariosAsignados', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> sortByUsuariosAsignadosDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuariosAsignados', Sort.desc);
+    });
+  }
 }
 
 extension RolQuerySortThenBy on QueryBuilder<Rol, Rol, QSortThenBy> {
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByActivoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.desc);
+    });
+  }
+
   QueryBuilder<Rol, Rol, QAfterSortBy> thenByDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'descripcion', Sort.asc);
@@ -893,6 +1146,30 @@ extension RolQuerySortThenBy on QueryBuilder<Rol, Rol, QSortThenBy> {
   QueryBuilder<Rol, Rol, QAfterSortBy> thenByDescripcionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'descripcion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByEsSistema() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esSistema', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByEsSistemaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'esSistema', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByFechaActualizacion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaActualizacion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByFechaActualizacionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fechaActualizacion', Sort.desc);
     });
   }
 
@@ -931,13 +1208,43 @@ extension RolQuerySortThenBy on QueryBuilder<Rol, Rol, QSortThenBy> {
       return query.addSortBy(r'nombre', Sort.desc);
     });
   }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByUsuariosAsignados() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuariosAsignados', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QAfterSortBy> thenByUsuariosAsignadosDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'usuariosAsignados', Sort.desc);
+    });
+  }
 }
 
 extension RolQueryWhereDistinct on QueryBuilder<Rol, Rol, QDistinct> {
+  QueryBuilder<Rol, Rol, QDistinct> distinctByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'activo');
+    });
+  }
+
   QueryBuilder<Rol, Rol, QDistinct> distinctByDescripcion(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'descripcion', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QDistinct> distinctByEsSistema() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'esSistema');
+    });
+  }
+
+  QueryBuilder<Rol, Rol, QDistinct> distinctByFechaActualizacion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fechaActualizacion');
     });
   }
 
@@ -959,6 +1266,12 @@ extension RolQueryWhereDistinct on QueryBuilder<Rol, Rol, QDistinct> {
       return query.addDistinctBy(r'permisos');
     });
   }
+
+  QueryBuilder<Rol, Rol, QDistinct> distinctByUsuariosAsignados() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'usuariosAsignados');
+    });
+  }
 }
 
 extension RolQueryProperty on QueryBuilder<Rol, Rol, QQueryProperty> {
@@ -968,9 +1281,27 @@ extension RolQueryProperty on QueryBuilder<Rol, Rol, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Rol, bool, QQueryOperations> activoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'activo');
+    });
+  }
+
   QueryBuilder<Rol, String?, QQueryOperations> descripcionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'descripcion');
+    });
+  }
+
+  QueryBuilder<Rol, bool, QQueryOperations> esSistemaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'esSistema');
+    });
+  }
+
+  QueryBuilder<Rol, DateTime?, QQueryOperations> fechaActualizacionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fechaActualizacion');
     });
   }
 
@@ -989,6 +1320,12 @@ extension RolQueryProperty on QueryBuilder<Rol, Rol, QQueryProperty> {
   QueryBuilder<Rol, List<String>?, QQueryOperations> permisosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'permisos');
+    });
+  }
+
+  QueryBuilder<Rol, int?, QQueryOperations> usuariosAsignadosProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'usuariosAsignados');
     });
   }
 }

@@ -12,6 +12,9 @@ class Cliente {
   String? whatsapp; // Cambiado de telefono a whatsapp
   String? instagram; // Nuevo campo para Instagram
   String? direccion;
+
+  // Getter para mantener compatibilidad con telefono
+  String? get telefono => whatsapp;
   String? dni;
   String? cuil;
   DateTime? fechaRegistro;

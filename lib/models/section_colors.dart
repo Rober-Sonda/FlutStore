@@ -82,7 +82,7 @@ class AppRoutes {
   static const String roles = '/roles';
   static const String users = '/users';
   static const String settings = '/settings';
-  
+
   // Nuevas rutas
   static const String newPurchase = '/purchases/new';
   static const String newSale = '/sales/new';
@@ -91,4 +91,16 @@ class AppRoutes {
   static const String profitLoss = '/profit-loss';
   static const String cashRegister = '/cash-register';
   static const String sweepstakes = '/sweepstakes';
-} 
+
+  // Rutas para registros financieros
+  static const String financialRecordAdd = '/financial-records/add';
+  static const String financialRecordEdit = '/financial-records/edit';
+
+  // Rutas adicionales para categorías
+  static const String categoryAdd = '/categories/add';
+  static const String categoryEdit = '/categories/edit';
+
+  // Rutas adicionales para productos
+  static const String productAdd = '/products/add';
+  static const String productEdit = '/products/edit';
+}

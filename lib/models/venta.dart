@@ -6,12 +6,24 @@ part 'venta.g.dart';
 class Venta {
   Id id = Isar.autoIncrement;
 
-  late int clienteId;
+  // Información del cliente (almacenada para evitar dependencias)
+  int?
+  clienteId; // Referencia opcional, puede ser null si el cliente se elimina
+  String clienteNombre = '';
+  String clienteEmail = '';
+  String clienteTelefono = '';
+  String clienteDocumento = '';
+  String clienteDireccion = '';
+  String clienteTipoCliente = ''; // 'particular', 'empresa'
+
   late DateTime fecha;
   late double total;
   late String metodoPago;
   String? observaciones;
   late String estado; // 'pendiente', 'completada', 'cancelada', 'devuelta'
+
+  // Lista de productos con información completa (no solo IDs)
+  List<ProductoVentaCompleto> detalles = [];
 
   // Información profesional
   String? numeroFactura;
@@ -47,7 +59,13 @@ class Venta {
   DateTime? fechaActualizacion;
 
   Venta({
-    required this.clienteId,
+    this.clienteId,
+    required this.clienteNombre,
+    required this.clienteEmail,
+    required this.clienteTelefono,
+    required this.clienteDocumento,
+    required this.clienteDireccion,
+    required this.clienteTipoCliente,
     required this.fecha,
     required this.total,
     required this.metodoPago,
@@ -220,6 +238,12 @@ class Venta {
   }) {
     return Venta(
       clienteId: clienteId,
+      clienteNombre: clienteNombre,
+      clienteEmail: clienteEmail,
+      clienteTelefono: clienteTelefono,
+      clienteDocumento: clienteDocumento,
+      clienteDireccion: clienteDireccion,
+      clienteTipoCliente: clienteTipoCliente,
       fecha: DateTime.now(),
       total: -total, // Total negativo para indicar devolución
       metodoPago: metodoPago,
@@ -264,6 +288,65 @@ class Venta {
   }
 }
 
+// Modelo completo del producto en venta (información histórica)
+@embedded
+class ProductoVentaCompleto {
+  int?
+  productoId; // Referencia opcional, puede ser null si el producto se elimina
+  String codigo = '';
+  String nombre = '';
+  String descripcion = '';
+  String categoria = '';
+  String marca = '';
+  String unidadMedida = '';
+
+  // Precios históricos (los vigentes al momento de la venta)
+  double precioCompra = 0.0; // Precio de compra original del producto
+  double precioVenta = 0.0; // Precio de venta al momento de la transacción
+  double descuentoAplicado =
+      0.0; // Descuento aplicado específicamente en esta venta
+  double precioFinal = 0.0; // Precio final después de descuentos
+
+  int cantidad = 0;
+  double subtotal = 0.0;
+
+  // Información adicional
+  String? lote = '';
+  DateTime? fechaVencimiento;
+  String? observaciones;
+
+  ProductoVentaCompleto({
+    this.productoId,
+    this.codigo = '',
+    this.nombre = '',
+    this.descripcion = '',
+    this.categoria = '',
+    this.marca = '',
+    this.unidadMedida = '',
+    this.precioCompra = 0.0,
+    this.precioVenta = 0.0,
+    this.descuentoAplicado = 0.0,
+    this.precioFinal = 0.0,
+    this.cantidad = 0,
+    this.lote,
+    this.fechaVencimiento,
+    this.observaciones,
+  }) {
+    calcularSubtotal();
+  }
+
+  void calcularSubtotal() {
+    subtotal = cantidad * precioFinal;
+  }
+
+  void aplicarDescuento(double porcentajeDescuento) {
+    descuentoAplicado = precioVenta * (porcentajeDescuento / 100);
+    precioFinal = precioVenta - descuentoAplicado;
+    calcularSubtotal();
+  }
+}
+
+// Para compatibilidad con código existente
 class ProductoVenta {
   final String productoId;
   final String nombre;

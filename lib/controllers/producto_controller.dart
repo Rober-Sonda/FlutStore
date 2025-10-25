@@ -8,14 +8,14 @@ class ProductoController {
   Future<List<Producto>> getProductos({Isar? isar}) async {
     isar ??= Isar.getInstance();
     if (isar == null) return [];
-    return await isar.productos.where().findAll();
+    return await isar.collection<Producto>().where().findAll();
   }
 
   Future<void> addProducto(Producto producto, {Isar? isar}) async {
     isar ??= Isar.getInstance();
     if (isar == null) return;
     await isar.writeTxn(() async {
-      await isar!.productos.put(producto);
+      await isar!.collection<Producto>().put(producto);
     });
   }
 }

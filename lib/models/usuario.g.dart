@@ -17,48 +17,68 @@ const UsuarioSchema = CollectionSchema(
   name: r'Usuario',
   id: 2086545823229412462,
   properties: {
-    r'apellido': PropertySchema(
+    r'activo': PropertySchema(
       id: 0,
+      name: r'activo',
+      type: IsarType.bool,
+    ),
+    r'apellido': PropertySchema(
+      id: 1,
       name: r'apellido',
       type: IsarType.string,
     ),
     r'avatarUrl': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'avatarUrl',
       type: IsarType.string,
     ),
     r'email': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'email',
       type: IsarType.string,
     ),
     r'fechaCreacion': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'fechaCreacion',
       type: IsarType.dateTime,
     ),
     r'imagenPerfil': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'imagenPerfil',
       type: IsarType.string,
     ),
     r'nombre': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'password': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'password',
       type: IsarType.string,
     ),
+    r'rolDescripcion': PropertySchema(
+      id: 8,
+      name: r'rolDescripcion',
+      type: IsarType.string,
+    ),
     r'rolId': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'rolId',
       type: IsarType.long,
     ),
+    r'rolNombre': PropertySchema(
+      id: 10,
+      name: r'rolNombre',
+      type: IsarType.string,
+    ),
+    r'rolPermisos': PropertySchema(
+      id: 11,
+      name: r'rolPermisos',
+      type: IsarType.stringList,
+    ),
     r'username': PropertySchema(
-      id: 8,
+      id: 12,
       name: r'username',
       type: IsarType.string,
     )
@@ -104,6 +124,30 @@ int _usuarioEstimateSize(
   bytesCount += 3 + object.imagenPerfil.length * 3;
   bytesCount += 3 + object.nombre.length * 3;
   bytesCount += 3 + object.password.length * 3;
+  {
+    final value = object.rolDescripcion;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.rolNombre;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final list = object.rolPermisos;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount += value.length * 3;
+        }
+      }
+    }
+  }
   bytesCount += 3 + object.username.length * 3;
   return bytesCount;
 }
@@ -114,15 +158,19 @@ void _usuarioSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.apellido);
-  writer.writeString(offsets[1], object.avatarUrl);
-  writer.writeString(offsets[2], object.email);
-  writer.writeDateTime(offsets[3], object.fechaCreacion);
-  writer.writeString(offsets[4], object.imagenPerfil);
-  writer.writeString(offsets[5], object.nombre);
-  writer.writeString(offsets[6], object.password);
-  writer.writeLong(offsets[7], object.rolId);
-  writer.writeString(offsets[8], object.username);
+  writer.writeBool(offsets[0], object.activo);
+  writer.writeString(offsets[1], object.apellido);
+  writer.writeString(offsets[2], object.avatarUrl);
+  writer.writeString(offsets[3], object.email);
+  writer.writeDateTime(offsets[4], object.fechaCreacion);
+  writer.writeString(offsets[5], object.imagenPerfil);
+  writer.writeString(offsets[6], object.nombre);
+  writer.writeString(offsets[7], object.password);
+  writer.writeString(offsets[8], object.rolDescripcion);
+  writer.writeLong(offsets[9], object.rolId);
+  writer.writeString(offsets[10], object.rolNombre);
+  writer.writeStringList(offsets[11], object.rolPermisos);
+  writer.writeString(offsets[12], object.username);
 }
 
 Usuario _usuarioDeserialize(
@@ -132,15 +180,19 @@ Usuario _usuarioDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Usuario();
-  object.apellido = reader.readStringOrNull(offsets[0]);
-  object.avatarUrl = reader.readStringOrNull(offsets[1]);
-  object.email = reader.readStringOrNull(offsets[2]);
-  object.fechaCreacion = reader.readDateTimeOrNull(offsets[3]);
+  object.activo = reader.readBool(offsets[0]);
+  object.apellido = reader.readStringOrNull(offsets[1]);
+  object.avatarUrl = reader.readStringOrNull(offsets[2]);
+  object.email = reader.readStringOrNull(offsets[3]);
+  object.fechaCreacion = reader.readDateTimeOrNull(offsets[4]);
   object.id = id;
-  object.nombre = reader.readString(offsets[5]);
-  object.password = reader.readString(offsets[6]);
-  object.rolId = reader.readLongOrNull(offsets[7]);
-  object.username = reader.readString(offsets[8]);
+  object.nombre = reader.readString(offsets[6]);
+  object.password = reader.readString(offsets[7]);
+  object.rolDescripcion = reader.readStringOrNull(offsets[8]);
+  object.rolId = reader.readLongOrNull(offsets[9]);
+  object.rolNombre = reader.readStringOrNull(offsets[10]);
+  object.rolPermisos = reader.readStringList(offsets[11]);
+  object.username = reader.readString(offsets[12]);
   return object;
 }
 
@@ -152,22 +204,30 @@ P _usuarioDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
       return (reader.readString(offset)) as P;
     case 7:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readLongOrNull(offset)) as P;
+    case 10:
+      return (reader.readStringOrNull(offset)) as P;
+    case 11:
+      return (reader.readStringList(offset)) as P;
+    case 12:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -263,6 +323,16 @@ extension UsuarioQueryWhere on QueryBuilder<Usuario, Usuario, QWhereClause> {
 
 extension UsuarioQueryFilter
     on QueryBuilder<Usuario, Usuario, QFilterCondition> {
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> activoEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'activo',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterFilterCondition> apellidoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1215,6 +1285,157 @@ extension UsuarioQueryFilter
     });
   }
 
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'rolDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolDescripcionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'rolDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolDescripcionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'rolDescripcion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolDescripcionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'rolDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolDescripcionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'rolDescripcion',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolDescripcionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolDescripcion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolDescripcionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'rolDescripcion',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1281,6 +1502,392 @@ extension UsuarioQueryFilter
         upper: upper,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'rolNombre',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'rolNombre',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'rolNombre',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'rolNombre',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'rolNombre',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolNombre',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolNombreIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'rolNombre',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolPermisosIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'rolPermisos',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolPermisosIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'rolPermisos',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'rolPermisos',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'rolPermisos',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'rolPermisos',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rolPermisos',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'rolPermisos',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition> rolPermisosIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterFilterCondition>
+      rolPermisosLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'rolPermisos',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -1422,6 +2029,18 @@ extension UsuarioQueryLinks
     on QueryBuilder<Usuario, Usuario, QFilterCondition> {}
 
 extension UsuarioQuerySortBy on QueryBuilder<Usuario, Usuario, QSortBy> {
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByActivoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.desc);
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByApellido() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'apellido', Sort.asc);
@@ -1506,6 +2125,18 @@ extension UsuarioQuerySortBy on QueryBuilder<Usuario, Usuario, QSortBy> {
     });
   }
 
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolDescripcion', Sort.desc);
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rolId', Sort.asc);
@@ -1515,6 +2146,18 @@ extension UsuarioQuerySortBy on QueryBuilder<Usuario, Usuario, QSortBy> {
   QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rolId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolNombre() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolNombre', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> sortByRolNombreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolNombre', Sort.desc);
     });
   }
 
@@ -1533,6 +2176,18 @@ extension UsuarioQuerySortBy on QueryBuilder<Usuario, Usuario, QSortBy> {
 
 extension UsuarioQuerySortThenBy
     on QueryBuilder<Usuario, Usuario, QSortThenBy> {
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByActivoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'activo', Sort.desc);
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByApellido() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'apellido', Sort.asc);
@@ -1629,6 +2284,18 @@ extension UsuarioQuerySortThenBy
     });
   }
 
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolDescripcion', Sort.desc);
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rolId', Sort.asc);
@@ -1638,6 +2305,18 @@ extension UsuarioQuerySortThenBy
   QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rolId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolNombre() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolNombre', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QAfterSortBy> thenByRolNombreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rolNombre', Sort.desc);
     });
   }
 
@@ -1656,6 +2335,12 @@ extension UsuarioQuerySortThenBy
 
 extension UsuarioQueryWhereDistinct
     on QueryBuilder<Usuario, Usuario, QDistinct> {
+  QueryBuilder<Usuario, Usuario, QDistinct> distinctByActivo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'activo');
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QDistinct> distinctByApellido(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1704,9 +2389,30 @@ extension UsuarioQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Usuario, Usuario, QDistinct> distinctByRolDescripcion(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'rolDescripcion',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Usuario, Usuario, QDistinct> distinctByRolId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'rolId');
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QDistinct> distinctByRolNombre(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'rolNombre', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Usuario, Usuario, QDistinct> distinctByRolPermisos() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'rolPermisos');
     });
   }
 
@@ -1723,6 +2429,12 @@ extension UsuarioQueryProperty
   QueryBuilder<Usuario, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Usuario, bool, QQueryOperations> activoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'activo');
     });
   }
 
@@ -1768,9 +2480,27 @@ extension UsuarioQueryProperty
     });
   }
 
+  QueryBuilder<Usuario, String?, QQueryOperations> rolDescripcionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'rolDescripcion');
+    });
+  }
+
   QueryBuilder<Usuario, int?, QQueryOperations> rolIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'rolId');
+    });
+  }
+
+  QueryBuilder<Usuario, String?, QQueryOperations> rolNombreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'rolNombre');
+    });
+  }
+
+  QueryBuilder<Usuario, List<String>?, QQueryOperations> rolPermisosProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'rolPermisos');
     });
   }
 

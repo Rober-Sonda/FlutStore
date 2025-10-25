@@ -14,12 +14,21 @@ class Compra {
   String estado =
       'pendiente'; // 'pendiente', 'confirmada', 'cancelada', 'recibida', 'devuelta'
 
-  // Relaciones
-  int? proveedorId;
+  // Información del proveedor (almacenada para evitar dependencias)
+  int?
+  proveedorId; // Referencia opcional, puede ser null si el proveedor se elimina
+  String proveedorNombre = '';
+  String proveedorEmail = '';
+  String proveedorTelefono = '';
+  String proveedorDocumento = '';
+  String proveedorDireccion = '';
+  String proveedorContacto = '';
+  String proveedorTipoProveedor = '';
+
   int usuarioId = 1; // Usuario que registró la compra
 
-  // Detalles de productos
-  List<CompraProducto> productos = [];
+  // Detalles de productos con información completa
+  List<CompraProductoCompleto> productos = [];
 
   // Información de pago
   String metodoPago =
@@ -62,6 +71,13 @@ class Compra {
     this.observaciones,
     this.estado = 'pendiente',
     this.proveedorId,
+    required this.proveedorNombre,
+    required this.proveedorEmail,
+    required this.proveedorTelefono,
+    required this.proveedorDocumento,
+    required this.proveedorDireccion,
+    required this.proveedorContacto,
+    required this.proveedorTipoProveedor,
     this.usuarioId = 1,
     this.metodoPago = 'efectivo',
     this.montoPagado = 0.0,
@@ -191,6 +207,13 @@ class Compra {
       observaciones: observaciones ?? 'Devolución de compra #$id',
       estado: 'devuelta',
       proveedorId: proveedorId,
+      proveedorNombre: proveedorNombre,
+      proveedorEmail: proveedorEmail,
+      proveedorTelefono: proveedorTelefono,
+      proveedorDocumento: proveedorDocumento,
+      proveedorDireccion: proveedorDireccion,
+      proveedorContacto: proveedorContacto,
+      proveedorTipoProveedor: proveedorTipoProveedor,
       metodoPago: metodoPago,
       montoPagado: 0.0,
       saldoPendiente: 0.0,
@@ -248,7 +271,69 @@ class Compra {
   }
 }
 
-// Modelo para los productos de una compra
+// Modelo completo del producto en compra (información histórica)
+@embedded
+class CompraProductoCompleto {
+  int?
+  productoId; // Referencia opcional, puede ser null si el producto se elimina
+  String codigo = '';
+  String nombre = '';
+  String descripcion = '';
+  String categoria = '';
+  String marca = '';
+  String unidadMedida = '';
+
+  // Precios históricos (los vigentes al momento de la compra)
+  double precioCompra = 0.0; // Precio de compra negociado en esta transacción
+  double precioVentaSugerido =
+      0.0; // Precio de venta sugerido al momento de compra
+  double descuentoObtenido = 0.0; // Descuento obtenido del proveedor
+  double precioFinal = 0.0; // Precio final después de descuentos
+
+  int cantidad = 0;
+  double subtotal = 0.0;
+
+  // Información adicional de la compra
+  String? lote = '';
+  DateTime? fechaVencimiento;
+  DateTime? fechaFabricacion;
+  String? observaciones;
+  String? condicionesEspeciales;
+
+  CompraProductoCompleto({
+    this.productoId,
+    this.codigo = '',
+    this.nombre = '',
+    this.descripcion = '',
+    this.categoria = '',
+    this.marca = '',
+    this.unidadMedida = '',
+    this.precioCompra = 0.0,
+    this.precioVentaSugerido = 0.0,
+    this.descuentoObtenido = 0.0,
+    this.precioFinal = 0.0,
+    this.cantidad = 0,
+    this.lote,
+    this.fechaVencimiento,
+    this.fechaFabricacion,
+    this.observaciones,
+    this.condicionesEspeciales,
+  }) {
+    calcularSubtotal();
+  }
+
+  void calcularSubtotal() {
+    subtotal = cantidad * precioFinal;
+  }
+
+  void aplicarDescuento(double porcentajeDescuento) {
+    descuentoObtenido = precioCompra * (porcentajeDescuento / 100);
+    precioFinal = precioCompra - descuentoObtenido;
+    calcularSubtotal();
+  }
+}
+
+// Modelo para los productos de una compra (compatibilidad)
 @embedded
 class CompraProducto {
   int productoId = 0;

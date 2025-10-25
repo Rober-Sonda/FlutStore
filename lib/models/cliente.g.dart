@@ -57,8 +57,13 @@ const ClienteSchema = CollectionSchema(
       name: r'nombre',
       type: IsarType.string,
     ),
-    r'whatsapp': PropertySchema(
+    r'telefono': PropertySchema(
       id: 8,
+      name: r'telefono',
+      type: IsarType.string,
+    ),
+    r'whatsapp': PropertySchema(
+      id: 9,
       name: r'whatsapp',
       type: IsarType.string,
     )
@@ -121,6 +126,12 @@ int _clienteEstimateSize(
   }
   bytesCount += 3 + object.nombre.length * 3;
   {
+    final value = object.telefono;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.whatsapp;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -143,7 +154,8 @@ void _clienteSerialize(
   writer.writeDateTime(offsets[5], object.fechaRegistro);
   writer.writeString(offsets[6], object.instagram);
   writer.writeString(offsets[7], object.nombre);
-  writer.writeString(offsets[8], object.whatsapp);
+  writer.writeString(offsets[8], object.telefono);
+  writer.writeString(offsets[9], object.whatsapp);
 }
 
 Cliente _clienteDeserialize(
@@ -162,7 +174,7 @@ Cliente _clienteDeserialize(
     id: id,
     instagram: reader.readStringOrNull(offsets[6]),
     nombre: reader.readString(offsets[7]),
-    whatsapp: reader.readStringOrNull(offsets[8]),
+    whatsapp: reader.readStringOrNull(offsets[9]),
   );
   return object;
 }
@@ -191,6 +203,8 @@ P _clienteDeserializeProp<P>(
     case 7:
       return (reader.readString(offset)) as P;
     case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1415,6 +1429,152 @@ extension ClienteQueryFilter
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'telefono',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'telefono',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'telefono',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'telefono',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'telefono',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'telefono',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterFilterCondition> telefonoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'telefono',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterFilterCondition> whatsappIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1665,6 +1825,18 @@ extension ClienteQuerySortBy on QueryBuilder<Cliente, Cliente, QSortBy> {
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByTelefono() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefono', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByTelefonoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefono', Sort.desc);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterSortBy> sortByWhatsapp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'whatsapp', Sort.asc);
@@ -1788,6 +1960,18 @@ extension ClienteQuerySortThenBy
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByTelefono() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefono', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByTelefonoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'telefono', Sort.desc);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QAfterSortBy> thenByWhatsapp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'whatsapp', Sort.asc);
@@ -1858,6 +2042,13 @@ extension ClienteQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Cliente, Cliente, QDistinct> distinctByTelefono(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'telefono', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Cliente, Cliente, QDistinct> distinctByWhatsapp(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1919,6 +2110,12 @@ extension ClienteQueryProperty
   QueryBuilder<Cliente, String, QQueryOperations> nombreProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nombre');
+    });
+  }
+
+  QueryBuilder<Cliente, String?, QQueryOperations> telefonoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'telefono');
     });
   }
 
