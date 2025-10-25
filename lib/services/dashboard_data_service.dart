@@ -10,20 +10,18 @@ import '../models/venta.dart';
 
 class DashboardDataService {
   static Future<Map<String, dynamic>> calculateStats(Isar isar) async {
-    final productos = await isar.productos.where().findAll();
-    final categorias = await isar.categorias.where().findAll();
-    final proveedores = await isar.proveedors.where().findAll();
-    final clientes = await isar.clientes.where().findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final categorias = await isar.collection<Categoria>().where().findAll();
+    final proveedores = await isar.collection<Proveedor>().where().findAll();
+    final clientes = await isar.collection<Cliente>().where().findAll();
 
-    final productosCriticos = productos.where((p) => (p.stock ?? 0) < 5).length;
-    final productosBajoStock =
-        productos.where((p) => (p.stock ?? 0) < 10).length;
-    final productosSinStock =
-        productos.where((p) => (p.stock ?? 0) == 0).length;
-    final totalStock = productos.fold<int>(0, (sum, p) => sum + (p.stock ?? 0));
+    final productosCriticos = productos.where((p) => (p.stockActual ?? 0) < 5).length;
+    final productosBajoStock = productos.where((p) => (p.stockActual ?? 0) < 10).length;
+    final productosSinStock = productos.where((p) => (p.stockActual ?? 0) == 0).length;
+    final totalStock = productos.fold<int>(0, (sum, p) => sum + (p.stockActual ?? 0));
     final totalValorInventario = productos.fold<double>(
       0,
-      (sum, p) => sum + ((p.precio ?? 0) * (p.stock ?? 0)),
+      (sum, p) => sum + ((p.precio ?? 0) * (p.stockActual ?? 0)),
     );
 
     final now = DateTime.now();
@@ -41,38 +39,33 @@ class DashboardDataService {
     final endOfLastMonth = DateTime(now.year, now.month, 0);
 
     // Datos del mes actual
-    final pedidosMes =
-        await isar.pedidos
-            .filter()
-            .fechaBetween(startOfMonth, endOfMonth)
-            .findAll();
+    final pedidosMes = await isar.collection<Pedido>()
+        .filter()
+        .fechaBetween(startOfMonth, endOfMonth)
+        .findAll();
 
-    final pedidosSemana =
-        await isar.pedidos
-            .filter()
-            .fechaBetween(startOfWeek, endOfWeek)
-            .findAll();
+    final pedidosSemana = await isar.collection<Pedido>()
+        .filter()
+        .fechaBetween(startOfWeek, endOfWeek)
+        .findAll();
 
-    final comprasMes =
-        await isar.compras
-            .filter()
-            .fechaBetween(startOfMonth, endOfMonth)
-            .findAll();
+    final comprasMes = await isar.collection<Compra>()
+        .filter()
+        .fechaBetween(startOfMonth, endOfMonth)
+        .findAll();
 
-    final ventasDelMes =
-        await isar.ventas
-            .filter()
-            .fechaBetween(startOfMonth, endOfMonth)
-            .findAll();
+    final ventasDelMes = await isar.collection<Venta>()
+        .filter()
+        .fechaBetween(startOfMonth, endOfMonth)
+        .findAll();
 
-    // Datos del mes anterior para comparaciÃ³n
-    final pedidosMesAnterior =
-        await isar.pedidos
-            .filter()
-            .fechaBetween(startOfLastMonth, endOfLastMonth)
-            .findAll();
+    // Datos del mes anterior para comparación
+    final pedidosMesAnterior = await isar.collection<Pedido>()
+        .filter()
+        .fechaBetween(startOfLastMonth, endOfLastMonth)
+        .findAll();
 
-    // CÃ¡lculos financieros
+    // Cálculos financieros
     double totalVentasMes = pedidosMes.fold(
       0,
       (sum, p) => sum + (p.total ?? 0),
@@ -90,13 +83,13 @@ class DashboardDataService {
       (sum, p) => sum + (p.total ?? 0),
     );
 
-    // CÃ¡lculos de inventario
+    // Cálculos de inventario
     double valorInventario = productos.fold(
       0,
-      (sum, p) => sum + ((p.precio ?? 0) * (p.stock ?? 0)),
+      (sum, p) => sum + ((p.precio ?? 0) * (p.stockActual ?? 0)),
     );
 
-    // CÃ¡lculos de rendimiento
+    // Cálculos de rendimiento
     double gananciaMes = totalVentasMes - totalComprasMes;
     double margenGanancia =
         totalVentasMes > 0 ? (gananciaMes / totalVentasMes) * 100 : 0;
@@ -107,7 +100,7 @@ class DashboardDataService {
                 100
             : 0;
 
-    // CÃ¡lculos de clientes
+    // Cálculos de clientes
     int clientesNuevosMes =
         clientes
             .where(
@@ -123,7 +116,7 @@ class DashboardDataService {
         clientes.isNotEmpty ? (pedidosMes.length / clientes.length) * 100 : 0;
 
     return {
-      // MÃ©tricas financieras
+      // Métricas financieras
       'totalVentasMes': totalVentasMes,
       'totalVentasSemana': totalVentasSemana,
       'totalComprasMes': totalComprasMes,
@@ -132,24 +125,24 @@ class DashboardDataService {
       'crecimientoVentas': crecimientoVentas,
       'valorInventario': valorInventario,
 
-      // MÃ©tricas de operaciones
+      // Métricas de operaciones
       'pedidosMes': pedidosMes.length,
       'pedidosSemana': pedidosSemana.length,
       'comprasMes': comprasMes.length,
       'promedioVenta': promedioVenta,
       'tasaConversion': tasaConversion,
 
-      // MÃ©tricas de inventario
+      // Métricas de inventario
       'productos': productos.length,
       'productosBajoStock': productosBajoStock,
       'productosSinStock': productosSinStock,
       'productosCriticos': productosCriticos,
 
-      // MÃ©tricas de clientes
+      // Métricas de clientes
       'clientes': clientes.length,
       'clientesNuevosMes': clientesNuevosMes,
 
-      // MÃ©tricas de categorÃ­as y proveedores
+      // Métricas de categorías y proveedores
       'categorias': categorias.length,
       'proveedores': proveedores.length,
     };
@@ -160,13 +153,12 @@ class DashboardDataService {
     final startOfMonth = DateTime(now.year, now.month, 1);
     final endOfMonth = DateTime(now.year, now.month + 1, 0);
 
-    final pedidos =
-        await isar.pedidos
-            .filter()
-            .fechaBetween(startOfMonth, endOfMonth)
-            .findAll();
+    final pedidos = await isar.collection<Pedido>()
+        .filter()
+        .fechaBetween(startOfMonth, endOfMonth)
+        .findAll();
 
-    // Datos de ventas por dÃ­a
+    // Datos de ventas por día
     Map<int, double> ventasPorDia = {};
     for (int i = 1; i <= endOfMonth.day; i++) {
       ventasPorDia[i] = 0;
@@ -189,13 +181,12 @@ class DashboardDataService {
     final startOfMonth = DateTime(now.year, now.month, 1);
     final endOfMonth = DateTime(now.year, now.month + 1, 0);
 
-    final pedidos =
-        await isar.pedidos
-            .filter()
-            .fechaBetween(startOfMonth, endOfMonth)
-            .findAll();
+    final pedidos = await isar.collection<Pedido>()
+        .filter()
+        .fechaBetween(startOfMonth, endOfMonth)
+        .findAll();
 
-    final productos = await isar.productos.where().findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
 
     Map<int, int> ventasPorProducto = {};
     for (final pedido in pedidos) {
@@ -218,7 +209,7 @@ class DashboardDataService {
         'id': entry.key,
         'nombre': producto.nombre,
         'ventas': entry.value,
-        'stock': producto.stock ?? 0,
+        'stock': producto.stockActual ?? 0,
         'precio': producto.precio ?? 0,
         'categoria': producto.categoriaId,
       };
@@ -226,8 +217,8 @@ class DashboardDataService {
   }
 
   static Future<List<Map<String, dynamic>>> loadRecentOrders(Isar isar) async {
-    final pedidos = await isar.pedidos.where().sortByFecha().limit(5).findAll();
-    final clientes = await isar.clientes.where().findAll();
+    final pedidos = await isar.collection<Pedido>().where().sortByFecha().limit(5).findAll();
+    final clientes = await isar.collection<Cliente>().where().findAll();
 
     return pedidos.map((pedido) {
       final cliente = clientes.firstWhere(
@@ -245,11 +236,9 @@ class DashboardDataService {
     }).toList();
   }
 
-  static Future<List<Map<String, dynamic>>> loadCategoryPerformance(
-    Isar isar,
-  ) async {
-    final productos = await isar.productos.where().findAll();
-    final categorias = await isar.categorias.where().findAll();
+  static Future<List<Map<String, dynamic>>> loadCategoryPerformance(Isar isar) async {
+    final productos = await isar.collection<Producto>().where().findAll();
+    final categorias = await isar.collection<Categoria>().where().findAll();
 
     Map<int, Map<String, dynamic>> performancePorCategoria = {};
 
@@ -269,18 +258,17 @@ class DashboardDataService {
             1;
         performancePorCategoria[producto.categoriaId!]!['stock'] =
             (performancePorCategoria[producto.categoriaId!]!['stock'] as int) +
-            (producto.stock ?? 0);
+            (producto.stockActual ?? 0);
         performancePorCategoria[producto.categoriaId!]!['valor'] =
-            (performancePorCategoria[producto.categoriaId!]!['valor']
-                as double) +
-            ((producto.precio ?? 0) * (producto.stock ?? 0));
+            (performancePorCategoria[producto.categoriaId!]!['valor'] as double) +
+            ((producto.precio ?? 0) * (producto.stockActual ?? 0));
       }
     }
 
     return performancePorCategoria.entries.map((entry) {
       final categoria = categorias.firstWhere(
         (c) => c.id == entry.key,
-        orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
+        orElse: () => Categoria()..nombre = 'Sin categoría',
       );
       return {
         'id': entry.key,
@@ -293,13 +281,13 @@ class DashboardDataService {
   }
 
   static Future<List<Map<String, dynamic>>> loadStockAlerts(Isar isar) async {
-    final productos = await isar.productos.where().findAll();
-    final categorias = await isar.categorias.where().findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final categorias = await isar.collection<Categoria>().where().findAll();
 
     List<Map<String, dynamic>> alertas = [];
 
     for (final producto in productos) {
-      final stock = producto.stock ?? 0;
+      final stock = producto.stockActual ?? 0;
       String nivel = '';
       Color color = Colors.green;
 
@@ -307,7 +295,7 @@ class DashboardDataService {
         nivel = 'Sin stock';
         color = Colors.red;
       } else if (stock < 5) {
-        nivel = 'CrÃ­tico';
+        nivel = 'Crítico';
         color = Colors.red;
       } else if (stock < 10) {
         nivel = 'Bajo';
@@ -317,7 +305,7 @@ class DashboardDataService {
       if (stock < 10) {
         final categoria = categorias.firstWhere(
           (c) => c.id == producto.categoriaId,
-          orElse: () => Categoria()..nombre = 'Sin categorÃ­a',
+          orElse: () => Categoria()..nombre = 'Sin categoría',
         );
 
         alertas.add({
@@ -334,19 +322,17 @@ class DashboardDataService {
 
     // Ordenar por nivel de urgencia
     alertas.sort((a, b) {
-      final niveles = {'Sin stock': 3, 'CrÃ­tico': 2, 'Bajo': 1};
+      final niveles = {'Sin stock': 3, 'Crítico': 2, 'Bajo': 1};
       return (niveles[b['nivel']] ?? 0).compareTo(niveles[a['nivel']] ?? 0);
     });
 
     return alertas.take(10).toList();
   }
 
-  static Future<List<Map<String, dynamic>>> loadCustomerInsights(
-    Isar isar,
-  ) async {
+  static Future<List<Map<String, dynamic>>> loadCustomerInsights(Isar isar) async {
     try {
-      final clientes = await isar.clientes.where().findAll();
-      final pedidos = await isar.pedidos.where().findAll();
+      final clientes = await isar.collection<Cliente>().where().findAll();
+      final pedidos = await isar.collection<Pedido>().where().findAll();
 
       Map<int, Map<String, dynamic>> insightsPorCliente = {};
 
@@ -400,14 +386,14 @@ class DashboardDataService {
           (a, b) => (b['total'] as double).compareTo(a['total'] as double),
         );
     } catch (e) {
-      // Si ocurre cualquier error, retorna una lista vacÃ­a
+      // Si ocurre cualquier error, retorna una lista vacía
       return [];
     }
   }
 
   static Future<List<Map<String, dynamic>>> loadSupplierData(Isar isar) async {
-    final proveedores = await isar.proveedors.where().findAll();
-    final compras = await isar.compras.where().findAll();
+    final proveedores = await isar.collection<Proveedor>().where().findAll();
+    final compras = await isar.collection<Compra>().where().findAll();
 
     Map<int, Map<String, dynamic>> dataPorProveedor = {};
 

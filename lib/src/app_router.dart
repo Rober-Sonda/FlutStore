@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../iews/sorteos/sweepstakes_edit_loader.dart';
-import '../iews/sorteos/sweepstakes_edit_view.dart';
+import '../views/sorteos/sweepstakes_edit_loader.dart';
+import '../views/sorteos/sweepstakes_edit_view.dart';
 import '../views/productos/dialogs/product_add_edit_view.dart';
 import '../views/main_view.dart';
 import '../views/dashboard/dashboard_view.dart';
@@ -47,6 +47,7 @@ import '../views/ventas/dialogs/sale_add_edit_view.dart';
 import '../views/compras/dialogs/purchase_add_edit_view.dart';
 import '../views/compras/dialogs/purchase_add_view.dart';
 import '../views/registros_financieros/dialogs/financial_record_add_edit_view.dart';
+import '../views/errors/not_found_view.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -67,6 +68,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       return null;
     },
+    // Configuración de error para rutas inválidas
+    errorBuilder: (context, state) => NotFoundView(path: state.uri.path),
     routes: [
       // Ruta de login
       GoRoute(path: '/login', builder: (context, state) => const LoginView()),
@@ -344,4 +347,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-

@@ -2,10 +2,8 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import '../models/product.dart';
-import '../models/product_attribute.dart';
+import '../models/producto.dart';
 import '../services/isar_service.dart';
-import '../services/id_validator.dart';
 
 final productServiceProvider = Provider<ProductService>(
   (ref) => ProductService(),
@@ -17,263 +15,97 @@ class ProductService {
     return await isarService.db;
   }
 
-  Future<List<Product>> getAll() async {
+  Future<List<Producto>> getAll() async {
     final isar = await db;
-    return isar.products.where().findAll();
+    return await isar.collection<Producto>().where().findAll();
   }
 
-  String _generateSlug(AttributeType type, String name) {
-    final base = name.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '-');
-    return '${type.name}-$base';
-  }
-
-  Future<int> _putAttributeIfNotExists(
-    Isar isar,
-    ProductAttribute? attribute,
-  ) async {
-    if (attribute == null) return -1;
-
-    // TODO: Replace with logger - print('ðŸŸ¡ Verificando atributo: ${attribute.name}');
-
-    // Buscar si ya existe por name + type
-    final existing =
-        await isar.productAttributes
-            .filter()
-            .nameEqualTo(attribute.name.trim(), caseSensitive: false)
-            .typeEqualTo(attribute.type)
-            .findFirst();
-
-    if (existing != null) {
-      // TODO: Replace with logger - print(
-        'ðŸ” Atributo ya existente encontrado: ${existing.name} (ID: ${existing.id})',
-      );
-      attribute.id = existing.id;
-      return existing.id;
-    }
-
-    // ðŸ†• Generar slug Ãºnico (esto debe coincidir con el Ã­ndice @Index(unique: true))
-    attribute.slug = _generateSlug(attribute.type, attribute.name);
-
-    // Asignar ID como autoincrement
-    attribute.id = Isar.autoIncrement;
-
-    // Guardar el atributo
-    final id = await isar.productAttributes.put(attribute);
-    attribute.id = id;
-
-    // Validar y registrar el ID del atributo
-    IdValidator.validateAndLogEntityWithName(
-      id,
-      'Atributo',
-      attribute.name,
-      'Atributo guardado',
-    );
-
-    return id;
-  }
-
-  Future<void> add(Product product) async {
+  Future<void> add(Producto producto) async {
     final isar = await db;
 
-    final isNew = product.id <= 0;
-
-    // TODO: Replace with logger - print('ðŸ‘‰ Iniciando guardado de producto: ${product.name}');
-    // TODO: Replace with logger - print('Â¿Es nuevo? $isNew');
-
+    final isNew = producto.id <= 0;
     final random = Random();
 
-    // Asignar SKU y barcode temporales si estÃ¡n vacÃ­os, ANTES de buscar duplicados
-    if (product.sku.isEmpty) {
-      product.sku =
-          'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
+    // Asignar SKU y barcode temporales si están vacíos
+    if (producto.sku == null || producto.sku!.isEmpty) {
+      producto.sku = 'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
     }
 
-    if (product.barcode.isEmpty) {
-      product.barcode =
-          'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
+    if (producto.codigoBarras == null || producto.codigoBarras!.isEmpty) {
+      producto.codigoBarras = 'TEMP-${DateTime.now().millisecondsSinceEpoch}-${random.nextInt(10000)}';
     }
-
-    // TODO: Replace with logger - print('SKU a guardar: ${product.sku}');
-    // TODO: Replace with logger - print('Barcode a guardar: ${product.barcode}');
 
     await isar.writeTxn(() async {
-      final skuExists =
-          await isar.products
-              .filter()
-              .skuEqualTo(product.sku, caseSensitive: false)
-              .findFirst();
+      // Verificar SKU duplicado
+      final todosProductos = await isar.collection<Producto>().where().findAll();
+      final skuExists = todosProductos.where((p) => 
+        p.sku?.toLowerCase() == producto.sku?.toLowerCase() && 
+        (isNew || p.id != producto.id)
+      ).isNotEmpty;
 
-      if (skuExists != null && (isNew || skuExists.id != product.id)) {
-        // TODO: Replace with logger - print(
-          'âŒ SKU duplicado detectado: ${product.sku} con ID: ${skuExists.id}',
-        );
+      if (skuExists) {
         throw Exception('SKU ya existe en otro producto.');
       }
 
-      final barcodeExists =
-          await isar.products
-              .filter()
-              .barcodeEqualTo(product.barcode, caseSensitive: false)
-              .findFirst();
+      // Verificar código de barras duplicado
+      final barcodeExists = todosProductos.where((p) => 
+        p.codigoBarras?.toLowerCase() == producto.codigoBarras?.toLowerCase() && 
+        (isNew || p.id != producto.id)
+      ).isNotEmpty;
 
-      if (barcodeExists != null && (isNew || barcodeExists.id != product.id)) {
-        // TODO: Replace with logger - print(
-          'âŒ Barcode duplicado detectado: ${product.barcode} con ID: ${barcodeExists.id}',
-        );
-        throw Exception('Barcode ya existe en otro producto.');
+      if (barcodeExists) {
+        throw Exception('Código de barras ya existe en otro producto.');
       }
 
-      try {
-        // TODO: Replace with logger - print('ðŸ’¾ Guardando atributos si no existen...');
-
-        if (product.category.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando category: ${product.category.value!.name}');
-          product.category.value!.id = await _putAttributeIfNotExists(
-            isar,
-            product.category.value,
-          );
-        }
-
-        if (product.size.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando size: ${product.size.value!.name}');
-          final id = await _putAttributeIfNotExists(isar, product.size.value);
-          product.size.value!.id = id;
-        }
-
-        if (product.color.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando color: ${product.color.value!.name}');
-          product.color.value!.id = await _putAttributeIfNotExists(
-            isar,
-            product.color.value,
-          );
-        }
-
-        if (product.season.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando season: ${product.season.value!.name}');
-          product.season.value!.id = await _putAttributeIfNotExists(
-            isar,
-            product.season.value,
-          );
-        }
-
-        if (product.brand.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando brand: ${product.brand.value!.name}');
-          product.brand.value!.id = await _putAttributeIfNotExists(
-            isar,
-            product.brand.value,
-          );
-        }
-
-        if (product.gender.value != null) {
-          // TODO: Replace with logger - print('ðŸŸ¡ Guardando gender: ${product.gender.value!.name}');
-          product.gender.value!.id = await _putAttributeIfNotExists(
-            isar,
-            product.gender.value,
-          );
-        }
-
-        final productId = await isar.products.put(product);
-
-        // **IMPORTANTE**: Actualiza el ID del producto despuÃ©s de guardarlo
-        product.id = productId;
-
-        // Validar y registrar el ID del producto
-        IdValidator.validateAndLogEntityWithName(
-          productId,
-          'Producto',
-          product.name,
-          'Producto guardado',
-        );
-
-        // TODO: Replace with logger - print('âœ… Producto guardado con ID: $productId');
-
-        // Vincular atributos con el producto reciÃ©n guardado
-        if (product.category.value != null) {
-          product.category.attach(
-            isar.products,
-            isar.productAttributes,
-            'category',
-            productId,
-          );
-          await product.category.save();
-        }
-        if (product.size.value != null) {
-          product.size.attach(
-            isar.products,
-            isar.productAttributes,
-            'size',
-            productId,
-          );
-          await product.size.save();
-        }
-        if (product.color.value != null) {
-          product.color.attach(
-            isar.products,
-            isar.productAttributes,
-            'color',
-            productId,
-          );
-          await product.color.save();
-        }
-        if (product.season.value != null) {
-          product.season.attach(
-            isar.products,
-            isar.productAttributes,
-            'season',
-            productId,
-          );
-          await product.season.save();
-        }
-        if (product.brand.value != null) {
-          product.brand.attach(
-            isar.products,
-            isar.productAttributes,
-            'brand',
-            productId,
-          );
-          await product.brand.save();
-        }
-        if (product.gender.value != null) {
-          product.gender.attach(
-            isar.products,
-            isar.productAttributes,
-            'gender',
-            productId,
-          );
-          await product.gender.save();
-        }
-
-        // TODO: Replace with logger - print('âœ… Producto y atributos guardados correctamente');
-      } catch (e, stack) {
-        // TODO: Replace with logger - print('âŒ ERROR al guardar producto: $e');
-        // TODO: Replace with logger - print('ðŸ“ Stack: $stack');
-        rethrow;
+      // Asignar fecha de creación si es nuevo
+      if (isNew) {
+        producto.fechaCreacion = DateTime.now();
       }
+      producto.fechaActualizacion = DateTime.now();
+
+      // Guardar el producto
+      final productId = await isar.collection<Producto>().put(producto);
+      producto.id = productId;
     });
   }
 
-  Future<void> update(Product product) async {
+  Future<void> update(Producto producto) async {
     final isar = await db;
     await isar.writeTxn(() async {
-      await product.category.save();
-      await product.size.save();
-      await product.color.save();
-      await product.season.save();
-      await product.brand.save();
-      await product.gender.save();
-
-      await isar.products.put(product);
+      producto.fechaActualizacion = DateTime.now();
+      await isar.collection<Producto>().put(producto);
     });
   }
 
-  Future<List<ProductAttribute>> getAttributesByType(AttributeType type) async {
+  Future<Producto?> getById(int id) async {
     final isar = await db;
-    return await isar.productAttributes.filter().typeEqualTo(type).findAll();
+    return await isar.collection<Producto>().get(id);
   }
 
-  Future<Product?> getById(int id) async {
+  Future<void> delete(int id) async {
     final isar = await db;
-    return await isar.products.get(id);
+    await isar.writeTxn(() async {
+      await isar.collection<Producto>().delete(id);
+    });
+  }
+
+  Future<List<Producto>> searchByName(String query) async {
+    final isar = await db;
+    final productos = await isar.collection<Producto>().where().findAll();
+    return productos.where((p) => 
+      p.nombre?.toLowerCase().contains(query.toLowerCase()) ?? false
+    ).toList();
+  }
+
+  Future<List<Producto>> getByCategory(int categoryId) async {
+    final isar = await db;
+    final productos = await isar.collection<Producto>().where().findAll();
+    return productos.where((p) => p.categoriaId == categoryId).toList();
+  }
+
+  Future<List<Producto>> getLowStockProducts([int threshold = 10]) async {
+    final isar = await db;
+    final productos = await isar.collection<Producto>().where().findAll();
+    return productos.where((p) => (p.stockActual ?? 0) <= threshold).toList();
   }
 }
-

@@ -27,33 +27,29 @@ class AuthService {
     try {
       final isar = await db;
       if (isar == null) {
-        // TODO: Replace with logger - print('Error: No se pudo obtener la instancia de Isar');
+        // Error: No se pudo obtener la instancia de Isar
         return false;
       }
 
       final hashedPassword = _hashPassword(password);
-      // TODO: Replace with logger - print(
-        'Login intent - Username: $username, Password hash: $hashedPassword',
-      );
+      // Login intent - Username: $username, Password hash: $hashedPassword
 
+      final usuarios = await isar.collection<Usuario>().where().findAll();
       final usuario =
-          await isar.usuarios
-              .filter()
-              .usernameEqualTo(username)
-              .and()
-              .passwordEqualTo(hashedPassword)
-              .findFirst();
+          usuarios
+              .where(
+                (u) => u.username == username && u.password == hashedPassword,
+              )
+              .firstOrNull;
 
-      // TODO: Replace with logger - print('Usuario encontrado: ${usuario != null}');
+      // Usuario encontrado: ${usuario != null}
       if (usuario != null) {
-        // TODO: Replace with logger - print(
-          'Usuario ID: ${usuario.id}, Nombre: ${usuario.nombre}, Rol: ${usuario.rolId}',
-        );
+        // Usuario ID: ${usuario.id}, Nombre: ${usuario.nombre}, Rol: ${usuario.rolId}
       }
 
       return usuario != null;
     } catch (e) {
-      // TODO: Replace with logger - print('Error en login: $e');
+      // Error en login: $e
       return false;
     }
   }
@@ -63,12 +59,12 @@ class AuthService {
       final isar = await db;
       if (isar == null) return null;
 
-      final usuario =
-          await isar.usuarios.filter().usernameEqualTo(username).findFirst();
+      final usuarios = await isar.collection<Usuario>().where().findAll();
+      final usuario = usuarios.where((u) => u.username == username).firstOrNull;
 
       return usuario;
     } catch (e) {
-      // TODO: Replace with logger - print('Error obteniendo usuario actual: $e');
+      // Error obteniendo usuario actual: $e
       return null;
     }
   }
@@ -80,26 +76,26 @@ class AuthService {
 
       if (usuario.rolId == null) return false;
 
-      final rol = await isar.rols.get(usuario.rolId!);
+      final rol = await isar.collection<Rol>().get(usuario.rolId!);
 
       return rol?.nombre.toLowerCase() == 'administrador';
     } catch (e) {
-      // TODO: Replace with logger - print('Error verificando si es admin: $e');
+      // Error verificando si es admin: $e
       return false;
     }
   }
 
-  /// Cierra la sesiÃ³n del usuario actual
+  /// Cierra la sesión del usuario actual
   Future<void> logout() async {
     try {
-      // AquÃ­ podrÃ­as agregar lÃ³gica adicional como:
-      // - Limpiar tokens de sesiÃ³n
+      // Aquí podrías agregar lógica adicional como:
+      // - Limpiar tokens de sesión
       // - Registrar el logout en logs
-      // - Limpiar cachÃ© local
-      
-      // TODO: Replace with logger - print('Usuario ha cerrado sesiÃ³n');
+      // - Limpiar caché local
+
+      // Usuario ha cerrado sesión
     } catch (e) {
-      // TODO: Replace with logger - print('Error durante el logout: $e');
+      // Error durante el logout: $e
     }
   }
 
@@ -109,28 +105,29 @@ class AuthService {
       if (isar == null) return false;
 
       // Verificar si el usuario a eliminar es administrador
-      final usuarioAEliminar = await isar.usuarios.get(userId);
+      final usuarioAEliminar = await isar.collection<Usuario>().get(userId);
       if (usuarioAEliminar == null) return false;
 
       final esAdminAEliminar = await isAdmin(usuarioAEliminar);
       if (!esAdminAEliminar) return true; // Puede eliminar usuarios no admin
 
-      // Si es admin, verificar que no sea el Ãºltimo
-      final admins = await isar.usuarios.filter().rolIdIsNotNull().findAll();
+      // Si es admin, verificar que no sea el último
+      final usuarios = await isar.collection<Usuario>().where().findAll();
+      final admins = usuarios.where((u) => u.rolId != null).toList();
 
       int adminCount = 0;
       for (final usuario in admins) {
         if (usuario.rolId != null) {
-          final rol = await isar.rols.get(usuario.rolId!);
+          final rol = await isar.collection<Rol>().get(usuario.rolId!);
           if (rol?.nombre.toLowerCase() == 'administrador') {
             adminCount++;
           }
         }
       }
 
-      return adminCount > 1; // Solo puede eliminar si hay mÃ¡s de un admin
+      return adminCount > 1; // Solo puede eliminar si hay más de un admin
     } catch (e) {
-      // TODO: Replace with logger - print('Error verificando si puede eliminar usuario: $e');
+      // Error verificando si puede eliminar usuario: $e
       return false;
     }
   }
@@ -146,7 +143,7 @@ class AuthService {
       // Solo los administradores pueden agregar usuarios
       return await isAdmin(currentUser);
     } catch (e) {
-      // TODO: Replace with logger - print('Error verificando si puede agregar usuario: $e');
+      // Error verificando si puede agregar usuario: $e
       return false;
     }
   }
@@ -159,7 +156,8 @@ class AuthService {
       if (!await isAdmin(usuario)) return false;
 
       // Contar todos los administradores
-      final admins = await isar.usuarios.filter().rolIdIsNotNull().findAll();
+      final usuarios = await isar.collection<Usuario>().where().findAll();
+      final admins = usuarios.where((u) => u.rolId != null).toList();
 
       int adminCount = 0;
       for (final admin in admins) {
@@ -170,7 +168,7 @@ class AuthService {
 
       return adminCount == 1;
     } catch (e) {
-      // TODO: Replace with logger - print('Error verificando si es Ãºltimo admin: $e');
+      // Error verificando si es último admin: $e
       return false;
     }
   }
@@ -183,16 +181,16 @@ class AuthService {
       final hashedPassword = _hashPassword(newPassword);
 
       await isar.writeTxn(() async {
-        final usuario = await isar.usuarios.get(userId);
+        final usuario = await isar.collection<Usuario>().get(userId);
         if (usuario != null) {
           usuario.password = hashedPassword;
-          await isar.usuarios.put(usuario);
+          await isar.collection<Usuario>().put(usuario);
         }
       });
 
       return true;
     } catch (e) {
-      // TODO: Replace with logger - print('Error reseteando contraseÃ±a: $e');
+      // Error reseteando contraseña: $e
       return false;
     }
   }
@@ -201,15 +199,14 @@ class AuthService {
     try {
       final isar = await db;
       if (isar == null) {
-        // TODO: Replace with logger - print(
-          'Error: No se pudo obtener la instancia de Isar para crear admin',
-        );
+        // Error: No se pudo obtener la instancia de Isar para crear admin
         return;
       }
 
       // Verificar si ya existe un administrador
+      final usuarios = await isar.collection<Usuario>().where().findAll();
       final existingAdmin =
-          await isar.usuarios.filter().usernameEqualTo('admin').findFirst();
+          usuarios.where((u) => u.username == 'admin').firstOrNull;
 
       if (existingAdmin != null) {
         IdValidator.validateAndLogEntityWithName(
@@ -221,20 +218,21 @@ class AuthService {
         return;
       }
 
-      // TODO: Replace with logger - print('Creando administrador por defecto...');
+      // Creando administrador por defecto...
 
       // Crear rol de administrador si no existe
+      final roles = await isar.collection<Rol>().where().findAll();
       Rol? adminRol =
-          await isar.rols.filter().nombreEqualTo('Administrador').findFirst();
+          roles.where((r) => r.nombre == 'Administrador').firstOrNull;
 
       if (adminRol == null) {
-        // TODO: Replace with logger - print('Creando rol de administrador...');
+        // Creando rol de administrador...
         await isar.writeTxn(() async {
           adminRol =
               Rol()
                 ..nombre = 'Administrador'
                 ..descripcion = 'Rol con todos los permisos del sistema';
-          await isar.rols.put(adminRol!);
+          await isar.collection<Rol>().put(adminRol!);
         });
         IdValidator.validateAndLogEntityWithName(
           adminRol!.id,
@@ -261,17 +259,14 @@ class AuthService {
               ..email = 'admin@najam.com'
               ..rolId = adminRol!.id;
 
-        await isar.usuarios.put(adminUser);
-        // TODO: Replace with logger - print(
-          'Administrador por defecto creado exitosamente - ID: ${adminUser.id}',
-        );
-        // TODO: Replace with logger - print('Password hash: ${adminUser.password}');
+        await isar.collection<Usuario>().put(adminUser);
+        // Administrador por defecto creado exitosamente - ID: ${adminUser.id}
+        // Password hash: ${adminUser.password}
       });
 
-      // TODO: Replace with logger - print('Administrador por defecto creado exitosamente');
+      // Administrador por defecto creado exitosamente
     } catch (e) {
-      // TODO: Replace with logger - print('Error creando administrador por defecto: $e');
+      // Error creando administrador por defecto: $e
     }
   }
 }
-

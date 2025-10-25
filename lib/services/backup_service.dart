@@ -17,7 +17,7 @@ import 'isar_service.dart';
 /// Especializado para tiendas de ropa con todas las funcionalidades críticas
 class BackupService {
   final IsarService _isarService = IsarService();
-  
+
   /// Crear backup completo de la tienda
   /// Incluye productos, clientes, ventas, compras, proveedores, etc.
   Future<BackupResult> createFullBackup({
@@ -31,13 +31,13 @@ class BackupService {
       final backupDir = customPath ?? await _getDefaultBackupPath();
       final backupFileName = 'tienda_backup_$timestamp.json';
       final backupFilePath = path.join(backupDir, backupFileName);
-      
+
       // Crear directorio si no existe
       final directory = Directory(backupDir);
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
-      
+
       // Obtener todos los datos de todas las colecciones
       final backupData = <String, dynamic>{
         'metadata': {
@@ -50,100 +50,110 @@ class BackupService {
         },
         'data': {},
       };
-      
+
       int totalRecords = 0;
-      
+
       // Productos
-      final productos = await isar.productos.where().findAll();
-      backupData['data']['productos'] = productos.map((p) => _productoToJson(p)).toList();
+      final productos = await isar.collection<Producto>().where().findAll();
+      backupData['data']['productos'] =
+          productos.map((p) => _productoToJson(p)).toList();
       totalRecords = totalRecords + productos.length;
-      
+
       // Clientes
-      final clientes = await isar.clientes.where().findAll();
-      backupData['data']['clientes'] = clientes.map((c) => _clienteToJson(c)).toList();
+      final clientes = await isar.collection<Cliente>().where().findAll();
+      backupData['data']['clientes'] =
+          clientes.map((c) => _clienteToJson(c)).toList();
       totalRecords = totalRecords + clientes.length;
-      
+
       // Ventas
-      final ventas = await isar.ventas.where().findAll();
-      backupData['data']['ventas'] = ventas.map((v) => _ventaToJson(v)).toList();
+      final ventas = await isar.collection<Venta>().where().findAll();
+      backupData['data']['ventas'] =
+          ventas.map((v) => _ventaToJson(v)).toList();
       totalRecords = totalRecords + ventas.length;
-      
+
       // Compras
-      final compras = await isar.compras.where().findAll();
-      backupData['data']['compras'] = compras.map((c) => _compraToJson(c)).toList();
+      final compras = await isar.collection<Compra>().where().findAll();
+      backupData['data']['compras'] =
+          compras.map((c) => _compraToJson(c)).toList();
       totalRecords = totalRecords + compras.length;
-      
+
       // Proveedores
-      final proveedores = await isar.proveedors.where().findAll();
-      backupData['data']['proveedores'] = proveedores.map((p) => _proveedorToJson(p)).toList();
+      final proveedores = await isar.collection<Proveedor>().where().findAll();
+      backupData['data']['proveedores'] =
+          proveedores.map((p) => _proveedorToJson(p)).toList();
       totalRecords = totalRecords + proveedores.length;
-      
+
       // Categorías
-      final categorias = await isar.categorias.where().findAll();
-      backupData['data']['categorias'] = categorias.map((c) => _categoriaToJson(c)).toList();
+      final categorias = await isar.collection<Categoria>().where().findAll();
+      backupData['data']['categorias'] =
+          categorias.map((c) => _categoriaToJson(c)).toList();
       totalRecords = totalRecords + categorias.length;
-      
+
       // Usuarios
-      final usuarios = await isar.usuarios.where().findAll();
-      backupData['data']['usuarios'] = usuarios.map((u) => _usuarioToJson(u)).toList();
+      final usuarios = await isar.collection<Usuario>().where().findAll();
+      backupData['data']['usuarios'] =
+          usuarios.map((u) => _usuarioToJson(u)).toList();
       totalRecords = totalRecords + usuarios.length;
-      
+
       // Cuentas Corrientes
-      final cuentasCorrientes = await isar.cuentaCorrientes.where().findAll();
-      backupData['data']['cuentas_corrientes'] = cuentasCorrientes.map((cc) => _cuentaCorrienteToJson(cc)).toList();
+      final cuentasCorrientes =
+          await isar.collection<CuentaCorriente>().where().findAll();
+      backupData['data']['cuentas_corrientes'] =
+          cuentasCorrientes.map((cc) => _cuentaCorrienteToJson(cc)).toList();
       totalRecords = totalRecords + cuentasCorrientes.length;
-      
+
       // Carrito de Compras (pedidos pendientes)
-      final carritoItems = await isar.carritoCompras.where().findAll();
-      backupData['data']['carrito_compras'] = carritoItems.map((ci) => _carritoCompraToJson(ci)).toList();
+      final carritoItems =
+          await isar.collection<CarritoCompra>().where().findAll();
+      backupData['data']['carrito_compras'] =
+          carritoItems.map((ci) => _carritoCompraToJson(ci)).toList();
       totalRecords = totalRecords + carritoItems.length;
-      
+
       // Movimientos Financieros - Simulados por ahora
       backupData['data']['movimientos_financieros'] = [];
-      
-      // Flujo de Caja - Simulados por ahora  
+
+      // Flujo de Caja - Simulados por ahora
       backupData['data']['flujos_caja'] = [];
-      
+
       // Configuración del Negocio - Simulados por ahora
       backupData['data']['business_configs'] = [];
-      
+
       // Temas Personalizados - Simulados por ahora
       backupData['data']['custom_themes'] = [];
-      
+
       // Actualizar metadatos
       backupData['metadata']['total_records'] = totalRecords;
-      
+
       // Guardar archivo JSON
-      final jsonString = compressBackup 
-          ? _compressJson(jsonEncode(backupData))
-          : jsonEncode(backupData);
-      
+      final jsonString =
+          compressBackup
+              ? _compressJson(jsonEncode(backupData))
+              : jsonEncode(backupData);
+
       final file = File(backupFilePath);
       await file.writeAsString(jsonString);
-      
+
       // Crear backup de imágenes si se solicita
       String? imagesPath;
       if (includeImages) {
         imagesPath = await _backupImages(backupDir, timestamp);
       }
-      
+
       return BackupResult(
         success: true,
         backupFilePath: backupFilePath,
         imagesPath: imagesPath,
         totalRecords: totalRecords,
         fileSize: await file.length(),
-        duration: DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp)),
+        duration: DateTime.now().difference(
+          DateTime.fromMillisecondsSinceEpoch(timestamp),
+        ),
       );
-      
     } catch (e) {
-      return BackupResult(
-        success: false,
-        error: 'Error creando backup: $e',
-      );
+      return BackupResult(success: false, error: 'Error creando backup: $e');
     }
   }
-  
+
   /// Restaurar backup completo
   Future<RestoreResult> restoreFullBackup(
     String backupFilePath, {
@@ -153,7 +163,7 @@ class BackupService {
     try {
       final startTime = DateTime.now();
       final isar = await _isarService.db;
-      
+
       // Leer archivo de backup
       final file = File(backupFilePath);
       if (!await file.exists()) {
@@ -162,10 +172,10 @@ class BackupService {
           error: 'Archivo de backup no encontrado: $backupFilePath',
         );
       }
-      
+
       final jsonString = await file.readAsString();
       final backupData = jsonDecode(jsonString) as Map<String, dynamic>;
-      
+
       // Validar estructura del backup
       if (!_validateBackupStructure(backupData)) {
         return RestoreResult(
@@ -173,123 +183,127 @@ class BackupService {
           error: 'Estructura de backup inválida',
         );
       }
-      
+
       int totalRestored = 0;
       final errors = <String>[];
-      
+
       // Limpiar datos existentes si se solicita
       if (clearExistingData) {
         await _clearAllData(isar);
       }
-      
+
       await isar.writeTxn(() async {
         // Restaurar cada colección
         final data = backupData['data'] as Map<String, dynamic>;
-        
+
         // Restaurar productos
         if (data.containsKey('productos')) {
           try {
-            final productos = (data['productos'] as List)
-                .map((p) => _jsonToProducto(p))
-                .toList();
-            await isar.productos.putAll(productos);
+            final productos =
+                (data['productos'] as List)
+                    .map((p) => _jsonToProducto(p))
+                    .toList();
+            await isar.collection<Producto>().putAll(productos);
             totalRestored += productos.length;
           } catch (e) {
             errors.add('Error restaurando productos: $e');
           }
         }
-        
+
         // Restaurar clientes
         if (data.containsKey('clientes')) {
           try {
-            final clientes = (data['clientes'] as List)
-                .map((c) => _jsonToCliente(c))
-                .toList();
-            await isar.clientes.putAll(clientes);
+            final clientes =
+                (data['clientes'] as List)
+                    .map((c) => _jsonToCliente(c))
+                    .toList();
+            await isar.collection<Cliente>().putAll(clientes);
             totalRestored += clientes.length;
           } catch (e) {
             errors.add('Error restaurando clientes: $e');
           }
         }
-        
+
         // Restaurar ventas
         if (data.containsKey('ventas')) {
           try {
-            final ventas = (data['ventas'] as List)
-                .map((v) => _jsonToVenta(v))
-                .toList();
-            await isar.ventas.putAll(ventas);
+            final ventas =
+                (data['ventas'] as List).map((v) => _jsonToVenta(v)).toList();
+            await isar.collection<Venta>().putAll(ventas);
             totalRestored += ventas.length;
           } catch (e) {
             errors.add('Error restaurando ventas: $e');
           }
         }
-        
+
         // Restaurar compras
         if (data.containsKey('compras')) {
           try {
-            final compras = (data['compras'] as List)
-                .map((c) => _jsonToCompra(c))
-                .toList();
-            await isar.compras.putAll(compras);
+            final compras =
+                (data['compras'] as List).map((c) => _jsonToCompra(c)).toList();
+            await isar.collection<Compra>().putAll(compras);
             totalRestored += compras.length;
           } catch (e) {
             errors.add('Error restaurando compras: $e');
           }
         }
-        
+
         // Restaurar proveedores
         if (data.containsKey('proveedores')) {
           try {
-            final proveedores = (data['proveedores'] as List)
-                .map((p) => _jsonToProveedor(p))
-                .toList();
-            await isar.proveedors.putAll(proveedores);
+            final proveedores =
+                (data['proveedores'] as List)
+                    .map((p) => _jsonToProveedor(p))
+                    .toList();
+            await isar.collection<Proveedor>().putAll(proveedores);
             totalRestored += proveedores.length;
           } catch (e) {
             errors.add('Error restaurando proveedores: $e');
           }
         }
-        
+
         // Restaurar categorías
         if (data.containsKey('categorias')) {
           try {
-            final categorias = (data['categorias'] as List)
-                .map((c) => _jsonToCategoria(c))
-                .toList();
-            await isar.categorias.putAll(categorias);
+            final categorias =
+                (data['categorias'] as List)
+                    .map((c) => _jsonToCategoria(c))
+                    .toList();
+            await isar.collection<Categoria>().putAll(categorias);
             totalRestored += categorias.length;
           } catch (e) {
             errors.add('Error restaurando categorías: $e');
           }
         }
-        
+
         // Restaurar usuarios
         if (data.containsKey('usuarios')) {
           try {
-            final usuarios = (data['usuarios'] as List)
-                .map((u) => _jsonToUsuario(u))
-                .toList();
-            await isar.usuarios.putAll(usuarios);
+            final usuarios =
+                (data['usuarios'] as List)
+                    .map((u) => _jsonToUsuario(u))
+                    .toList();
+            await isar.collection<Usuario>().putAll(usuarios);
             totalRestored += usuarios.length;
           } catch (e) {
             errors.add('Error restaurando usuarios: $e');
           }
         }
-        
+
         // Restaurar cuentas corrientes
         if (data.containsKey('cuentas_corrientes')) {
           try {
-            final cuentasCorrientes = (data['cuentas_corrientes'] as List)
-                .map((cc) => _jsonToCuentaCorriente(cc))
-                .toList();
-            await isar.cuentaCorrientes.putAll(cuentasCorrientes);
+            final cuentasCorrientes =
+                (data['cuentas_corrientes'] as List)
+                    .map((cc) => _jsonToCuentaCorriente(cc))
+                    .toList();
+            await isar.collection<CuentaCorriente>().putAll(cuentasCorrientes);
             totalRestored += cuentasCorrientes.length;
           } catch (e) {
             errors.add('Error restaurando cuentas corrientes: $e');
           }
         }
-        
+
         // Restaurar configuraciones - Comentado hasta implementar modelo
         // if (data.containsKey('business_configs')) {
         //   try {
@@ -303,19 +317,18 @@ class BackupService {
         //   }
         // }
       });
-      
+
       // Restaurar imágenes si se solicita
       if (restoreImages) {
         await _restoreImages(path.dirname(backupFilePath));
       }
-      
+
       return RestoreResult(
         success: errors.isEmpty,
         totalRestored: totalRestored,
         errors: errors,
         duration: DateTime.now().difference(startTime),
       );
-      
     } catch (e) {
       return RestoreResult(
         success: false,
@@ -323,69 +336,72 @@ class BackupService {
       );
     }
   }
-  
+
   /// Listar backups disponibles
   Future<List<BackupInfo>> listAvailableBackups([String? customPath]) async {
     try {
       final backupDir = customPath ?? await _getDefaultBackupPath();
       final directory = Directory(backupDir);
-      
+
       if (!await directory.exists()) {
         return [];
       }
-      
+
       final files = await directory.list().toList();
-      final backupFiles = files
-          .where((file) => file is File && file.path.endsWith('.json'))
-          .cast<File>()
-          .toList();
-      
+      final backupFiles =
+          files
+              .where((file) => file is File && file.path.endsWith('.json'))
+              .cast<File>()
+              .toList();
+
       final backupInfos = <BackupInfo>[];
-      
+
       for (final file in backupFiles) {
         try {
           final content = await file.readAsString();
           final data = jsonDecode(content) as Map<String, dynamic>;
           final metadata = data['metadata'] as Map<String, dynamic>?;
-          
+
           if (metadata != null) {
-            backupInfos.add(BackupInfo(
-              fileName: path.basename(file.path),
-              filePath: file.path,
-              createdAt: DateTime.parse(metadata['created_at']),
-              totalRecords: metadata['total_records'] ?? 0,
-              fileSize: await file.length(),
-              version: metadata['version'] ?? 'unknown',
-              backupType: metadata['backup_type'] ?? 'unknown',
-            ));
+            backupInfos.add(
+              BackupInfo(
+                fileName: path.basename(file.path),
+                filePath: file.path,
+                createdAt: DateTime.parse(metadata['created_at']),
+                totalRecords: metadata['total_records'] ?? 0,
+                fileSize: await file.length(),
+                version: metadata['version'] ?? 'unknown',
+                backupType: metadata['backup_type'] ?? 'unknown',
+              ),
+            );
           }
         } catch (e) {
           // Ignorar archivos con formato incorrecto
         }
       }
-      
+
       // Ordenar por fecha de creación (más reciente primero)
       backupInfos.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      
+
       return backupInfos;
     } catch (e) {
       return [];
     }
   }
-  
+
   /// Eliminar backup específico
   Future<bool> deleteBackup(String backupFilePath) async {
     try {
       final file = File(backupFilePath);
       if (await file.exists()) {
         await file.delete();
-        
+
         // También eliminar carpeta de imágenes si existe
         final imagesDir = Directory('${backupFilePath}_images');
         if (await imagesDir.exists()) {
           await imagesDir.delete(recursive: true);
         }
-        
+
         return true;
       }
       return false;
@@ -393,41 +409,38 @@ class BackupService {
       return false;
     }
   }
-  
+
   /// Crear backup automático programado
   Future<BackupResult> createScheduledBackup() async {
-    return await createFullBackup(
-      includeImages: true,
-      compressBackup: true,
-    );
+    return await createFullBackup(includeImages: true, compressBackup: true);
   }
-  
+
   /// Limpiar backups antiguos (mantener solo los N más recientes)
   Future<int> cleanupOldBackups(int keepCount, [String? customPath]) async {
     try {
       final backups = await listAvailableBackups(customPath);
-      
+
       if (backups.length <= keepCount) {
         return 0;
       }
-      
+
       final backupsToDelete = backups.skip(keepCount).toList();
       int deletedCount = 0;
-      
+
       for (final backup in backupsToDelete) {
         if (await deleteBackup(backup.filePath)) {
           deletedCount++;
         }
       }
-      
+
       return deletedCount;
     } catch (e) {
       return 0;
     }
   }
-  
+
   // Métodos auxiliares privados
-  
+
   Future<String> _getDefaultBackupPath() async {
     // En producción, usar Documents o directorio apropiado
     // Por ahora usar directorio temporal
@@ -435,25 +448,25 @@ class BackupService {
     final backupDir = path.join(tempDir.path, 'tienda_app_backups');
     return backupDir;
   }
-  
+
   bool _validateBackupStructure(Map<String, dynamic> data) {
-    return data.containsKey('metadata') && 
-           data.containsKey('data') &&
-           data['metadata'] is Map<String, dynamic> &&
-           data['data'] is Map<String, dynamic>;
+    return data.containsKey('metadata') &&
+        data.containsKey('data') &&
+        data['metadata'] is Map<String, dynamic> &&
+        data['data'] is Map<String, dynamic>;
   }
-  
+
   Future<void> _clearAllData(Isar isar) async {
     await isar.writeTxn(() async {
-      await isar.productos.clear();
-      await isar.clientes.clear();
-      await isar.ventas.clear();
-      await isar.compras.clear();
-      await isar.proveedors.clear();
-      await isar.categorias.clear();
-      await isar.usuarios.clear();
-      await isar.cuentaCorrientes.clear();
-      await isar.carritoCompras.clear();
+      await isar.collection<Producto>().clear();
+      await isar.collection<Cliente>().clear();
+      await isar.collection<Venta>().clear();
+      await isar.collection<Compra>().clear();
+      await isar.collection<Proveedor>().clear();
+      await isar.collection<Categoria>().clear();
+      await isar.collection<Usuario>().clear();
+      await isar.collection<CuentaCorriente>().clear();
+      await isar.collection<CarritoCompra>().clear();
       // Comentado hasta implementar modelos
       // await isar.movimientoFinancieros.clear();
       // await isar.flujoCajas.clear();
@@ -461,25 +474,25 @@ class BackupService {
       // await isar.customThemes.clear();
     });
   }
-  
+
   String _compressJson(String jsonString) {
     // Implementación simple de compresión (en producción usar gzip)
     return jsonString;
   }
-  
+
   Future<String?> _backupImages(String backupDir, int timestamp) async {
     // Implementar backup de imágenes de productos
     // Copiar archivos de assets/images a backup_images_timestamp/
     return null;
   }
-  
+
   Future<void> _restoreImages(String backupDir) async {
     // Implementar restauración de imágenes
     // Copiar de backup_images/ de vuelta a assets/images/
   }
-  
+
   // Métodos de conversión JSON (implementar para cada modelo)
-  
+
   Map<String, dynamic> _productoToJson(Producto producto) {
     return {
       'id': producto.id,
@@ -488,38 +501,105 @@ class BackupService {
       'precio': producto.precio,
       'precioCosto': producto.precioCosto,
       'utilidad': producto.utilidad,
-      'stock': producto.stock,
+      'stockActual': producto.stockActual,
+      'stockMinimo': producto.stockMinimo,
+      'stockMaximo': producto.stockMaximo,
       'categoriaId': producto.categoriaId,
       'categoria': producto.categoria,
+      'marca': producto.marca,
+      'genero': producto.genero?.name,
+      'temporada': producto.temporada?.name,
+      'estado': producto.estado.name,
+      'activo': producto.activo,
+      'destacado': producto.destacado,
+      'esServicio': producto.esServicio,
+      'aplicaIVA': producto.aplicaIVA,
+      'disponibleVenta': producto.disponibleVenta,
       'imagen': producto.imagen,
+      'imagenes': producto.imagenes,
       'codigoBarras': producto.codigoBarras,
       'sku': producto.sku,
       'fechaCreacion': producto.fechaCreacion?.toIso8601String(),
-      'imagenes': producto.imagenes,
+      'fechaActualizacion': producto.fechaActualizacion?.toIso8601String(),
+      'fechaUltimaVenta': producto.fechaUltimaVenta?.toIso8601String(),
     };
   }
-  
+
   Producto _jsonToProducto(Map<String, dynamic> json) {
-    final producto = Producto();
-    producto.id = json['id'];
-    producto.nombre = json['nombre'];
-    producto.descripcion = json['descripcion'];
-    producto.precio = json['precio']?.toDouble();
-    producto.precioCosto = json['precioCosto']?.toDouble();
-    producto.utilidad = json['utilidad']?.toDouble();
-    producto.stock = json['stock'];
+    final producto = Producto(
+      id: json['id'] ?? 0,
+      nombre: json['nombre'],
+      descripcion: json['descripcion'],
+      precio: json['precio']?.toDouble(),
+      stockActual: json['stockActual'],
+      stockMinimo: json['stockMinimo'],
+      stockMaximo: json['stockMaximo'],
+      categoria: json['categoria'],
+      marca: json['marca'],
+      imagen: json['imagen'],
+      codigoBarras: json['codigoBarras'],
+      sku: json['sku'],
+      precioCosto: json['precioCosto']?.toDouble(),
+      utilidad: json['utilidad']?.toDouble(),
+      fechaCreacion:
+          json['fechaCreacion'] != null
+              ? DateTime.parse(json['fechaCreacion'])
+              : null,
+      fechaActualizacion:
+          json['fechaActualizacion'] != null
+              ? DateTime.parse(json['fechaActualizacion'])
+              : null,
+      fechaUltimaVenta:
+          json['fechaUltimaVenta'] != null
+              ? DateTime.parse(json['fechaUltimaVenta'])
+              : null,
+    );
+
+    // Configurar enum values
+    if (json['genero'] != null) {
+      try {
+        producto.genero = GeneroProducto.values.firstWhere(
+          (e) => e.name == json['genero'],
+        );
+      } catch (e) {
+        // Ignorar si no se encuentra el valor
+      }
+    }
+
+    if (json['temporada'] != null) {
+      try {
+        producto.temporada = TemporadaProducto.values.firstWhere(
+          (e) => e.name == json['temporada'],
+        );
+      } catch (e) {
+        // Ignorar si no se encuentra el valor
+      }
+    }
+
+    if (json['estado'] != null) {
+      try {
+        producto.estado = EstadoProducto.values.firstWhere(
+          (e) => e.name == json['estado'],
+        );
+      } catch (e) {
+        producto.estado = EstadoProducto.activo;
+      }
+    }
+
+    producto.activo = json['activo'] ?? true;
+    producto.destacado = json['destacado'] ?? false;
+    producto.esServicio = json['esServicio'] ?? false;
+    producto.aplicaIVA = json['aplicaIVA'] ?? true;
+    producto.disponibleVenta = json['disponibleVenta'] ?? true;
     producto.categoriaId = json['categoriaId'];
-    producto.categoria = json['categoria'];
-    producto.imagen = json['imagen'];
-    producto.codigoBarras = json['codigoBarras'];
-    producto.sku = json['sku'];
-    producto.fechaCreacion = json['fechaCreacion'] != null 
-        ? DateTime.parse(json['fechaCreacion']) 
-        : null;
-    producto.imagenes = (json['imagenes'] as List?)?.cast<String>() ?? [];
+
+    if (json['imagenes'] != null) {
+      producto.imagenes.addAll(List<String>.from(json['imagenes']));
+    }
+
     return producto;
   }
-  
+
   Map<String, dynamic> _clienteToJson(Cliente cliente) {
     return {
       'id': cliente.id,
@@ -534,7 +614,7 @@ class BackupService {
       'fechaRegistro': cliente.fechaRegistro?.toIso8601String(),
     };
   }
-  
+
   Cliente _jsonToCliente(Map<String, dynamic> json) {
     return Cliente(
       id: json['id'],
@@ -546,12 +626,13 @@ class BackupService {
       direccion: json['direccion'],
       dni: json['dni'],
       cuil: json['cuil'],
-      fechaRegistro: json['fechaRegistro'] != null 
-          ? DateTime.parse(json['fechaRegistro']) 
-          : null,
+      fechaRegistro:
+          json['fechaRegistro'] != null
+              ? DateTime.parse(json['fechaRegistro'])
+              : null,
     );
   }
-  
+
   // Implementar métodos similares para otros modelos...
   Map<String, dynamic> _ventaToJson(Venta venta) => {
     'id': venta.id,
@@ -562,31 +643,53 @@ class BackupService {
     'estado': venta.estado,
     'usuarioId': venta.usuarioId,
   };
-  
+
   Venta _jsonToVenta(Map<String, dynamic> json) => Venta(
     clienteId: json['clienteId'] ?? 0,
-    fecha: json['fecha'] != null ? DateTime.parse(json['fecha']) : DateTime.now(),
+    fecha:
+        json['fecha'] != null ? DateTime.parse(json['fecha']) : DateTime.now(),
     total: json['total']?.toDouble() ?? 0.0,
     metodoPago: json['metodoPago'] ?? 'efectivo',
     estado: json['estado'] ?? 'pendiente',
     usuarioId: json['usuarioId'] ?? 1,
+    clienteNombre: json['clienteNombre'] ?? '',
+    clienteEmail: json['clienteEmail'] ?? '',
+    clienteTelefono: json['clienteTelefono'] ?? '',
+    clienteDocumento: json['clienteDocumento'] ?? '',
+    clienteDireccion: json['clienteDireccion'] ?? '',
+    clienteTipoCliente: json['clienteTipoCliente'] ?? '',
   );
-  
+
   Map<String, dynamic> _compraToJson(Compra compra) => {
     'id': compra.id,
     'numeroFactura': compra.numeroFactura,
     'fecha': compra.fecha?.toIso8601String(),
     'total': compra.total,
     'estado': compra.estado,
+    'proveedorNombre': compra.proveedorNombre,
+    'proveedorEmail': compra.proveedorEmail,
+    'proveedorTelefono': compra.proveedorTelefono,
+    'proveedorDocumento': compra.proveedorDocumento,
+    'proveedorDireccion': compra.proveedorDireccion,
+    'proveedorContacto': compra.proveedorContacto,
+    'proveedorTipoProveedor': compra.proveedorTipoProveedor,
   };
-  
+
   Compra _jsonToCompra(Map<String, dynamic> json) => Compra(
     numeroFactura: json['numeroFactura'] ?? 'SIN-NUM',
-    fecha: json['fecha'] != null ? DateTime.parse(json['fecha']) : DateTime.now(),
+    fecha:
+        json['fecha'] != null ? DateTime.parse(json['fecha']) : DateTime.now(),
     total: json['total']?.toDouble() ?? 0.0,
     estado: json['estado'] ?? 'pendiente',
+    proveedorNombre: json['proveedorNombre'] ?? 'Proveedor',
+    proveedorEmail: json['proveedorEmail'] ?? '',
+    proveedorTelefono: json['proveedorTelefono'] ?? '',
+    proveedorDocumento: json['proveedorDocumento'] ?? '',
+    proveedorDireccion: json['proveedorDireccion'] ?? '',
+    proveedorContacto: json['proveedorContacto'] ?? '',
+    proveedorTipoProveedor: json['proveedorTipoProveedor'] ?? 'otro',
   );
-  
+
   Map<String, dynamic> _proveedorToJson(Proveedor proveedor) => {
     'id': proveedor.id,
     'nombre': proveedor.nombre,
@@ -594,11 +697,10 @@ class BackupService {
     'email': proveedor.email,
     'direccion': proveedor.direccion,
   };
-  
-  Proveedor _jsonToProveedor(Map<String, dynamic> json) => Proveedor(
-    nombre: json['nombre'] ?? 'Proveedor Sin Nombre',
-  );
-  
+
+  Proveedor _jsonToProveedor(Map<String, dynamic> json) =>
+      Proveedor(nombre: json['nombre'] ?? 'Proveedor Sin Nombre');
+
   Map<String, dynamic> _categoriaToJson(Categoria categoria) => {
     'id': categoria.id,
     'nombre': categoria.nombre,
@@ -606,13 +708,14 @@ class BackupService {
     'parent': categoria.parent,
     'orden': categoria.orden,
   };
-  
-  Categoria _jsonToCategoria(Map<String, dynamic> json) => Categoria()
-    ..nombre = json['nombre'] ?? 'Sin Categoría'
-    ..descripcion = json['descripcion']
-    ..parent = json['parent']
-    ..orden = json['orden'] ?? 0;
-  
+
+  Categoria _jsonToCategoria(Map<String, dynamic> json) =>
+      Categoria()
+        ..nombre = json['nombre'] ?? 'Sin Categoría'
+        ..descripcion = json['descripcion']
+        ..parent = json['parent']
+        ..orden = json['orden'] ?? 0;
+
   Map<String, dynamic> _usuarioToJson(Usuario usuario) => {
     'id': usuario.id,
     'nombre': usuario.nombre,
@@ -624,19 +727,21 @@ class BackupService {
     'fechaCreacion': usuario.fechaCreacion?.toIso8601String(),
     'avatarUrl': usuario.avatarUrl,
   };
-  
-  Usuario _jsonToUsuario(Map<String, dynamic> json) => Usuario()
-    ..nombre = json['nombre'] ?? 'Usuario'
-    ..apellido = json['apellido']
-    ..email = json['email']
-    ..username = json['username'] ?? 'usuario'
-    ..password = json['password'] ?? '123456'
-    ..rolId = json['rolId']
-    ..fechaCreacion = json['fechaCreacion'] != null 
-        ? DateTime.parse(json['fechaCreacion']) 
-        : DateTime.now()
-    ..avatarUrl = json['avatarUrl'];
-  
+
+  Usuario _jsonToUsuario(Map<String, dynamic> json) =>
+      Usuario()
+        ..nombre = json['nombre'] ?? 'Usuario'
+        ..apellido = json['apellido']
+        ..email = json['email']
+        ..username = json['username'] ?? 'usuario'
+        ..password = json['password'] ?? '123456'
+        ..rolId = json['rolId']
+        ..fechaCreacion =
+            json['fechaCreacion'] != null
+                ? DateTime.parse(json['fechaCreacion'])
+                : DateTime.now()
+        ..avatarUrl = json['avatarUrl'];
+
   Map<String, dynamic> _cuentaCorrienteToJson(CuentaCorriente cuenta) => {
     'id': cuenta.id,
     'clienteId': cuenta.clienteId,
@@ -645,19 +750,22 @@ class BackupService {
     'fechaCreacion': cuenta.fechaCreacion.toIso8601String(),
     'fechaVencimiento': cuenta.fechaVencimiento.toIso8601String(),
   };
-  
-  CuentaCorriente _jsonToCuentaCorriente(Map<String, dynamic> json) => CuentaCorriente(
-    clienteId: json['clienteId'] ?? 0, 
-    nombreCliente: json['nombreCliente'] ?? 'Cliente', 
-    montoTotal: json['montoTotal']?.toDouble() ?? 0.0, 
-    fechaCreacion: json['fechaCreacion'] != null 
-        ? DateTime.parse(json['fechaCreacion'])
-        : DateTime.now(), 
-    fechaVencimiento: json['fechaVencimiento'] != null 
-        ? DateTime.parse(json['fechaVencimiento'])
-        : DateTime.now().add(Duration(days: 30)),
-  );
-  
+
+  CuentaCorriente _jsonToCuentaCorriente(Map<String, dynamic> json) =>
+      CuentaCorriente(
+        clienteId: json['clienteId'] ?? 0,
+        nombreCliente: json['nombreCliente'] ?? 'Cliente',
+        montoTotal: json['montoTotal']?.toDouble() ?? 0.0,
+        fechaCreacion:
+            json['fechaCreacion'] != null
+                ? DateTime.parse(json['fechaCreacion'])
+                : DateTime.now(),
+        fechaVencimiento:
+            json['fechaVencimiento'] != null
+                ? DateTime.parse(json['fechaVencimiento'])
+                : DateTime.now().add(Duration(days: 30)),
+      );
+
   Map<String, dynamic> _carritoCompraToJson(CarritoCompra item) => {
     'id': item.id,
     'nombreProducto': item.nombreProducto,
@@ -672,7 +780,7 @@ class BackupService {
     'notas': item.notas,
     'estado': item.estado,
   };
-  
+
   // Métodos placeholder para modelos futuros
   Map<String, dynamic> _businessConfigToJson(dynamic config) => {};
   dynamic _jsonToBusinessConfig(Map<String, dynamic> json) => null;
@@ -735,11 +843,13 @@ class BackupInfo {
     required this.version,
     required this.backupType,
   });
-  
+
   String get formattedSize {
     if (fileSize < 1024) return '$fileSize B';
-    if (fileSize < 1024 * 1024) return '${(fileSize / 1024).toStringAsFixed(1)} KB';
-    if (fileSize < 1024 * 1024 * 1024) return '${(fileSize / (1024 * 1024)).toStringAsFixed(1)} MB';
+    if (fileSize < 1024 * 1024)
+      return '${(fileSize / 1024).toStringAsFixed(1)} KB';
+    if (fileSize < 1024 * 1024 * 1024)
+      return '${(fileSize / (1024 * 1024)).toStringAsFixed(1)} MB';
     return '${(fileSize / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 }

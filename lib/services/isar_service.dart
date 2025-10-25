@@ -63,7 +63,7 @@ class IsarService {
       _isarInstance = await Isar.open(
         [
           CategoriaSchema,
-          ProductoSchema,
+          // ProductoSchema, // Comentado temporalmente hasta restaurar anotaciones
           PropiedadSchema,
           ClienteSchema,
           CompraSchema,
@@ -153,21 +153,24 @@ class IsarService {
 
   Future<void> initializeSeeds() async {
     final isar = await db;
-    if (await isar.productos.count() == 0) {
+    // Comentado temporalmente hasta restaurar esquemas de Isar
+    /*
+    if (await isar.collection<Producto>().count() == 0) {
       await isar.writeTxn(() async {
-        await isar.productos.putAll([
+        await isar.collection<Producto>().putAll([
           Producto()
-            ..nombre = 'Remera bÃ¡sica'
+            ..nombre = 'Remera básica'
             ..precio = 3500
-            ..stock = 20,
+            ..stockActual = 20,
           Producto()
-            ..nombre = 'PantalÃ³n jeans'
+            ..nombre = 'Pantalón jeans'
             ..precio = 6500
-            ..stock = 15,
-          // ...agrega mÃ¡s productos seed aquÃ­...
+            ..stockActual = 15,
+          // ...agrega más productos seed aquí...
         ]);
-        // ...agrega seeds para usuarios, categorÃ­as, etc...
+        // ...agrega seeds para usuarios, categorías, etc...
       });
     }
+    */
   }
 }

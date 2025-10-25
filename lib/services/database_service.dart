@@ -30,7 +30,7 @@ class DatabaseService {
     await Future.delayed(const Duration(milliseconds: 200));
     final index = _productos.indexWhere((p) => p.id == id);
     if (index != -1) {
-      _productos[index] = _productos[index].copyWith(stock: nuevoStock);
+      _productos[index] = _productos[index].copyWith(stockActual: nuevoStock);
     }
   }
 
@@ -59,7 +59,7 @@ class DatabaseService {
           nombre: 'Laptop HP Pavilion',
           descripcion: 'Laptop para gaming y trabajo',
           precio: 1299.99,
-          stock: 5,
+          stockActual: 5,
           categoria: 'Electrónicos',
           imagen: 'assets/images/laptop.jpg',
         ),
@@ -68,7 +68,7 @@ class DatabaseService {
           nombre: 'Mouse Logitech',
           descripcion: 'Mouse inalámbrico ergonómico',
           precio: 45.99,
-          stock: 15,
+          stockActual: 15,
           categoria: 'Accesorios',
           imagen: 'assets/images/mouse.jpg',
         ),
@@ -77,7 +77,7 @@ class DatabaseService {
           nombre: 'Teclado Mecánico',
           descripcion: 'Teclado mecánico RGB',
           precio: 89.99,
-          stock: 8,
+          stockActual: 8,
           categoria: 'Accesorios',
         ),
         Producto(
@@ -85,7 +85,7 @@ class DatabaseService {
           nombre: 'Monitor 24"',
           descripcion: 'Monitor Full HD 24 pulgadas',
           precio: 199.99,
-          stock: 3,
+          stockActual: 3,
           categoria: 'Electrónicos',
         ),
         Producto(
@@ -93,7 +93,7 @@ class DatabaseService {
           nombre: 'Smartphone',
           descripcion: 'Smartphone Android última generación',
           precio: 699.99,
-          stock: 12,
+          stockActual: 12,
           categoria: 'Móviles',
         ),
       ]);

@@ -1,3 +1,5 @@
+import 'package:isar/isar.dart';
+
 import '../models/pedido_proveedor.dart';
 import '../models/compra.dart';
 import '../models/producto.dart';
@@ -17,10 +19,18 @@ class PedidoCompraService {
 
     // Crear la compra con número de factura manual
     final compra = Compra(
-      numeroFactura: 'PED-${pedido.id}-${DateTime.now().millisecondsSinceEpoch}',
+      numeroFactura:
+          'PED-${pedido.id}-${DateTime.now().millisecondsSinceEpoch}',
       fecha: DateTime.now(),
       total: 0.0, // Se calculará después
       proveedorId: proveedor.id,
+      proveedorNombre: proveedor.nombre,
+      proveedorEmail: proveedor.email ?? '',
+      proveedorTelefono: proveedor.telefono ?? '',
+      proveedorDocumento: '',
+      proveedorDireccion: proveedor.direccion ?? '',
+      proveedorContacto: proveedor.contacto ?? '',
+      proveedorTipoProveedor: '',
       observaciones: 'Convertido desde pedido #${pedido.id}',
       estado: 'pendiente',
     );
@@ -40,12 +50,12 @@ class PedidoCompraService {
 
     // Guardar la compra
     await isar.writeTxn(() async {
-      await isar.compras.put(compra);
+      await isar.collection<Compra>().put(compra);
 
       // Actualizar el pedido
       pedido.compraId = compra.id;
       pedido.cambiarEstado(PedidoProveedor.estadoRecibido);
-      await isar.pedidoProveedors.put(pedido);
+      await isar.collection<PedidoProveedor>().put(pedido);
 
       // Actualizar precios de costo de los productos
       await _actualizarPreciosCosto(pedido, preciosFinales);
@@ -65,7 +75,7 @@ class PedidoCompraService {
       final precioFinal = preciosFinales[item.productoId];
       if (precioFinal != null) {
         // Buscar el producto
-        final producto = await isar.productos.get(item.productoId);
+        final producto = await isar.collection<Producto>().get(item.productoId);
         if (producto != null) {
           // Actualizar precio de costo
           producto.precioCosto = precioFinal;
@@ -79,7 +89,7 @@ class PedidoCompraService {
             producto.utilidad = utilidad;
           }
 
-          await isar.productos.put(producto);
+          await isar.collection<Producto>().put(producto);
         }
       }
     }
@@ -89,8 +99,7 @@ class PedidoCompraService {
   Future<double> obtenerUtilidadPromedio() async {
     final isar = await _isarService.db;
 
-    final productosRaw = await isar.productos.getAll([0]);
-    final productos = productosRaw.whereType<Producto>().toList();
+    final productos = await isar.collection<Producto>().where().findAll();
     final productosConUtilidad =
         productos.where((p) => p.utilidad != null).toList();
 
@@ -108,8 +117,7 @@ class PedidoCompraService {
   Future<List<Producto>> obtenerProductosBajaUtilidad() async {
     final isar = await _isarService.db;
 
-    final productosRaw = await isar.productos.getAll([0]);
-    final productos = productosRaw.whereType<Producto>().toList();
+    final productos = await isar.collection<Producto>().where().findAll();
     return productos
         .where((p) => p.utilidad != null && p.utilidad! < 20.0)
         .toList();
@@ -119,8 +127,7 @@ class PedidoCompraService {
   Future<List<Producto>> obtenerProductosAltaUtilidad() async {
     final isar = await _isarService.db;
 
-    final productosRaw = await isar.productos.getAll([0]);
-    final productos = productosRaw.whereType<Producto>().toList();
+    final productos = await isar.collection<Producto>().where().findAll();
     return productos
         .where((p) => p.utilidad != null && p.utilidad! > 50.0)
         .toList();
@@ -130,10 +137,12 @@ class PedidoCompraService {
   Future<List<Producto>> obtenerProductosMediaUtilidad() async {
     final isar = await _isarService.db;
 
-    final productosRaw = await isar.productos.getAll([0]);
-    final productos = productosRaw.whereType<Producto>().toList();
+    final productos = await isar.collection<Producto>().where().findAll();
     return productos
-        .where((p) => p.utilidad != null && p.utilidad! >= 20.0 && p.utilidad! <= 50.0)
+        .where(
+          (p) =>
+              p.utilidad != null && p.utilidad! >= 20.0 && p.utilidad! <= 50.0,
+        )
         .toList();
   }
 }
