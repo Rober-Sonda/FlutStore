@@ -1,13 +1,11 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../models/propiedad_categoria.dart';
-import '../../../providers/theme_provider.dart';
 
 class PropiedadDialog extends StatefulWidget {
   final PropiedadCategoria? propiedad;
   final Function(PropiedadCategoria) onSave;
 
-  const PropiedadDialog({this.propiedad, required this.onSave});
+  const PropiedadDialog({super.key, this.propiedad, required this.onSave});
 
   @override
   State<PropiedadDialog> createState() => _PropiedadDialogState();
@@ -77,15 +75,13 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 420, maxHeight: 600),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: themeProvider.getCardColor(context),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -95,8 +91,8 @@ class _PropiedadDialogState extends State<PropiedadDialog> {
             // Título
             Text(
               widget.propiedad == null ? 'Nueva Propiedad' : 'Editar Propiedad',
-              style: TextStyle(
-                color: themeProvider.getTitleColor(context),
+              style: const TextStyle(
+                color: Colors.black87,
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
                 letterSpacing: -0.5,
