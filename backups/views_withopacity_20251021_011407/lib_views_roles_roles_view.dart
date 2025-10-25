@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isar/isar.dart';
-import '../../src/app_routes.dart';
-import '../../models/rol.dart';
-import '../../services/isar_service.dart';
-import '../../services/id_validator.dart';
+import 'package:tienda_app/models/rol.dart';
+import 'package:tienda_app/services/id_validator.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/src/app_routes.dart';
 
 class RolesView extends StatefulWidget {
   const RolesView({super.key});

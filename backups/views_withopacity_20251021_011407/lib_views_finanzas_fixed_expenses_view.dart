@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../models/gasto_fijo.dart';
-import '../../services/isar_service.dart';
-import '../../widgets/permission_widget.dart';
+import 'package:isar/isar.dart';
+import 'package:tienda_app/models/gasto_fijo.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/widgets/permission_widget.dart';
 
 class FixedExpensesView extends ConsumerStatefulWidget {
   const FixedExpensesView({super.key});
@@ -28,8 +29,7 @@ class _FixedExpensesViewState extends ConsumerState<FixedExpensesView> {
       setState(() => _isLoading = true);
 
       final isar = await ref.read(isarServiceProvider).db;
-      final gastosRaw = await isar.gastoFijos.getAll([0]);
-      final gastos = gastosRaw.whereType<GastoFijo>().toList();
+      final gastos = await isar.collection<GastoFijo>().where().findAll();
 
       setState(() {
         _gastos = gastos;

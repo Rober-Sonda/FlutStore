@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../src/app_routes.dart';
-import '../../widgets/permission_widget.dart';
-import '../../models/registrofinanciero.dart';
-import '../../services/isar_service.dart';
-import '../finanzas/fixed_expenses_view.dart';
-import '../finanzas/cash_register_view.dart';
+import 'package:tienda_app/models/registrofinanciero.dart';
+import 'package:tienda_app/models/section_colors.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/views/finanzas/cash_register_view.dart';
+import 'package:tienda_app/widgets/permission_widget.dart';
+
+import 'lib_views_finanzas_fixed_expenses_view.dart';
 
 class FinancialRecordsView extends ConsumerStatefulWidget {
   const FinancialRecordsView({super.key});

@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/custom_card.dart';
-import '../widgets/loading_indicator.dart';
-import '../utils/app_theme.dart';
-import '../models/producto.dart';
-import '../providers/producto_provider.dart';
+import 'package:tienda_app/models/producto.dart';
+import 'package:tienda_app/providers/producto_provider.dart';
+import 'package:tienda_app/widgets/custom_card.dart';
+import 'package:tienda_app/widgets/loading_indicator.dart';
+
+// Definir AppTheme temporalmente si no existe
+class AppTheme {
+  static const Color backgroundColor = Color(0xFF1E1E1E);
+  static const Color textSecondary = Color(0xFF9E9E9E);
+  static const Color textPrimary = Color(0xFFFFFFFF);
+  static const Color primaryColor = Color(0xFF2196F3);
+  static const Color successColor = Color(0xFF4CAF50);
+  static const Color errorColor = Color(0xFFF44336);
+}
 
 class ProductosView extends StatefulWidget {
   @override
@@ -150,16 +159,16 @@ class _ProductosViewState extends State<ProductosView> {
                 Icons.inventory_2,
                 size: 16,
                 color:
-                    (producto.stock ?? 0) > 5
+                    (producto.stockActual ?? 0) > 5
                         ? AppTheme.successColor
                         : AppTheme.errorColor,
               ),
               const SizedBox(width: 4),
               Text(
-                'Stock: ${producto.stock ?? 0}',
+                'Stock: ${producto.stockActual ?? 0}',
                 style: TextStyle(
                   color:
-                      (producto.stock ?? 0) > 5
+                      (producto.stockActual ?? 0) > 5
                           ? AppTheme.successColor
                           : AppTheme.errorColor,
                   fontSize: 12,

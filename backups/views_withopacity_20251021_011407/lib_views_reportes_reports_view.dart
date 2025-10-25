@@ -1,14 +1,14 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import '../../models/pedido.dart';
-import '../../models/compra.dart';
-import '../../models/producto.dart';
-import '../../models/cliente.dart';
-import '../../models/categoria.dart';
-import '../../services/isar_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/models/pedido.dart';
+import 'package:tienda_app/models/compra.dart';
+import 'package:tienda_app/models/producto.dart';
+import 'package:tienda_app/models/cliente.dart';
+import 'package:tienda_app/models/categoria.dart';
 
 class ReportsView extends ConsumerStatefulWidget {
   const ReportsView({super.key});
@@ -86,11 +86,21 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(start, end).findAll();
+        await isar
+            .collection<Pedido>()
+            .where()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
     final compras =
-        await isar.compras.filter().fechaBetween(start, end).findAll();
-    final productos = await isar.productos.where().findAll();
-    final clientes = await isar.clientes.where().findAll();
+        await isar
+            .collection<Compra>()
+            .where()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final clientes = await isar.collection<Cliente>().where().findAll();
 
     double totalVentas = pedidos.fold(0, (sum, p) => sum + (p.total ?? 0));
     double totalCompras = compras.fold(0, (sum, c) => sum + (c.total ?? 0));
@@ -150,9 +160,14 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     }
 
     final pedidos =
-        await isar.pedidos.filter().fechaBetween(start, end).findAll();
-    final productos = await isar.productos.where().findAll();
-    final categorias = await isar.categorias.where().findAll();
+        await isar
+            .collection<Pedido>()
+            .where()
+            .filter()
+            .fechaBetween(start, end)
+            .findAll();
+    final productos = await isar.collection<Producto>().where().findAll();
+    final categorias = await isar.collection<Categoria>().where().findAll();
 
     // Ventas por dÃ­a
     Map<int, double> ventasPorDia = {};
@@ -703,4 +718,3 @@ class _ReportsViewState extends ConsumerState<ReportsView> {
     );
   }
 }
-

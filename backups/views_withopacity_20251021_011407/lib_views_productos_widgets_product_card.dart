@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tienda_app/models/categoria.dart';
+import 'package:tienda_app/models/producto.dart';
+import 'package:tienda_app/views/productos/dialogs/agregar_al_carrito_dialog.dart';
 // Elimina la importación de flutter_screenutil si no está en tu proyecto
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../models/producto.dart';
-import '../../../models/categoria.dart';
-import '../dialogs/agregar_al_carrito_dialog.dart';
 
 class ProductCard extends StatelessWidget {
   final Producto producto;
@@ -25,13 +25,16 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLowStock = producto.stock != null && producto.stock! <= 10;
-    final isOutOfStock = producto.stock != null && producto.stock! == 0;
+    final isLowStock =
+        producto.stockActual != null && producto.stockActual! <= 10;
+    final isOutOfStock =
+        producto.stockActual != null && producto.stockActual! == 0;
     final theme = Theme.of(context);
 
-    final imagenUrl = (producto.imagenes != null && producto.imagenes!.isNotEmpty)
-        ? producto.imagenes!.first
-        : null; // Cambia a null si no hay imagen
+    final imagenUrl =
+        (producto.imagenes != null && producto.imagenes!.isNotEmpty)
+            ? producto.imagenes!.first
+            : null; // Cambia a null si no hay imagen
 
     // Responsive manual: calcula el ancho máximo/min según el ancho de pantalla
     final screenWidth = MediaQuery.of(context).size.width;
@@ -73,22 +76,24 @@ class ProductCard extends StatelessWidget {
                     ),
                     child: AspectRatio(
                       aspectRatio: 1.2,
-                      child: imagenUrl != null
-                          ? Image.network(
-                              imagenUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Container(
-                                color: Colors.grey[800],
-                                child: Image.asset(
-                                  'assets/images/backgrounds/najam.png',
-                                  fit: BoxFit.cover,
-                                ),
+                      child:
+                          imagenUrl != null
+                              ? Image.network(
+                                imagenUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) => Container(
+                                      color: Colors.grey[800],
+                                      child: Image.asset(
+                                        'assets/images/backgrounds/najam.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                              )
+                              : Image.asset(
+                                'assets/images/backgrounds/najam.png',
+                                fit: BoxFit.cover,
                               ),
-                            )
-                          : Image.asset(
-                              'assets/images/backgrounds/najam.png',
-                              fit: BoxFit.cover,
-                            ),
                     ),
                   ),
                   // Info principal
@@ -115,33 +120,43 @@ class ProductCard extends StatelessWidget {
                                 ),
                               ),
                               PopupMenuButton<String>(
-                                icon: const Icon(Icons.more_vert, color: Colors.grey),
+                                icon: const Icon(
+                                  Icons.more_vert,
+                                  color: Colors.grey,
+                                ),
                                 onSelected: (value) {
                                   if (value == 'edit') onEdit();
                                   if (value == 'delete') onDelete();
                                 },
-                                itemBuilder: (context) => [
-                                  const PopupMenuItem(
-                                    value: 'edit',
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.edit, color: Colors.blue),
-                                        SizedBox(width: 8),
-                                        Text('Editar'),
-                                      ],
-                                    ),
-                                  ),
-                                  const PopupMenuItem(
-                                    value: 'delete',
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.delete, color: Colors.red),
-                                        SizedBox(width: 8),
-                                        Text('Eliminar'),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                itemBuilder:
+                                    (context) => [
+                                      const PopupMenuItem(
+                                        value: 'edit',
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.edit,
+                                              color: Colors.blue,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text('Editar'),
+                                          ],
+                                        ),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'delete',
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text('Eliminar'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                               ),
                             ],
                           ),
@@ -174,17 +189,21 @@ class ProductCard extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: isOutOfStock
-                                      ? Colors.red
-                                      : isLowStock
+                                  color:
+                                      isOutOfStock
+                                          ? Colors.red
+                                          : isLowStock
                                           ? Colors.orange
                                           : Colors.green,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
-                                  'Stock: ${producto.stock ?? 0}',
+                                  'Stock: ${producto.stockActual ?? 0}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -214,11 +233,18 @@ class ProductCard extends StatelessWidget {
                             child: Tooltip(
                               message: 'Agregar al carrito',
                               child: IconButton(
-                                icon: const Icon(Icons.add_shopping_cart, color: Colors.deepOrange, size: 22),
+                                icon: const Icon(
+                                  Icons.add_shopping_cart,
+                                  color: Colors.deepOrange,
+                                  size: 22,
+                                ),
                                 onPressed: () async {
                                   await showDialog(
                                     context: context,
-                                    builder: (context) => AgregarAlCarritoDialog(producto: producto),
+                                    builder:
+                                        (context) => AgregarAlCarritoDialog(
+                                          producto: producto,
+                                        ),
                                   );
                                 },
                               ),

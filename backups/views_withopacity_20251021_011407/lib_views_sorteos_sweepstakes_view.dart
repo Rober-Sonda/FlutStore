@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../models/sorteo.dart';
-import '../../models/registrofinanciero.dart';
-import '../../services/isar_service.dart';
-import '../../widgets/permission_widget.dart';
+import 'package:tienda_app/models/registrofinanciero.dart';
+import 'package:tienda_app/models/sorteo.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/widgets/permission_widget.dart';
 
 class SweepstakesView extends ConsumerStatefulWidget {
   const SweepstakesView({super.key});

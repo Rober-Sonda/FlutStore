@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../models/producto.dart';
-import '../../models/categoria.dart';
-import '../../models/app_theme.dart';
-import '../../models/font_config.dart';
-import '../../services/app_config_service.dart';
-import '../../services/pedido_compra_service.dart';
-import '../../services/isar_service.dart';
-import '../../widgets/permission_widget.dart';
+import 'package:isar/isar.dart';
+import 'package:tienda_app/models/categoria.dart';
+import 'package:tienda_app/models/font_config.dart';
+import 'package:tienda_app/models/producto.dart';
+import 'package:tienda_app/models/app_theme.dart';
+import 'package:tienda_app/services/app_config_service.dart';
+import 'package:tienda_app/services/isar_service.dart';
+import 'package:tienda_app/services/pedido_compra_service.dart';
+import 'package:tienda_app/widgets/permission_widget.dart';
 
 class UtilidadReportView extends ConsumerStatefulWidget {
   const UtilidadReportView({super.key});
@@ -47,8 +48,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       setState(() => _isLoading = true);
 
       final isar = await ref.read(isarServiceProvider).db;
-      final productosRaw = await isar.productos.getAll([0]);
-      final productos = productosRaw.whereType<Producto>().toList();
+      final productos = await isar.collection<Producto>().where().findAll();
 
       final pedidoCompraService = PedidoCompraService();
 
@@ -62,8 +62,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
           await pedidoCompraService.obtenerProductosMediaUtilidad();
 
       // Cargar categorías
-      final categoriasRaw = await isar.categorias.getAll([0]);
-      final categorias = categoriasRaw.whereType<Categoria>().toList();
+      final categorias = await isar.collection<Categoria>().where().findAll();
       _categorias = ['Todas', ...categorias.map((c) => c.nombre)];
 
       // Cargar tema
@@ -241,7 +240,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.2),
+          backgroundColor: color.withValues(alpha: 0.2),
           child: Icon(Icons.inventory, color: color),
         ),
         title: Text(
@@ -283,7 +282,7 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.2),
+            color: color.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: color),
           ),
@@ -327,10 +326,10 @@ class _UtilidadReportViewState extends ConsumerState<UtilidadReportView> {
 
             // Búsqueda
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Buscar productos',
-                prefixIcon: const Icon(Icons.search),
-                border: const OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
               ),
               onChanged: (value) {
                 setState(() => _busqueda = value);
