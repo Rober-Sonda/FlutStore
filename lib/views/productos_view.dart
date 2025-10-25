@@ -1,8 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/custom_card.dart';
 import '../widgets/loading_indicator.dart';
-import '../utils/app_theme.dart';
+import '../widgets/app_design_system.dart';
+import '../components/shared/professional_app_bar.dart';
+import '../components/shared/glass_containers.dart';
 import '../models/producto.dart';
 import '../providers/producto_provider.dart';
 
@@ -25,16 +26,18 @@ class _ProductosViewState extends State<ProductosView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Productos'),
+      appBar: ProfessionalAppBar(
+        title: 'Productos',
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () => _showSearchDialog(),
+            tooltip: 'Buscar productos',
           ),
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () => _showFilterDialog(),
+            tooltip: 'Filtrar productos',
           ),
         ],
       ),
@@ -44,8 +47,8 @@ class _ProductosViewState extends State<ProductosView> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppTheme.backgroundColor,
-              AppTheme.backgroundColor.withValues(alpha: 0.8),
+              AppDesignSystem.surface,
+              AppDesignSystem.surface.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -61,19 +64,59 @@ class _ProductosViewState extends State<ProductosView> {
 
             return RefreshIndicator(
               onRefresh: () => provider.cargarProductos(),
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: provider.productosFiltrados.length,
-                itemBuilder: (context, index) {
-                  final producto = provider.productosFiltrados[index];
-                  return _buildProductCard(producto);
-                },
+              child: Column(
+                children: [
+                  // Contenedor con filtros rápidos con efecto glass
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GlassFormContainer(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Filtros rápidos',
+                            style: AppDesignSystem.bodyMd().copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _buildFilterChip('Todos', true),
+                                const SizedBox(width: 8),
+                                _buildFilterChip('Disponibles', false),
+                                const SizedBox(width: 8),
+                                _buildFilterChip('Sin Stock', false),
+                                const SizedBox(width: 8),
+                                _buildFilterChip('Destacados', false),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Cuadrícula de productos
+                  Expanded(
+                    child: GridView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.75,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
+                      itemCount: provider.productosFiltrados.length,
+                      itemBuilder: (context, index) {
+                        final producto = provider.productosFiltrados[index];
+                        return _buildProductCard(producto);
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -88,86 +131,111 @@ class _ProductosViewState extends State<ProductosView> {
   }
 
   Widget _buildProductCard(Producto producto) {
-    return CustomCard(
+    return GestureDetector(
       onTap: () => _navigateToProductDetail(producto),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppTheme.backgroundColor,
-              ),
-              child:
-                  producto.imagen != null
-                      ? ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          producto.imagen!,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
+      child: GlassCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppDesignSystem.surface.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child:
+                      producto.imagen != null
+                          ? Image.asset(
+                            producto.imagen!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Icon(
+                                  Icons.inventory,
+                                  size: 48,
+                                  color: AppDesignSystem.textSecondary,
+                                ),
+                              );
+                            },
+                          )
+                          : Center(
+                            child: Icon(
                               Icons.inventory,
                               size: 48,
-                              color: AppTheme.textSecondary,
-                            );
-                          },
-                        ),
-                      )
-                      : const Icon(
-                        Icons.inventory,
-                        size: 48,
-                        color: AppTheme.textSecondary,
-                      ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            producto.nombre ?? 'Sin nombre',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: AppTheme.textPrimary,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '\$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
-            style: const TextStyle(
-              color: AppTheme.primaryColor,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Icon(
-                Icons.inventory_2,
-                size: 16,
-                color:
-                    (producto.stock ?? 0) > 5
-                        ? AppTheme.successColor
-                        : AppTheme.errorColor,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                'Stock: ${producto.stock ?? 0}',
-                style: TextStyle(
-                  color:
-                      (producto.stock ?? 0) > 5
-                          ? AppTheme.successColor
-                          : AppTheme.errorColor,
-                  fontSize: 12,
+                              color: AppDesignSystem.textSecondary,
+                            ),
+                          ),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              producto.nombre ?? 'Sin nombre',
+              style: AppDesignSystem.bodyMd().copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppDesignSystem.textPrimary,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '\$${(producto.precio ?? 0.0).toStringAsFixed(2)}',
+              style: AppDesignSystem.bodyMd().copyWith(
+                fontWeight: FontWeight.w700,
+                color: AppDesignSystem.navAccent,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color:
+                    (producto.stockActual ?? 0) > 5
+                        ? AppDesignSystem.success.withOpacity(0.1)
+                        : AppDesignSystem.error.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color:
+                      (producto.stockActual ?? 0) > 5
+                          ? AppDesignSystem.success
+                          : AppDesignSystem.error,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.inventory_2,
+                    size: 12,
+                    color:
+                        (producto.stockActual ?? 0) > 5
+                            ? AppDesignSystem.success
+                            : AppDesignSystem.error,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Stock: ${producto.stockActual ?? 0}',
+                    style: AppDesignSystem.bodyMd().copyWith(
+                      color:
+                          (producto.stockActual ?? 0) > 5
+                              ? AppDesignSystem.success
+                              : AppDesignSystem.error,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -180,21 +248,24 @@ class _ProductosViewState extends State<ProductosView> {
           Icon(
             Icons.inventory_2_outlined,
             size: 100,
-            color: AppTheme.textSecondary.withValues(alpha: 0.5),
+            color: AppDesignSystem.textSecondary.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'No hay productos disponibles',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: AppTheme.textSecondary,
+              color: AppDesignSystem.textSecondary,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Agrega tu primer producto para comenzar',
-            style: TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            style: TextStyle(
+              fontSize: 16,
+              color: AppDesignSystem.textSecondary,
+            ),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -248,12 +319,12 @@ class _ProductosViewState extends State<ProductosView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Filtrar por categorÃ­a'),
+          title: const Text('Filtrar por categoría'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: const Text('Todas las categorÃ­as'),
+                title: const Text('Todas las categorías'),
                 onTap: () {
                   provider.limpiarFiltros();
                   Navigator.pop(context);
@@ -276,17 +347,64 @@ class _ProductosViewState extends State<ProductosView> {
   }
 
   void _navigateToAddProduct() {
-    // TODO: Implementar navegaciÃ³n a pantalla de agregar producto
+    // TODO: Implementar navegación a pantalla de agregar producto
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('FunciÃ³n en desarrollo')));
+    ).showSnackBar(const SnackBar(content: Text('Función en desarrollo')));
   }
 
   void _navigateToProductDetail(Producto producto) {
-    // TODO: Implementar navegaciÃ³n a detalle del producto
+    // TODO: Implementar navegación a detalle del producto
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Ver detalles de: ${producto.nombre}')),
     );
   }
-}
 
+  Widget _buildFilterChip(String label, bool isSelected) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: Implementar lógica de filtrado
+        setState(() {
+          // Aquí se implementaría la lógica de selección de filtros
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              isSelected
+                  ? AppDesignSystem.navAccent
+                  : (AppDesignSystem.isDark
+                      ? Colors.white.withOpacity(0.05)
+                      : Colors.black.withOpacity(0.03)),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color:
+                isSelected
+                    ? AppDesignSystem.navAccent
+                    : AppDesignSystem.navAccent.withOpacity(0.2),
+            width: 1,
+          ),
+          boxShadow:
+              isSelected
+                  ? [
+                    BoxShadow(
+                      color: AppDesignSystem.navAccent.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                  : null,
+        ),
+        child: Text(
+          label,
+          style: AppDesignSystem.bodyMd().copyWith(
+            color: isSelected ? Colors.white : AppDesignSystem.textSecondary,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+}
