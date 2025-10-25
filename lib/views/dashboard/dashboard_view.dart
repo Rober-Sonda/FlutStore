@@ -2,9 +2,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/app_config_service.dart';
 import '../../services/isar_service.dart';
+import '../../services/theme_service.dart';
 import '../../models/app_theme.dart';
 import '../../models/font_config.dart';
 import '../../services/dashboard_data_service.dart';
+import '../../widgets/transparent_scaffold.dart';
 import 'sections/financial_metrics_section.dart';
 import 'sections/operations_section.dart';
 import 'sections/inventory_alerts_section.dart';
@@ -169,245 +171,264 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     final isTablet = screenWidth > 600;
     final isDesktop = screenWidth > 900;
 
-    return Scaffold(
-      backgroundColor: theme.backgroundColor,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(isDesktop ? 24 : 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header principal
-            Row(
+    return FashionBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          decoration: BoxDecoration(
+            color:
+                theme.isDark
+                    ? const Color(0xFF0F172A).withOpacity(0.93)
+                    : const Color(0xFFF8FAFC).withOpacity(0.93),
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.all(isDesktop ? 24 : 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
-                    'Dashboard de Negocio',
-                    style: TextStyle(
-                      fontSize: isDesktop ? 32 : 24,
-                      fontWeight: FontWeight.bold,
-                      color: theme.textColor,
-                      fontFamily: fontConfig.titleFont,
+                // Header principal
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Dashboard de Negocio',
+                        style: TextStyle(
+                          fontSize: isDesktop ? 32 : 24,
+                          fontWeight: FontWeight.bold,
+                          color: theme.textColor,
+                          fontFamily: fontConfig.titleFont,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _loadData(),
+                      icon: Icon(Icons.refresh, color: theme.textColor),
+                      tooltip: 'Actualizar datos',
+                    ),
+                    // Elimina cualquier IconButton de carrito aquÃ­.
+                    // El icono de carrito con punto rojo ya estÃ¡ en modern_title_bar.dart.
+                  ],
+                ),
+                // NUEVO: DescripciÃ³n general del dashboard
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 16),
+                  child: Card(
+                    color: Colors.blueGrey[900],
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(
+                        'AquÃ­ puedes ver un resumen de tu negocio: ventas, productos, pedidos, inventario y alertas importantes. Usa este panel para tomar decisiones rÃ¡pidas y controlar el estado general de tu tienda.',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () => _loadData(),
-                  icon: Icon(Icons.refresh, color: theme.textColor),
-                  tooltip: 'Actualizar datos',
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 1: MÃ©tricas Financieras
+                FinancialMetricsSection(
+                  stats: stats,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      () => _showDetailedAnalysis('MÃ©tricas Financieras', {
+                        'Ventas del mes':
+                            '\$${stats['totalVentasMes']?.toStringAsFixed(2) ?? '0.00'}',
+                        'Ganancia del mes':
+                            '\$${stats['gananciaMes']?.toStringAsFixed(2) ?? '0.00'}',
+                        'Margen de ganancia':
+                            '${stats['margenGanancia']?.toStringAsFixed(1) ?? '0.0'}%',
+                        'Crecimiento vs mes anterior':
+                            '${stats['crecimientoVentas']?.toStringAsFixed(1) ?? '0.0'}%',
+                        'Valor del inventario':
+                            '\$${stats['valorInventario']?.toStringAsFixed(2) ?? '0.00'}',
+                      }),
+                  isDesktop: isDesktop,
+                  isTablet: isTablet,
                 ),
-                // Elimina cualquier IconButton de carrito aquÃ­.
-                // El icono de carrito con punto rojo ya estÃ¡ en modern_title_bar.dart.
-              ],
-            ),
-            // NUEVO: DescripciÃ³n general del dashboard
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 16),
-              child: Card(
-                color: Colors.blueGrey[900],
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    'AquÃ­ puedes ver un resumen de tu negocio: ventas, productos, pedidos, inventario y alertas importantes. Usa este panel para tomar decisiones rÃ¡pidas y controlar el estado general de tu tienda.',
-                    style: const TextStyle(color: Colors.white70, fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 2: Operaciones y Productividad
+                OperationsSection(
+                  stats: stats,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      () => _showDetailedAnalysis('Operaciones', {
+                        'Pedidos del mes': '${stats['pedidosMes'] ?? 0}',
+                        'Pedidos de la semana':
+                            '${stats['pedidosSemana'] ?? 0}',
+                        'Compras del mes': '${stats['comprasMes'] ?? 0}',
+                        'Promedio por venta':
+                            '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
+                        'Tasa de conversiÃ³n':
+                            '${stats['tasaConversion']?.toStringAsFixed(1) ?? '0.0'}%',
+                      }),
+                  isDesktop: isDesktop,
+                  isTablet: isTablet,
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            // SECCIÃ“N 1: MÃ©tricas Financieras
-            FinancialMetricsSection(
-              stats: stats,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap:
-                  () => _showDetailedAnalysis('MÃ©tricas Financieras', {
-                    'Ventas del mes':
-                        '\$${stats['totalVentasMes']?.toStringAsFixed(2) ?? '0.00'}',
-                    'Ganancia del mes':
-                        '\$${stats['gananciaMes']?.toStringAsFixed(2) ?? '0.00'}',
-                    'Margen de ganancia':
-                        '${stats['margenGanancia']?.toStringAsFixed(1) ?? '0.0'}%',
-                    'Crecimiento vs mes anterior':
-                        '${stats['crecimientoVentas']?.toStringAsFixed(1) ?? '0.0'}%',
-                    'Valor del inventario':
-                        '\$${stats['valorInventario']?.toStringAsFixed(2) ?? '0.00'}',
-                  }),
-              isDesktop: isDesktop,
-              isTablet: isTablet,
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 2: Operaciones y Productividad
-            OperationsSection(
-              stats: stats,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap:
-                  () => _showDetailedAnalysis('Operaciones', {
-                    'Pedidos del mes': '${stats['pedidosMes'] ?? 0}',
-                    'Pedidos de la semana': '${stats['pedidosSemana'] ?? 0}',
-                    'Compras del mes': '${stats['comprasMes'] ?? 0}',
-                    'Promedio por venta':
-                        '\$${stats['promedioVenta']?.toStringAsFixed(2) ?? '0.00'}',
-                    'Tasa de conversiÃ³n':
-                        '${stats['tasaConversion']?.toStringAsFixed(1) ?? '0.0'}%',
-                  }),
-              isDesktop: isDesktop,
-              isTablet: isTablet,
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 3: Alertas de Inventario
-            InventoryAlertsSection(
-              stats: stats,
-              stockAlerts: stockAlerts,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap: null, // Corrige el error pasando null o una funciÃ³n vÃ¡lida
-              isDesktop: isDesktop,
-              isTablet: isTablet,
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 4: Rendimiento por CategorÃ­as
-            CategoryPerformanceSection(
-              categoryPerformance: categoryPerformance,
-              stats: stats,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap:
-                  () => _showDetailedAnalysis('Rendimiento por CategorÃ­as', {
-                    'Total de categorÃ­as': '${stats['categorias'] ?? 0}',
-                    'CategorÃ­as con productos': '${categoryPerformance.length}',
-                  }),
-              isDesktop: isDesktop,
-              isTablet: isTablet,
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 5: AnÃ¡lisis de Ventas
-            SalesAnalysisSection(
-              salesData: salesData,
-              topProducts: topProducts,
-              stats: stats,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap:
-                  () => _showDetailedAnalysis('AnÃ¡lisis de Ventas', {
-                    'DÃ­as con ventas':
-                        '${salesData.where((d) => d['ventas'] > 0).length}',
-                    'Total de dÃ­as analizados': '${salesData.length}',
-                    'Promedio diario':
-                        '\$${(stats['totalVentasMes'] ?? 0) / salesData.length}',
-                  }),
-              isDesktop: isDesktop,
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 6: Pedidos Recientes
-            RecentOrdersSection(
-              recentOrders: recentOrders,
-              theme: theme,
-              fontConfig: fontConfig,
-              onTap:
-                  () => _showDetailedAnalysis('Pedidos Recientes', {
-                    'Total de pedidos mostrados': '${recentOrders.length}',
-                    'Promedio de pedidos':
-                        '\$${recentOrders.isNotEmpty ? recentOrders.map((o) => o['total'] as double).reduce((a, b) => a + b) / recentOrders.length : 0}',
-                  }),
-            ),
-            const SizedBox(height: 24),
-
-            // SECCIÃ“N 7: Acciones RÃ¡pidas
-            QuickActionsSection(
-              theme: theme,
-              fontConfig: fontConfig,
-              isDesktop: isDesktop,
-              isTablet: isTablet,
-            ),
-            const SizedBox(height: 32),
-
-            // KPIs principales
-            Wrap(
-              spacing: 24,
-              runSpacing: 24,
-              children: [
-                _buildKpiCard(
-                  'Ventas Hoy',
-                  ventasHoy.toString(),
-                  Icons.shopping_cart,
-                  Colors.green,
+                // SECCIÃ“N 3: Alertas de Inventario
+                InventoryAlertsSection(
+                  stats: stats,
+                  stockAlerts: stockAlerts,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      null, // Corrige el error pasando null o una funciÃ³n vÃ¡lida
+                  isDesktop: isDesktop,
+                  isTablet: isTablet,
                 ),
-                _buildKpiCard(
-                  'Ingresos Hoy',
-                  '\$${ingresosHoy.toStringAsFixed(0)}',
-                  Icons.attach_money,
-                  Colors.blue,
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 4: Rendimiento por CategorÃ­as
+                CategoryPerformanceSection(
+                  categoryPerformance: categoryPerformance,
+                  stats: stats,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      () =>
+                          _showDetailedAnalysis('Rendimiento por CategorÃ­as', {
+                            'Total de categorÃ­as':
+                                '${stats['categorias'] ?? 0}',
+                            'CategorÃ­as con productos':
+                                '${categoryPerformance.length}',
+                          }),
+                  isDesktop: isDesktop,
+                  isTablet: isTablet,
                 ),
-                _buildKpiCard(
-                  'Bajo Stock',
-                  productosBajoStock.toString(),
-                  Icons.warning,
-                  Colors.orange,
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 5: AnÃ¡lisis de Ventas
+                SalesAnalysisSection(
+                  salesData: salesData,
+                  topProducts: topProducts,
+                  stats: stats,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      () => _showDetailedAnalysis('AnÃ¡lisis de Ventas', {
+                        'DÃ­as con ventas':
+                            '${salesData.where((d) => d['ventas'] > 0).length}',
+                        'Total de dÃ­as analizados': '${salesData.length}',
+                        'Promedio diario':
+                            '\$${(stats['totalVentasMes'] ?? 0) / salesData.length}',
+                      }),
+                  isDesktop: isDesktop,
                 ),
-                _buildKpiCard(
-                  'Clientes Nuevos',
-                  clientesNuevos.toString(),
-                  Icons.person_add,
-                  Colors.purple,
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 6: Pedidos Recientes
+                RecentOrdersSection(
+                  recentOrders: recentOrders,
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  onTap:
+                      () => _showDetailedAnalysis('Pedidos Recientes', {
+                        'Total de pedidos mostrados': '${recentOrders.length}',
+                        'Promedio de pedidos':
+                            '\$${recentOrders.isNotEmpty ? recentOrders.map((o) => o['total'] as double).reduce((a, b) => a + b) / recentOrders.length : 0}',
+                      }),
                 ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            // Notificaciones
-            Card(
-              color: Colors.grey[900],
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 24),
+
+                // SECCIÃ“N 7: Acciones RÃ¡pidas
+                QuickActionsSection(
+                  theme: theme,
+                  fontConfig: fontConfig,
+                  isDesktop: isDesktop,
+                  isTablet: isTablet,
+                ),
+                const SizedBox(height: 32),
+
+                // KPIs principales
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 24,
                   children: [
-                    Row(
-                      children: const [
-                        Icon(Icons.notifications, color: Colors.purple),
-                        SizedBox(width: 8),
-                        Text(
-                          'Notificaciones',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purple,
+                    _buildKpiCard(
+                      'Ventas Hoy',
+                      ventasHoy.toString(),
+                      Icons.shopping_cart,
+                      Colors.green,
+                    ),
+                    _buildKpiCard(
+                      'Ingresos Hoy',
+                      '\$${ingresosHoy.toStringAsFixed(0)}',
+                      Icons.attach_money,
+                      Colors.blue,
+                    ),
+                    _buildKpiCard(
+                      'Bajo Stock',
+                      productosBajoStock.toString(),
+                      Icons.warning,
+                      Colors.orange,
+                    ),
+                    _buildKpiCard(
+                      'Clientes Nuevos',
+                      clientesNuevos.toString(),
+                      Icons.person_add,
+                      Colors.purple,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                // Notificaciones
+                Card(
+                  color: Colors.grey[900],
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(Icons.notifications, color: Colors.purple),
+                            SizedBox(width: 8),
+                            Text(
+                              'Notificaciones',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ...notificaciones.map(
+                          (n) => ListTile(
+                            leading: const Icon(
+                              Icons.info,
+                              color: Colors.white54,
+                              size: 20,
+                            ),
+                            title: Text(
+                              n,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    ...notificaciones.map(
-                      (n) => ListTile(
-                        leading: const Icon(
-                          Icons.info,
-                          color: Colors.white54,
-                          size: 20,
-                        ),
-                        title: Text(
-                          n,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 32),
+                // ...puedes agregar aquÃ­ grÃ¡ficos, tendencias, accesos rÃ¡pidos, etc...
+              ],
             ),
-            const SizedBox(height: 32),
-            // ...puedes agregar aquÃ­ grÃ¡ficos, tendencias, accesos rÃ¡pidos, etc...
-          ],
+          ),
         ),
       ),
     );
@@ -444,4 +465,3 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 }
-

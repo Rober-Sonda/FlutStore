@@ -47,20 +47,30 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
     final carrito = ref.watch(carritoProvider);
 
     return Container(
-      height: 50,
+      height: 56, // Altura aumentada para mejor presencia
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            currentTheme.surfaceColor,
-            currentTheme.surfaceColor.withOpacity(0.95),
-            currentTheme.surfaceColor,
-          ],
+          colors:
+              currentTheme.isDark
+                  ? [
+                    const Color(0xFF0F172A),
+                    const Color(0xFF1E293B),
+                    const Color(0xFF334155),
+                  ]
+                  : [
+                    Colors.white,
+                    const Color(0xFFF8FAFC),
+                    const Color(0xFFE2E8F0),
+                  ],
         ),
         border: Border(
           bottom: BorderSide(
-            color: currentTheme.textSecondaryColor.withOpacity(0.1),
+            color:
+                currentTheme.isDark
+                    ? Colors.white.withOpacity(0.08)
+                    : Colors.black.withOpacity(0.06),
             width: 1,
           ),
         ),
@@ -68,10 +78,19 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
           BoxShadow(
             color:
                 currentTheme.isDark
-                    ? Colors.black.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+                    ? Colors.black.withOpacity(0.4)
+                    : Colors.grey.withOpacity(0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+            spreadRadius: 1,
+          ),
+          BoxShadow(
+            color:
+                currentTheme.isDark
+                    ? const Color(0xFF6366F1).withOpacity(0.1)
+                    : const Color(0xFF6366F1).withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -84,7 +103,7 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    // Animated Modern Logo
+                    // Animated Modern Logo Premium
                     MouseRegion(
                       onEnter: (_) => setState(() => _isHovered = true),
                       onExit: (_) => setState(() => _isHovered = false),
@@ -94,30 +113,34 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
                           _pulseAnimationController,
                         ]),
                         builder: (context, child) {
-                          return Container(
-                            width: 32,
-                            height: 32,
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            width: _isHovered ? 38 : 34,
+                            height: _isHovered ? 38 : 34,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  currentTheme.primaryColor,
-                                  currentTheme.primaryColor.withOpacity(0.8),
-                                  currentTheme.primaryColor,
+                                  const Color(0xFF6366F1),
+                                  const Color(0xFF8B5CF6),
+                                  const Color(0xFFA855F7),
+                                  const Color(0xFF6366F1),
                                 ],
+                                stops: const [0.0, 0.3, 0.7, 1.0],
                               ),
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: currentTheme.primaryColor.withOpacity(
-                                    0.4,
+                                  color: const Color(0xFF6366F1).withOpacity(
+                                    0.4 +
+                                        (_pulseAnimationController.value * 0.2),
                                   ),
                                   blurRadius:
-                                      6 + (_logoAnimationController.value * 3),
+                                      8 + (_logoAnimationController.value * 4),
                                   offset: Offset(
                                     0,
-                                    2 + (_logoAnimationController.value * 1),
+                                    3 + (_logoAnimationController.value * 2),
                                   ),
                                   spreadRadius: 1,
                                 ),
@@ -192,50 +215,104 @@ class _ModernTitleBarState extends ConsumerState<ModernTitleBar>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Main brand name with gradient
+                          // Main brand name with modern gradient
                           ShaderMask(
                             shaderCallback:
                                 (bounds) => LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                   colors: [
-                                    currentTheme.primaryColor,
-                                    currentTheme.primaryColor.withOpacity(0.8),
-                                    currentTheme.primaryColor,
+                                    const Color(0xFF6366F1),
+                                    const Color(0xFF8B5CF6),
+                                    const Color(0xFFA855F7),
+                                    const Color(0xFF6366F1),
                                   ],
+                                  stops: const [0.0, 0.3, 0.7, 1.0],
                                 ).createShader(bounds),
-                            child: Text(
-                              'NAJAM',
+                            child: AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 300),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
-                                letterSpacing: 2.0,
-                                fontSize: 18,
+                                letterSpacing: _isHovered ? 2.5 : 2.0,
+                                fontSize: _isHovered ? 19 : 18,
+                                fontFamily: 'Roboto',
+                                shadows: [
+                                  Shadow(
+                                    color: const Color(
+                                      0xFF6366F1,
+                                    ).withOpacity(0.3),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
+                              child: const Text('FASHION CENTER'),
                             ),
                           ),
-                          const SizedBox(height: 1),
-                          // Subtitle with modern styling
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 1,
+                          const SizedBox(height: 2),
+                          // Subtitle with premium badge design
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: _isHovered ? 8 : 6,
+                              vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: currentTheme.primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(6),
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors:
+                                    currentTheme.isDark
+                                        ? [
+                                          const Color(
+                                            0xFF6366F1,
+                                          ).withOpacity(0.15),
+                                          const Color(
+                                            0xFF8B5CF6,
+                                          ).withOpacity(0.15),
+                                        ]
+                                        : [
+                                          const Color(
+                                            0xFF6366F1,
+                                          ).withOpacity(0.08),
+                                          const Color(
+                                            0xFF8B5CF6,
+                                          ).withOpacity(0.08),
+                                        ],
+                              ),
+                              borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: currentTheme.primaryColor.withOpacity(
-                                  0.3,
-                                ),
+                                color: const Color(0xFF6366F1).withOpacity(0.3),
                                 width: 1,
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(
+                                    0xFF6366F1,
+                                  ).withOpacity(0.1),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
                             ),
                             child: Text(
-                              'TIENDA OFICIAL',
+                              'GESTIÓN COMERCIAL',
                               style: TextStyle(
-                                color: currentTheme.primaryColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 8,
-                                letterSpacing: 1.0,
+                                color: const Color(0xFF6366F1),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 9,
+                                letterSpacing: 1.2,
+                                fontFamily: 'Roboto',
+                                shadows: [
+                                  Shadow(
+                                    color: const Color(
+                                      0xFF6366F1,
+                                    ).withOpacity(0.2),
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -531,4 +608,3 @@ class _ModernWindowButtonState extends State<ModernWindowButton>
     );
   }
 }
-

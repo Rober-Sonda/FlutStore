@@ -380,38 +380,53 @@ class _ProfessionalNavigationRailState
   }
 
   Widget _buildHeader() {
-    return Container(
-      padding: EdgeInsets.all(_isCollapsed ? 16 : 24),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      padding: EdgeInsets.all(_isCollapsed ? 12 : 20),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color:
                 AppDesignSystem.isDark
-                    ? AppDesignSystem.navSecondary
-                    : const Color(0xFFE2E8F0),
+                    ? AppDesignSystem.navSecondary.withOpacity(0.3)
+                    : const Color(0xFFE2E8F0).withOpacity(0.5),
             width: 1,
           ),
         ),
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors:
               AppDesignSystem.isDark
                   ? [
                     const Color(0xFF0F172A),
-                    const Color(0xFF1E293B).withOpacity(0.8),
+                    const Color(0xFF1E293B).withOpacity(0.9),
+                    const Color(0xFF334155).withOpacity(0.6),
                   ]
-                  : [Colors.white, const Color(0xFFF8FAFC)],
+                  : [
+                    Colors.white,
+                    const Color(0xFFF8FAFC),
+                    const Color(0xFFE2E8F0).withOpacity(0.3),
+                  ],
         ),
+        boxShadow: [
+          BoxShadow(
+            color: (AppDesignSystem.isDark ? Colors.black : Colors.grey)
+                .withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
           Row(
             children: [
-              // Logo empresarial moderno
-              Container(
-                width: _isCollapsed ? 40 : 48,
-                height: _isCollapsed ? 40 : 48,
+              // Logo empresarial moderno con animaciones
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: _isCollapsed ? 36 : 52,
+                height: _isCollapsed ? 36 : 52,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -419,22 +434,43 @@ class _ProfessionalNavigationRailState
                     colors: [
                       AppDesignSystem.navAccent,
                       AppDesignSystem.navActive,
+                      AppDesignSystem.primaryIndigo,
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(_isCollapsed ? 10 : 14),
                   boxShadow: [
                     BoxShadow(
-                      color: AppDesignSystem.navAccent.withOpacity(0.3),
-                      blurRadius: 12,
+                      color: AppDesignSystem.navAccent.withOpacity(0.4),
+                      blurRadius: _isCollapsed ? 8 : 16,
                       offset: const Offset(0, 4),
-                      spreadRadius: 2,
+                      spreadRadius: _isCollapsed ? 1 : 3,
+                    ),
+                    BoxShadow(
+                      color: AppDesignSystem.primaryIndigo.withOpacity(0.2),
+                      blurRadius: _isCollapsed ? 12 : 24,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.storefront_rounded,
-                  size: _isCollapsed ? 20 : 24,
-                  color: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(_isCollapsed ? 10 : 14),
+                    onTap: () {
+                      // Opcional: navegación a dashboard al hacer clic en logo
+                    },
+                    child: Center(
+                      child: AnimatedScale(
+                        duration: const Duration(milliseconds: 300),
+                        scale: _isCollapsed ? 0.8 : 1.0,
+                        child: Icon(
+                          Icons.storefront_rounded,
+                          size: _isCollapsed ? 18 : 26,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
 
@@ -491,34 +527,64 @@ class _ProfessionalNavigationRailState
                 ),
               ],
 
-              // Toggle button mejorado
-              Container(
+              // Toggle button moderno con hover effect
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 decoration: BoxDecoration(
-                  color:
-                      AppDesignSystem.isDark
-                          ? Colors.white.withOpacity(0.1)
-                          : Colors.black.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors:
+                        AppDesignSystem.isDark
+                            ? [
+                              Colors.white.withOpacity(0.1),
+                              Colors.white.withOpacity(0.05),
+                            ]
+                            : [
+                              Colors.black.withOpacity(0.08),
+                              Colors.black.withOpacity(0.03),
+                            ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: (AppDesignSystem.isDark
+                            ? Colors.white
+                            : Colors.black)
+                        .withOpacity(0.1),
+                    width: 1,
+                  ),
                 ),
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isCollapsed = !_isCollapsed;
-                    });
-                  },
-                  icon: AnimatedRotation(
-                    duration: const Duration(milliseconds: 300),
-                    turns: _isCollapsed ? 0 : 0.5,
-                    child: Icon(
-                      _isCollapsed ? Icons.menu_rounded : Icons.close_rounded,
-                      color:
-                          AppDesignSystem.isDark
-                              ? AppDesignSystem.navText
-                              : AppDesignSystem.navPrimary,
-                      size: 20,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {
+                      setState(() {
+                        _isCollapsed = !_isCollapsed;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: AnimatedRotation(
+                        duration: const Duration(milliseconds: 400),
+                        turns: _isCollapsed ? 0 : 0.5,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: Icon(
+                            _isCollapsed
+                                ? Icons.keyboard_arrow_right_rounded
+                                : Icons.keyboard_arrow_left_rounded,
+                            key: ValueKey(_isCollapsed),
+                            color:
+                                AppDesignSystem.isDark
+                                    ? AppDesignSystem.navText
+                                    : AppDesignSystem.navPrimary,
+                            size: 20,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  tooltip: _isCollapsed ? 'Expandir menú' : 'Contraer menú',
                 ),
               ),
             ],
@@ -533,16 +599,27 @@ class _ProfessionalNavigationRailState
       return _buildEmptyState();
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemCount: _filteredSections.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final section = _filteredSections[index];
-        final isExpanded = _expandedCategories.contains(section.id);
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.symmetric(
+            vertical: _isCollapsed ? 12 : 20,
+            horizontal: _isCollapsed ? 4 : 8,
+          ),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final section = _filteredSections[index];
+              final isExpanded = _expandedCategories.contains(section.id);
 
-        return _buildNavigationSection(section, isExpanded);
-      },
+              return Padding(
+                padding: EdgeInsets.only(bottom: _isCollapsed ? 12 : 16),
+                child: _buildNavigationSection(section, isExpanded),
+              );
+            }, childCount: _filteredSections.length),
+          ),
+        ),
+      ],
     );
   }
 
@@ -609,61 +686,83 @@ class _ProfessionalNavigationRailState
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: section.color.withOpacity(0.2), width: 1),
           ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: section.color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  section.icon,
-                  color: section.color,
-                  size: _isCollapsed ? 16 : 18,
-                ),
-              ),
-
-              if (!_isCollapsed) ...[
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    section.label,
-                    style: AppDesignSystem.bodyMd().copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppDesignSystem.textPrimary,
+          child:
+              _isCollapsed
+                  ? Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: section.color.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(section.icon, color: section.color, size: 16),
                     ),
+                  )
+                  : Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: section.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          section.icon,
+                          color: section.color,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          section.label,
+                          style: AppDesignSystem.bodyMd().copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppDesignSystem.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Icon(
+                        isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        color: AppDesignSystem.textTertiary,
+                        size: 20,
+                      ),
+                    ],
                   ),
-                ),
-                Icon(
-                  isExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: AppDesignSystem.textTertiary,
-                  size: 20,
-                ),
-              ],
-            ],
-          ),
         ),
       ),
     );
   }
 
   Widget _buildSectionItems(_NavSection section, bool isExpanded) {
+    final itemHeight = _isCollapsed ? 52.0 : 56.0;
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      height: isExpanded ? section.items.length * 48.0 : 0,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeInOutCubic,
+      height: isExpanded ? section.items.length * itemHeight : 0,
       child: ClipRect(
-        child: ListView.builder(
+        child: ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(
+            vertical: _isCollapsed ? 4 : 8,
+            horizontal: _isCollapsed ? 2 : 4,
+          ),
           itemCount: section.items.length,
+          separatorBuilder:
+              (context, index) => SizedBox(height: _isCollapsed ? 4 : 6),
           itemBuilder: (context, index) {
             final item = section.items[index];
             final isSelected = _selectedRoute == item.route;
 
-            return _buildNavigationItem(item, isSelected);
+            return AnimatedContainer(
+              duration: Duration(milliseconds: 200 + (index * 50)),
+              curve: Curves.easeOutBack,
+              child: _buildNavigationItem(item, isSelected),
+            );
           },
         ),
       ),

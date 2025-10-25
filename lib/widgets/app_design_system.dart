@@ -298,92 +298,134 @@ class AppDesignSystem {
     Color? customColor,
   }) {
     final color = customColor ?? navAccent;
+    final bool isCollapsed = description == null;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(radiusMd),
+        borderRadius: BorderRadius.circular(radiusSm),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(radiusMd),
+          borderRadius: BorderRadius.circular(radiusSm),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.all(isCollapsed ? 8 : 12),
+            constraints: const BoxConstraints(minHeight: 40),
             decoration: BoxDecoration(
               color:
                   isSelected
-                      ? color.withOpacity(_isDark ? 0.2 : 0.1)
+                      ? color.withOpacity(_isDark ? 0.15 : 0.1)
                       : Colors.transparent,
-              borderRadius: BorderRadius.circular(radiusMd),
+              borderRadius: BorderRadius.circular(radiusSm),
               border:
                   isSelected
                       ? Border.all(color: color.withOpacity(0.3), width: 1)
                       : null,
             ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color:
-                        isSelected
-                            ? color.withOpacity(0.2)
-                            : (_isDark
-                                ? Colors.white10
-                                : Colors.black.withOpacity(0.05)),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 18,
-                    color:
-                        isSelected ? color : (_isDark ? navText : navPrimary),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: bodyMd(
+            child:
+                isCollapsed
+                    ? // Modo colapsado - solo ícono centrado
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
                           color:
                               isSelected
-                                  ? (_isDark ? Colors.white : navPrimary)
+                                  ? color.withOpacity(0.2)
+                                  : (_isDark
+                                      ? Colors.white.withOpacity(0.1)
+                                      : Colors.black.withOpacity(0.05)),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(
+                          icon,
+                          size: 16,
+                          color:
+                              isSelected
+                                  ? color
                                   : (_isDark ? navText : navPrimary),
-                        ).copyWith(
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.w500,
                         ),
                       ),
-                      if (description != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          description,
-                          style: caption(
+                    )
+                    : // Modo expandido - layout completo
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
                             color:
-                                _isDark
-                                    ? navTextSecondary
-                                    : navPrimary.withOpacity(0.6),
+                                isSelected
+                                    ? color.withOpacity(0.2)
+                                    : (_isDark
+                                        ? Colors.white.withOpacity(0.1)
+                                        : Colors.black.withOpacity(0.05)),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(
+                            icon,
+                            size: 16,
+                            color:
+                                isSelected
+                                    ? color
+                                    : (_isDark ? navText : navPrimary),
                           ),
                         ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                label,
+                                style: bodyMd(
+                                  color:
+                                      isSelected
+                                          ? (_isDark
+                                              ? Colors.white
+                                              : navPrimary)
+                                          : (_isDark ? navText : navPrimary),
+                                ).copyWith(
+                                  fontWeight:
+                                      isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                  fontSize: 13,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (description.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  description,
+                                  style: caption(
+                                    color:
+                                        _isDark
+                                            ? navTextSecondary
+                                            : navPrimary.withOpacity(0.6),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        if (isSelected) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 3,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                ),
-                if (isSelected)
-                  Container(
-                    width: 4,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.circular(2),
                     ),
-                  ),
-              ],
-            ),
           ),
         ),
       ),
